@@ -1,0 +1,148 @@
+﻿<!doctype html>
+<html>
+	<head>
+		<title>Moneta Dashboard</title>
+		<script src="./Chart.bundle.min.js"></script>
+		<script src="./utils.js"></script>
+		<style>
+			.card {
+				display: inline-block;
+				box-shadow: 0 1px 2px 0 rgba(0,0,0,.15);
+				margin: 20px;
+				position: relative;
+				margin-bottom: 50px;
+				transition: all .2s ease-in-out;
+			  }
+			  
+			  .card:hover {
+				/*box-shadow: 0 5px 22px 0 rgba(0,0,0,.25);*/
+				box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+				margin-bottom: 54px;
+			  }
+			  
+			  .image {
+				height: 200px;
+				opacity: .7;
+				overflow: hidden;
+				transition: all .2s ease-in-out;
+			  }
+			  
+			  .image:hover,
+			  .card:hover .image {
+				height: 200px;
+				opacity: 1;
+			  }
+		</style>
+	</head>
+
+	<body>
+		<div id="dashboard" style="padding: 30px">
+			<div id="canvas-holder" style="width:100%; height:40%; margin-bottom: 30px;">
+				<canvas id="invoices-chart-area"/>
+			</div>
+			<div id="canvas-holder" style="width:50%; height:50%; float: left;">
+				<canvas id="expenses-chart-area" />
+			</div>
+			<div id="canvas-holder" style="width:50%; height:50%; float: right;">
+				<canvas id="clients-chart-area" />
+			</div>
+		</div>
+				
+		<script>
+		var pieDataColors =
+		[
+			chartColors.red,
+			chartColors.orange,
+			chartColors.yellow,
+			chartColors.green,
+			chartColors.blue,
+		];
+
+		var pieTooltip =
+		{
+			enabled: true,
+			mode: 'single',
+			callbacks: {
+				title: (tooltipItems, data) => {
+					return data.labels[tooltipItems[0].index]
+				},
+				label: (tooltipItem, data) => { 
+					//get the concerned dataset
+					var dataset = data.datasets[tooltipItem.datasetIndex];
+					
+					//calculate the total of this data set
+					var total = dataset.data.reduce(function(previousValue, currentValue, currentIndex, array) {
+					return previousValue + currentValue;
+					});
+					
+					//get the current items value
+					var currentValue = dataset.data[tooltipItem.index];
+					//calculate the precentage based on the total and current item, also this does a rough rounding to give a whole number
+					var precentage = Math.floor(((currentValue/total) * 100)+0.5);
+
+					return ' $' + currentValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' (' + precentage + "%)";
+				}
+			}
+		};
+				
+		function setupTopClients(data)
+		{
+			var config = {
+				type: 'doughnut',
+				options: {
+					responsive: true,
+					legend: {
+						display: true,
+						position: 'right'
+					},
+					tooltips: pieTooltip
+				}
+			};
+
+			config.data = JSON.parse(data);
+			var ctx = document.getElementById("clients-chart-area").getContext("2d");
+			window.myPie = new Chart(ctx, config);
+			
+			return "Success";
+		}
+		
+		function setupTopExpenseCategories(data)
+		{
+			var config = {
+				type: 'doughnut',
+				options: {
+					responsive: true,
+					legend: {
+						display: true,
+						position: 'right'
+					},
+					tooltips: pieTooltip
+				}
+			};
+
+			config.data = JSON.parse(data);
+			var ctx = document.getElementById("expenses-chart-area").getContext("2d");
+			window.myExpensesDonut = new Chart(ctx, config);
+			
+			return "Success";
+		}
+		
+		function setupRevenueExpense(data)
+		{
+			var revenueExpenseData = {
+			  type: 'line',
+				options: {
+					tooltips: pieTooltip
+				}
+			};
+			
+			revenueExpenseData.data = JSON.parse(data);
+			
+			var ctx = document.getElementById('invoices-chart-area').getContext('2d');
+			var myChart = new Chart(ctx, revenueExpenseData);
+
+			return 'Success';
+		}
+		</script>
+	</body>
+</html>
