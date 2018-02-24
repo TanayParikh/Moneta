@@ -1,0 +1,102 @@
+﻿<local:PageBase
+    x:Class="MonetaFMS.Pages.ClientsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:local="using:MonetaFMS.Pages"
+    xmlns:extensions="using:Microsoft.Toolkit.Uwp.UI.Extensions"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:lottieUwp="using:LottieUWP"
+    mc:Ignorable="d">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+
+        <!--<lottieUwp:LottieAnimationView
+                            x:Name="LottieAnimationWrapper"
+                            RepeatCount="0"
+                            Margin="0,-40,0,0"
+                            Width="75"
+                            Height="75"
+                            Grid.Column="1"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Center"/>-->
+
+        <controls:MasterDetailsView ItemsSource="{Binding AllClients}"
+                                    NoSelectionContent="Select a User"
+                                    Foreground="Black">
+            <controls:MasterDetailsView.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Margin="0,8">
+                        <TextBlock Text="{Binding Company}" 
+                                   Style="{ThemeResource SubtitleTextBlockStyle}"/>
+                        <TextBlock Text="{Binding FullName}" 
+                                   Style="{ThemeResource BodyTextBlockStyle}"
+                                   Opacity=".6" 
+                                   MaxLines="1"/>
+                    </StackPanel>
+                </DataTemplate>
+            </controls:MasterDetailsView.ItemTemplate>
+            <controls:MasterDetailsView.DetailsTemplate>
+                <DataTemplate>
+                    <RelativePanel Margin="24">
+                        <StackPanel>
+                            <TextBox FontSize="36" Text="{Binding Company}" PlaceholderText="Company Name" IsTextPredictionEnabled="False" IsSpellCheckEnabled="False" x:Name="CompanyName" Margin="0,24,0,0" MaxLength="75" Width="400" FontWeight="SemiBold" HorizontalAlignment="Left" InputScope="AlphanumericFullWidth"/>
+
+
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="20px" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <TextBox Grid.Column="0" Text="{Binding FirstName}" Header="First Name" x:Name="FirstName" PlaceholderText= "First Name" Margin="0,24,0,0" MaxLength="50" Width="190"  HorizontalAlignment="Left" InputScope="PersonalFullName"/>
+                                <TextBox Grid.Column="2" Text="{Binding LastName}" Header="Last Name" x:Name="LastName" PlaceholderText= "Last Name" Margin="0,24,0,0" MaxLength="50" Width="190"  HorizontalAlignment="Left" InputScope="PersonalFullName"/>
+                            </Grid>
+
+                            <TextBox Text="{Binding Email}" extensions:TextBoxRegex.ValidationType="Email" x:Name="Email" Header="Email" PlaceholderText="Email" Margin="0,24,0,0" MaxLength="50" Width="400" HorizontalAlignment="Left" InputScope="EmailNameOrAddress" />
+                            <TextBox Text="{Binding PhoneNumber}" extensions:TextBoxRegex.Regex="^\s*\+?\s*([0-9][\s-]*){9,}$" x:Name="PhoneNumber" PlaceholderText="Phone Number" Header="Phone Number" Margin="0,24,0,0" MaxLength="15" Width="400" HorizontalAlignment="Left" InputScope="TelephoneNumber" />
+                            <TextBox Text="{Binding Address}" x:Name="Address" Header="Address" PlaceholderText="Address" Margin="0,24,0,0" MaxLength="50" Width="400" HorizontalAlignment="Left" InputScope="EmailNameOrAddress" />
+
+                            <StackPanel Orientation="Horizontal">
+                                <Button Content="Save" Margin="0,24" />
+                                <Button Content="Cancel" Margin="24"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </RelativePanel>
+                </DataTemplate>
+            </controls:MasterDetailsView.DetailsTemplate>
+            <controls:MasterDetailsView.NoSelectionContentTemplate>
+                <DataTemplate>
+                    <StackPanel HorizontalAlignment="Center" 
+                                VerticalAlignment="Center">
+                        <SymbolIcon RenderTransformOrigin=".5,.5" Symbol="Contact">
+                            <SymbolIcon.RenderTransform>
+                                <CompositeTransform 
+                                  ScaleX="2" 
+                                  ScaleY="2"/>
+                            </SymbolIcon.RenderTransform>
+                        </SymbolIcon>
+
+                        <TextBlock Text="{Binding}" 
+                                   FontSize="24" 
+                                   Margin="0,20"/>
+                    </StackPanel>
+                </DataTemplate>
+            </controls:MasterDetailsView.NoSelectionContentTemplate>
+            <controls:MasterDetailsView.DetailsCommandBar>
+                <CommandBar>
+                    <AppBarButton Icon="Mail" Label="Send Email"/>
+                    <AppBarButton Label="Create Invoice">
+                        <AppBarButton.Icon>
+                            <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE71D;"/>
+                        </AppBarButton.Icon>
+                    </AppBarButton>
+                </CommandBar>
+            </controls:MasterDetailsView.DetailsCommandBar>
+        </controls:MasterDetailsView>
+
+    </Grid>
+</local:PageBase>
