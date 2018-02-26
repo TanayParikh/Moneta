@@ -49,17 +49,7 @@ namespace MonetaFMS.Pages
             folderPicker.FileTypeFilter.Add("*");
 
             Windows.Storage.StorageFolder folder = await folderPicker.PickSingleFolderAsync();
-            if (folder != null)
-            {
-                // Application now has read/write access to all contents in the picked folder
-                // (including other sub-folder contents)
-                ViewModel.BackupFolderSelected(folder);
-                //this.textBlock.Text = "Picked folder: " + folder.Name;
-            }
-            else
-            {
-                //this.textBlock.Text = "Operation cancelled.";
-            }
+            await PlayAnimation(folder != null && ViewModel.BackupFolderSelected(folder));
         }
 
         private async void Save_Profile(object sender, RoutedEventArgs e)

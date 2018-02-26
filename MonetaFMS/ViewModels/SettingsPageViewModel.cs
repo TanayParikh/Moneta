@@ -61,14 +61,14 @@ namespace MonetaFMS.ViewModels
             SetFutureAccessFolder(FutureAccessToken.BackupFolderToken, BackupDirectory);
         }
 
-        internal void BackupFolderSelected(StorageFolder folder)
+        internal bool BackupFolderSelected(StorageFolder folder)
         {
-            AddFutureAccessFolder(FutureAccessToken.BackupFolderToken, folder);
+            return AddFutureAccessFolder(FutureAccessToken.BackupFolderToken, folder);
         }
         
-        internal void MonetaFolderSelected(StorageFolder folder)
+        internal bool MonetaFolderSelected(StorageFolder folder)
         {
-            AddFutureAccessFolder(FutureAccessToken.MonetaFolderToken, folder);
+            return AddFutureAccessFolder(FutureAccessToken.MonetaFolderToken, folder);
         }
 
         private async void SetFutureAccessFolder(FutureAccessToken token, StorageFolder folder)
@@ -77,9 +77,18 @@ namespace MonetaFMS.ViewModels
                 folder = await StorageApplicationPermissions.FutureAccessList.GetFolderAsync(token.ToString());
         }
 
-        private void AddFutureAccessFolder(FutureAccessToken token, StorageFolder folder)
+        private bool AddFutureAccessFolder(FutureAccessToken token, StorageFolder folder)
         {
-            StorageApplicationPermissions.FutureAccessList.AddOrReplace(token.ToString(), folder);
+            try
+            {
+                StorageApplicationPermissions.FutureAccessList.AddOrReplace(token.ToString(), folder);
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
+            return true;
         }
 
         internal bool SaveBusinessProfile()
