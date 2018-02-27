@@ -96,6 +96,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Common\BindableBase.cs" />
+    <Compile Include="Models\DayRange.cs" />
     <Compile Include="Models\LottieAnimation.cs" />
     <Compile Include="Pages\PageBase.cs" />
     <Compile Include="Converters\MoneyConverter.cs" />
