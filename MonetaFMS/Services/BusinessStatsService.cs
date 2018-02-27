@@ -85,5 +85,31 @@ namespace MonetaFMS.Services
                 .Where(i => i.InvoiceDate >= start && i.InvoiceDate <= end)
                 .Sum(i => i.TaxAmount);
         }
+
+        public Dictionary<DayRange, decimal> GetFuturePayables(DateTime start)
+        {
+            return InvoiceService.AllItems
+                .Where(i => i.DueDate.HasValue && i.DueDate >= start && i.Status.InvoiceStatusType != InvoiceStatusType.Paid)
+                .GroupBy(i => GetPayableInterval(start, i))
+                .ToDictionary(invoicesByInterval => invoicesByInterval.Key, invoicesByInterval => invoicesByInterval.Sum(i => i.Total));
+        }
+        
+        private DayRange GetPayableInterval(DateTime start, Invoice invoice)
+        {
+            int daysTillDue = (invoice.DueDate.Value.Date - start.Date).Days;
+
+            if (daysTillDue < 15)
+                return DayRange.DueIn14;
+            else if (daysTillDue < 30)
+                return DayRange.DueIn29;
+            else if (daysTillDue < 45)
+                return DayRange.DueIn44;
+            else if (daysTillDue < 90)
+                return DayRange.DueIn89;
+            else if (daysTillDue >= 90)
+                return DayRange.DueIn90Plus;
+            else
+                return DayRange.Overdue;
+        }
     }
 }
