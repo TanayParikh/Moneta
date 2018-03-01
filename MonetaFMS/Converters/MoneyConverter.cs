@@ -15,13 +15,19 @@ namespace MonetaFMS.Converters
         {
             if (value is decimal i)
             {
-                if (i < 100_000)
+                string format = (parameter is string p && p == "Round") ? "C0" : "C2";
+
+                if (i < 10_000)
                 {
-                    return ((int)i).ToString("C0", CultureInfo.CurrentCulture).Replace(',', ' ');
+                    return ((int)i).ToString(format, CultureInfo.CurrentCulture).Replace(",", "");
+                }
+                else if (i < 100_000)
+                {
+                    return ((int)i).ToString(format, CultureInfo.CurrentCulture).Replace(',', ' ');
                 }
                 else
                 {
-                    return ((int)i / 1000).ToString("C0", CultureInfo.CurrentCulture).Replace(',', ' ') + "K";
+                    return ((int)i / 1000).ToString(format, CultureInfo.CurrentCulture).Replace(',', ' ') + "K";
                 }
             }
 
