@@ -1,4 +1,4 @@
-﻿<Page
+﻿<Page xmlns:my="using:Microsoft.Toolkit.Uwp.UI.Controls" 
     x:Class="MonetaFMS.Pages.InvoicesPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -7,6 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:Converters="using:MonetaFMS.Converters"
     xmlns:lottieUwp="using:LottieUWP"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     Loaded="Page_Loaded"
     mc:Ignorable="d">
 
@@ -20,10 +21,18 @@
             <Setter Property="FontSize" Value="48" />
         </Style>
         <Converters:MoneyConverter x:Key="MoneyConverter" />
+        <Converters:InvoiceStatusToColorConverter x:Key="InvoiceStatusToColorConverter" />
     </Page.Resources>
 
-    <StackPanel Margin="24,10,24,24">
-        <Grid>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        
+        <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="auto" />
@@ -36,25 +45,25 @@
                     <Run Text="REVENUE" Foreground="#27AE60" />
                     <Run Text=" (YTD)" Foreground="#6FCF97" />
                 </TextBlock>
-                <TextBlock Style="{StaticResource StatValue}" Foreground="#27AE60" Text="{Binding Path=RevenueDisplayed, Converter={StaticResource MoneyConverter}}" />
+                <TextBlock Style="{StaticResource StatValue}" Foreground="#27AE60" Text="{Binding Path=RevenueDisplayed, Converter={StaticResource MoneyConverter}, ConverterParameter=Round}" />
             </StackPanel>
             <Rectangle Grid.Column="1" VerticalAlignment="Stretch" Height="60" Width="1" Margin="30,10,30,10" Stroke="#E0E0E0" />
 
             <StackPanel Grid.Column="2" HorizontalAlignment="Center">
                 <TextBlock Style="{StaticResource StatHeader}" Text="PAYABLES" Foreground="#2D9CDB" />
-                <TextBlock Style="{StaticResource StatValue}" Foreground="#2D9CDB" Text="{Binding Path=PayablesDisplayed, Converter={StaticResource MoneyConverter}}" />
+                <TextBlock Style="{StaticResource StatValue}" Foreground="#2D9CDB" Text="{Binding Path=PayablesDisplayed, Converter={StaticResource MoneyConverter}, ConverterParameter=Round}" />
             </StackPanel>
             <Rectangle Grid.Column="3" VerticalAlignment="Stretch" Height="60" Width="1" Margin="30,10,30,10" Stroke="#E0E0E0" />
 
             <StackPanel Grid.Column="4" HorizontalAlignment="Center">
                 <TextBlock Style="{StaticResource StatHeader}" Text="OVERDUE" Foreground="#A61111" />
-                <TextBlock Style="{StaticResource StatValue}" Foreground="#A61111" Text="{Binding Path=OverdueDisplayed, Converter={StaticResource MoneyConverter}}" />
+                <TextBlock Style="{StaticResource StatValue}" Foreground="#A61111" Text="{Binding Path=OverdueDisplayed, Converter={StaticResource MoneyConverter}, ConverterParameter=Round}" />
             </StackPanel>
         </Grid>
 
-        <Rectangle HorizontalAlignment="Stretch" Height="1" Margin="30" Stroke="#E0E0E0" />
+        <Rectangle Grid.Row="1" HorizontalAlignment="Stretch" Height="1" Margin="30" Stroke="#E0E0E0" />
 
-        <Grid Margin="30,0,30,30">
+        <Grid Grid.Row="2" Grid.Column="0" Margin="30,0,30,30">
             <AutoSuggestBox x:Name="ASB" Width="296" HorizontalAlignment="Left"
                         VerticalAlignment="Center" QueryIcon="Find"/>
             <CommandBar HorizontalAlignment="Right"
@@ -72,5 +81,79 @@
                 <AppBarButton Label="Delete" Icon="Delete"/>
             </CommandBar>
         </Grid>
-    </StackPanel>
+
+        <ListView Grid.Row="3" ItemsSource="{Binding AllInvoices}" ContainerContentChanging="ListView_ContainerContentChanging" ItemClick="ListView_ItemClick" IsItemClickEnabled="True">
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                    <Setter Property="Margin" Value="15" />
+                </Style>
+            </ListView.ItemContainerStyle>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Canvas HorizontalAlignment="Stretch" Margin="10"></Canvas>
+                        <Grid Background="White" CornerRadius="2" VerticalAlignment="Center" Height="63">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition Width="2*" />
+                                <ColumnDefinition Width="2*" />
+                                <ColumnDefinition Width="8*" />
+                                <ColumnDefinition Width="2*" />
+                                <ColumnDefinition Width="1*" />
+                            </Grid.ColumnDefinitions>
+                            <Ellipse Width="10"
+                                 Height="10"
+                                 Grid.Column="0"
+                                 VerticalAlignment="Center"
+                                 Fill="{Binding Status, Converter={StaticResource InvoiceStatusToColorConverter}, ConverterParameter=Brush}" />
+                            <TextBlock Text="{Binding Status.InvoiceStatusType}" 
+                                       FontWeight="SemiLight"
+                                       FontSize="14"
+                                       Foreground="{Binding Status, Converter={StaticResource InvoiceStatusToColorConverter}, ConverterParameter=HEX}" 
+                                       VerticalAlignment="Center"
+                                       Grid.Column="1"
+                                       MaxLines="1"/>
+                            <TextBlock Text="{Binding Id}"
+                                       Foreground="#A1A1A1"
+                                       FontWeight="Light"
+                                       FontSize="18"
+                                       Margin="38, 0, 0 0"
+                                       VerticalAlignment="Center"
+                                       Grid.Column="2"
+                                       MaxLines="1"/>
+                            <TextBlock Text="{Binding Client.Company}" 
+                                       FontWeight="SemiBold"
+                                       FontSize="18"
+                                       Grid.Column="3"
+                                       VerticalAlignment="Center"
+                                       MaxLines="1"/>
+                            <TextBlock Text="{Binding Total, Converter={StaticResource MoneyConverter}}"
+                                       Foreground="#A1A1A1"
+                                       FontWeight="Light"
+                                       FontSize="18"
+                                       Grid.Column="4"
+                                       VerticalAlignment="Center"
+                                       MaxLines="1"/>
+
+                            <StackPanel VerticalAlignment="Center" Grid.Column="5">
+                                <TextBlock Text="Apr" 
+                                       Foreground="#828282"
+                                       FontWeight="SemiLight"
+                                       FontSize="15"
+                                       LineHeight="0"
+                                       MaxLines="1"/>
+                                <TextBlock Text="20" 
+                                       LineHeight="0"
+                                       Foreground="#A1A1A1"
+                                       FontWeight="SemiLight"
+                                       FontSize="26"
+                                       MaxLines="1"/>
+                            </StackPanel>
+                        </Grid>
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </Grid>
 </Page>

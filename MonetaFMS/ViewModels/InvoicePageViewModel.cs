@@ -1,7 +1,9 @@
-﻿using MonetaFMS.Common;
+﻿using Microsoft.Toolkit.Uwp.UI;
+using MonetaFMS.Common;
 using MonetaFMS.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,10 +23,15 @@ namespace MonetaFMS.ViewModels
         private decimal overdueDisplayed = 0;
 
         private readonly DispatcherTimer Timer = new DispatcherTimer();
-
+        
+        private ObservableCollection<Invoice> _allInvoices { get; set; }
+        public AdvancedCollectionView AllInvoices { get; set; }
+        
         public InvoicePageViewModel()
         {
             GenerateStats();
+            _allInvoices = new ObservableCollection<Invoice>(Services.Services.InvoiceService.AllItems);
+            AllInvoices = new AdvancedCollectionView(_allInvoices);
         }
 
         public decimal Revenue
@@ -93,6 +100,11 @@ namespace MonetaFMS.ViewModels
             {
                 return displayValue + increment;
             }
+        }
+
+        internal void InvoiceSelected(Invoice clickedItem)
+        {
+
         }
 
         private void GenerateStats()
