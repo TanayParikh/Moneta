@@ -97,6 +97,7 @@
     </Compile>
     <Compile Include="Common\BindableBase.cs" />
     <Compile Include="Converters\InvoiceStatusToColorConverter.cs" />
+    <Compile Include="Converters\DateConverter.cs" />
     <Compile Include="Models\DayRange.cs" />
     <Compile Include="Models\LottieAnimation.cs" />
     <Compile Include="Pages\PageBase.cs" />
