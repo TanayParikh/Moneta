@@ -60,10 +60,10 @@ namespace MonetaFMS.Pages
             var shadow = _compositor.CreateDropShadow();
             sprite.Shadow = shadow;
 
-            shadow.BlurRadius = 2.5f;
-            shadow.Offset = new Vector3(-6, -6, 0);
+            shadow.BlurRadius = 16f;
+            shadow.Offset = new Vector3(-9, -10, 0);
             shadow.Color = Colors.DarkGray;
-            shadow.Opacity = 0.10f;
+            shadow.Opacity = 0.22f;
 
             Windows.UI.Xaml.Hosting.ElementCompositionPreview.SetElementChildVisual(shadowHost, sprite);
 
@@ -76,6 +76,11 @@ namespace MonetaFMS.Pages
         private void ListView_ItemClick(object sender, ItemClickEventArgs e)
         {
             ViewModel.InvoiceSelected((Invoice)e.ClickedItem);
+        }
+
+        private void SearchBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
+        {
+            ViewModel.Search(sender.Text);
         }
     }
 }
