@@ -41,38 +41,6 @@ namespace MonetaFMS.Pages
             ViewModel.OnPageLoaded();
         }
 
-        // https://canbilgin.wordpress.com/2017/05/09/add-list-view-drop-shadow-on-uwp/
-        private void ListView_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
-        {
-            var presenter = VisualTreeHelper.GetChild(args.ItemContainer, 0) as ListViewItemPresenter;
-            var contentHost = VisualTreeHelper.GetChild(presenter, 0) as Grid;
-            var shadowHost = VisualTreeHelper.GetChild(contentHost, 0) as Canvas;
-            var content = VisualTreeHelper.GetChild(contentHost, 1) as Grid;
-
-            var contentVisual = Windows.UI.Xaml.Hosting.ElementCompositionPreview.GetElementVisual(content);
-
-            var _compositor = contentVisual.Compositor;
-
-            var sprite = _compositor.CreateSpriteVisual();
-            sprite.Size = contentVisual.Size;
-            sprite.CenterPoint = contentVisual.CenterPoint;
-
-            var shadow = _compositor.CreateDropShadow();
-            sprite.Shadow = shadow;
-
-            shadow.BlurRadius = 16f;
-            shadow.Offset = new Vector3(-9, -10, 0);
-            shadow.Color = Colors.DarkGray;
-            shadow.Opacity = 0.22f;
-
-            Windows.UI.Xaml.Hosting.ElementCompositionPreview.SetElementChildVisual(shadowHost, sprite);
-
-            var bindSizeAnimation = _compositor.CreateExpressionAnimation("hostVisual.Size");
-            bindSizeAnimation.SetReferenceParameter("hostVisual", contentVisual);
-
-            sprite.StartAnimation("Size", bindSizeAnimation);
-        }
-
         private void ListView_ItemClick(object sender, ItemClickEventArgs e)
         {
             ViewModel.InvoiceSelected((Invoice)e.ClickedItem);
