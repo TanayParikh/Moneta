@@ -76,11 +76,11 @@ namespace MonetaFMS.Services
             using (var command = new SqliteCommand())
             {
                 string updateQuery = $"UPDATE {TableName} SET ClientID=@ClientID, InvoiceDate=@InvoiceDate, Type=@Type, Paid=@Paid, DueDate=@DueDate, Note=@Note"
-                    + " WHERE ExpenseID=@ExpenseID;";
+                    + " WHERE InvoiceID=@InvoiceID;";
 
                 command.CommandText = updateQuery;
                 SetParameters(command, updatedValue);
-                command.Parameters.Add(new SqliteParameter("@ExpenseID", DbType.Int32) { Value = updatedValue.Id });
+                command.Parameters.Add(new SqliteParameter("@InvoiceID", DbType.Int32) { Value = updatedValue.Id });
 
                 return DBService.UpdateValue(command);
             }
