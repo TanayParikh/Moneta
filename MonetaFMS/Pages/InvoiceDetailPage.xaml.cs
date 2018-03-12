@@ -1,4 +1,5 @@
 ﻿using MonetaFMS.Models;
+using MonetaFMS.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -24,16 +25,19 @@ namespace MonetaFMS.Pages
     /// </summary>
     public sealed partial class InvoiceDetailPage : Page
     {
+        public InvoiceDetailPageViewModel ViewModel { get; set; } = new InvoiceDetailPageViewModel();
+
         public InvoiceDetailPage()
         {
             this.InitializeComponent();
+            DataContext = ViewModel;
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
 
-            Invoice invoice = e.Parameter as Invoice;
+            ViewModel.SetupInvoice(e.Parameter as Invoice);
 
             ConnectedAnimation headerAnimation = ConnectedAnimationService.GetForCurrentView().GetAnimation("InvoiceToDetails");
 
@@ -46,8 +50,17 @@ namespace MonetaFMS.Pages
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
             base.OnNavigatedFrom(e);
-
             ConnectedAnimationService.GetForCurrentView().PrepareToAnimate("DetailToInvoice", InvoiceDetailsHeader);
+        }
+
+        private void EditInvoice_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void InvoicePaymentStatusToggle_Toggled(object sender, RoutedEventArgs e)
+        {
+            ViewModel.UpdatePaymentStatus();
         }
     }
 }
