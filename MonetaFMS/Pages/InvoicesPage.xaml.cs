@@ -16,6 +16,7 @@ using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
@@ -28,12 +29,13 @@ namespace MonetaFMS.Pages
     public sealed partial class InvoicesPage : Page
     {
         public InvoicePageViewModel ViewModel { get; set; } = new InvoicePageViewModel();
-
+        private Invoice _storedItem;
 
         public InvoicesPage()
         {
             this.InitializeComponent();
             DataContext = ViewModel;
+            NavigationCacheMode = NavigationCacheMode.Enabled;
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -44,11 +46,38 @@ namespace MonetaFMS.Pages
         private void ListView_ItemClick(object sender, ItemClickEventArgs e)
         {
             ViewModel.InvoiceSelected((Invoice)e.ClickedItem);
+
+            if (InvoicesList.ContainerFromItem(e.ClickedItem) is ListViewItem container)
+            {
+                // Stash the clicked item f or use later. We'll need it when we connect back
+                _storedItem = container.Content as Invoice;
+
+                var animation = InvoicesList.PrepareConnectedAnimation("InvoiceToDetails", _storedItem, "connectedElement");
+            }
+
+            Frame.Navigate(typeof(InvoiceDetailPage), _storedItem);
         }
 
         private void SearchBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
         {
             ViewModel.Search(sender.Text);
+        }
+
+        private async void InvoicesList_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (_storedItem  != null)
+            {
+                // If the connected item apperars outside viewport, scroll into view
+                InvoicesList.ScrollIntoView(_storedItem, ScrollIntoViewAlignment.Default);
+                InvoicesList.UpdateLayout();
+
+                ConnectedAnimation animation = ConnectedAnimationService.GetForCurrentView().GetAnimation("DetailToInvoice");
+
+                if (animation != null)
+                {
+                    await InvoicesList.TryStartConnectedAnimationAsync(animation, _storedItem, "DetailToInvoice");
+                }
+            }
         }
     }
 }

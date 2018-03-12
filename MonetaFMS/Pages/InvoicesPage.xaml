@@ -101,18 +101,17 @@
             </CommandBar>
         </Grid>
 
-        <ListView Grid.Row="3" ItemsSource="{Binding AllInvoices}"  ItemClick="ListView_ItemClick" IsItemClickEnabled="True">
+        <ListView Grid.Row="3" x:Name="InvoicesList" ItemsSource="{Binding AllInvoices}" ItemClick="ListView_ItemClick" Loaded="InvoicesList_Loaded" IsItemClickEnabled="True">
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                     <Setter Property="Margin" Value="15" />
-
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="ListViewItem">
                                 <ListViewItemPresenter
                                     FocusBorderBrush="{ThemeResource SystemControlTransparentBrush}"
-                                    FocusSecondaryBorderBrush="{ThemeResource SystemControlTransparentBrush}"/>
+                                    FocusSecondaryBorderBrush="{ThemeResource SystemControlTransparentBrush}" />
                             </ControlTemplate>
                         </Setter.Value>
                     </Setter>
@@ -125,7 +124,7 @@
                           ShadowOpacity="0.22"
                           HorizontalContentAlignment="Stretch"
                           Color="DarkGray">
-                        <Grid Background="White" BorderBrush="#f9f9f9" BorderThickness="0.3" CornerRadius="2" VerticalAlignment="Center" Height="63">
+                        <Grid x:Name="connectedElement" Background="White" BorderBrush="#f9f9f9" BorderThickness="0.3" CornerRadius="2" VerticalAlignment="Center" Height="63">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition />
                                 <ColumnDefinition Width="2*" />

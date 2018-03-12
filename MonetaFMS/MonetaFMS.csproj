@@ -100,6 +100,9 @@
     <Compile Include="Converters\DateConverter.cs" />
     <Compile Include="Models\DayRange.cs" />
     <Compile Include="Models\LottieAnimation.cs" />
+    <Compile Include="Pages\InvoiceDetailPage.xaml.cs">
+      <DependentUpon>InvoiceDetailPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\PageBase.cs" />
     <Compile Include="Converters\MoneyConverter.cs" />
     <Compile Include="Interfaces\IBusinessStatsService.cs" />
@@ -232,6 +235,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\ExpensesPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\InvoiceDetailPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
