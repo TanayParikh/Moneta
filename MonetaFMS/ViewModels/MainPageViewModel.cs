@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.UI.Xaml;
 
 namespace MonetaFMS.ViewModels
 {
@@ -11,6 +12,7 @@ namespace MonetaFMS.ViewModels
     {
         private string pageTitle = "Moneta FMS";
         private bool isPaneOpen = true;
+        private Visibility backButtonVisibility = Visibility.Collapsed;
 
         public MainPageViewModel()
         {
@@ -26,6 +28,12 @@ namespace MonetaFMS.ViewModels
         {
             get { return isPaneOpen; }
             set { SetProperty(ref isPaneOpen, value); }
+        }
+
+        public Visibility BackButtonVisibility
+        {
+            get { return backButtonVisibility; }
+            set { SetProperty(ref backButtonVisibility, value); }
         }
     }
 }

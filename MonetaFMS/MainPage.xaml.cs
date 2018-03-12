@@ -26,12 +26,19 @@ namespace MonetaFMS
     {
         public MainPageViewModel ViewModel { get; set; } = new MainPageViewModel();
 
+        List<string> backButtonPages = new List<string>
+        {
+            nameof(InvoiceDetailPage)
+        };
+
         public MainPage()
         {
             InitializeComponent();
             DataContext = ViewModel;
+
+            ContentFrame.Navigated += DisplayBackButton;
         }
-        
+
         /// <summary>
         /// Sets default menu item to dashboard
         /// </summary>
@@ -96,6 +103,20 @@ namespace MonetaFMS
             }
 
             ViewModel.PageTitle = item.Content.ToString();
+        }
+
+        private void BackButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (ContentFrame.CanGoBack)
+            {
+                ContentFrame.GoBack();
+            }
+        }
+        
+        private void DisplayBackButton(object sender, NavigationEventArgs e)
+        {
+            ViewModel.BackButtonVisibility = (ContentFrame.CanGoBack && backButtonPages.Contains(e.SourcePageType.Name)) ? 
+                Visibility.Visible : Visibility.Collapsed;
         }
     }
 }
