@@ -12,6 +12,7 @@
 
     <Page.Resources>
         <Converters:MoneyConverter x:Key="MoneyConverter" />
+        <Converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </Page.Resources>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
