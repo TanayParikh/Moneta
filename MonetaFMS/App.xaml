@@ -3,6 +3,52 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:MonetaFMS"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     RequestedTheme="Light">
+    
+    <Application.Resources>
+        <Style TargetType="ListViewItem">
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Setter Property="Margin" Value="15" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListViewItem">
+                        <ListViewItemPresenter
+                                    FocusBorderBrush="{ThemeResource SystemControlTransparentBrush}"
+                                    FocusSecondaryBorderBrush="{ThemeResource SystemControlTransparentBrush}" />
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
 
+        <Style x:Name="ListViewRowDropshadow" TargetType="controls:DropShadowPanel">
+            <Setter Property="BlurRadius" Value="16" />
+            <Setter Property="ShadowOpacity" Value="0.22" />
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Setter Property="Color" Value="DarkGray" />
+        </Style>
+
+        <Style x:Name="ListViewRow" TargetType="Grid">
+            <Setter Property="Background" Value="White" />
+            <Setter Property="BorderBrush" Value="#f9f9f9" />
+            <Setter Property="BorderThickness" Value="0.3" />
+            <Setter Property="CornerRadius" Value="2" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Height" Value="63" />
+        </Style>
+
+        <Style x:Key="ListViewSubtitle" TargetType="TextBlock">
+            <Setter Property="LineHeight" Value="0" />
+            <Setter Property="Foreground" Value="#A1A1A1" />
+            <Setter Property="MaxLines" Value="1" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="FontSize" Value="18" />
+            <Setter Property="FontWeight" Value="Light" />
+        </Style>
+
+        <Style x:Key="ListViewHeading" BasedOn="{StaticResource ListViewSubtitle}" TargetType="TextBlock">
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Foreground" Value="#282828" />
+        </Style>
+    </Application.Resources>
 </Application>

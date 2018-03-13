@@ -5,9 +5,9 @@
     xmlns:local="using:MonetaFMS.Pages"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:Converters="using:MonetaFMS.Converters"
     xmlns:lottieUwp="using:LottieUWP"
     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:Converters="using:MonetaFMS.Converters"
     Loaded="Page_Loaded"
     mc:Ignorable="d">
 
@@ -20,21 +20,13 @@
             <Setter Property="FontWeight" Value="Bold" />
             <Setter Property="FontSize" Value="48" />
         </Style>
-        <Style x:Key="Subtitle" TargetType="TextBlock">
-            <Setter Property="LineHeight" Value="0" />
-            <Setter Property="Foreground" Value="#A1A1A1" />
-            <Setter Property="MaxLines" Value="1" />
-            <Setter Property="VerticalAlignment" Value="Center" />
-            <Setter Property="FontSize" Value="18" />
-            <Setter Property="FontWeight" Value="Light" />
-        </Style>
-        <Style x:Key="Month" TargetType="TextBlock" BasedOn="{StaticResource Subtitle}">
+        <Style x:Key="Month" TargetType="TextBlock" BasedOn="{StaticResource ListViewSubtitle}">
             <Setter Property="Foreground" Value="#828282" />
             <Setter Property="FontWeight" Value="SemiLight" />
             <Setter Property="FontSize" Value="15" />
             <Setter Property="HorizontalAlignment" Value="Center" />
         </Style>
-        <Style x:Name="DayOfMonth" TargetType="TextBlock" BasedOn="{StaticResource Subtitle}">
+        <Style x:Name="DayOfMonth" TargetType="TextBlock" BasedOn="{StaticResource ListViewSubtitle}">
             <Setter Property="FontWeight" Value="SemiLight" />
             <Setter Property="FontSize" Value="26" />
             <Setter Property="HorizontalAlignment" Value="Center" />
@@ -42,7 +34,7 @@
         <Style x:Name="Headings" TargetType="TextBlock">
             <Setter Property="Foreground" Value="#828282" />
         </Style>
-
+        
         <Converters:MoneyConverter x:Key="MoneyConverter" />
         <Converters:DateConverter x:Key="DateConverter" />
         <Converters:InvoiceStatusToColorConverter x:Key="InvoiceStatusToColorConverter" />
@@ -88,7 +80,7 @@
 
         <Rectangle Grid.Row="1" HorizontalAlignment="Stretch" Height="1" Margin="30" Stroke="#E0E0E0" />
 
-        <Grid Grid.Row="2" Grid.Column="0" Margin="30,0,30,30">
+        <Grid Grid.Row="2" Grid.Column="0" Margin="30,0,30,15">
             <AutoSuggestBox x:Name="SearchBox" Width="296" HorizontalAlignment="Left"
                         TextChanged="SearchBox_TextChanged"
                         VerticalAlignment="Center" QueryIcon="Find"/>
@@ -101,15 +93,11 @@
                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xECC8;"/>
                     </AppBarButton.Icon>
                 </AppBarButton>
-                <AppBarButton Label="Edit" Icon="Edit"/>
-                <AppBarButton Label="Print" Icon="Print" />
-                <AppBarButton Label="Email" Icon="Send"/>
-                <AppBarButton Label="Delete" Icon="Delete"/>
             </CommandBar>
         </Grid>
 
 
-        <Grid HorizontalAlignment="Stretch" Margin="15, 0, 15, 10"  Grid.Row="3">
+        <Grid HorizontalAlignment="Stretch" Margin="12, 0, 12, 10"  Grid.Row="3">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
                 <ColumnDefinition Width="2*" />
@@ -125,31 +113,14 @@
             <TextBlock Text="Total" Grid.Column="4" Style="{StaticResource Headings}" />
             <TextBlock Text="Issued" Grid.Column="5" Margin="-10,0,0,0" Style="{StaticResource Headings}" />
         </Grid>
-        
-        <ListView Grid.Row="4" x:Name="InvoicesList" ItemsSource="{Binding AllInvoices}" ItemClick="ListView_ItemClick" Loaded="InvoicesList_Loaded" IsItemClickEnabled="True">
-            <ListView.ItemContainerStyle>
-                <Style TargetType="ListViewItem">
-                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                    <Setter Property="Margin" Value="15" />
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="ListViewItem">
-                                <ListViewItemPresenter
-                                    FocusBorderBrush="{ThemeResource SystemControlTransparentBrush}"
-                                    FocusSecondaryBorderBrush="{ThemeResource SystemControlTransparentBrush}" />
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-            </ListView.ItemContainerStyle>
+
+        <ListView Grid.Row="4" x:Name="InvoicesList" ItemsSource="{Binding AllInvoices}" 
+                  ItemClick="ListView_ItemClick" Loaded="InvoicesList_Loaded" 
+                  IsItemClickEnabled="True" Background="#f8f8f8">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <controls:DropShadowPanel
-                          BlurRadius="16"
-                          ShadowOpacity="0.22"
-                          HorizontalContentAlignment="Stretch"
-                          Color="DarkGray">
-                        <Grid x:Name="connectedElement" Background="White" BorderBrush="#f9f9f9" BorderThickness="0.3" CornerRadius="2" VerticalAlignment="Center" Height="63">
+                    <controls:DropShadowPanel Style="{StaticResource ListViewRowDropshadow}">
+                        <Grid x:Name="connectedElement" Style="{StaticResource ListViewRow}">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition />
                                 <ColumnDefinition Width="2*" />
@@ -170,9 +141,9 @@
                                        VerticalAlignment="Center"
                                        Grid.Column="1"
                                        MaxLines="1"/>
-                            <TextBlock Grid.Column="2" Text="{Binding Id}" Style="{StaticResource Subtitle}" />
-                            <TextBlock Grid.Column="3" Text="{Binding Client.Company}" FontWeight="SemiBold" Foreground="#282828" Style="{StaticResource Subtitle}" />
-                            <TextBlock Grid.Column="4" Text="{Binding Total, Converter={StaticResource MoneyConverter}}" Style="{StaticResource Subtitle}" />
+                            <TextBlock Grid.Column="2" Text="{Binding Id}" Style="{StaticResource ListViewSubtitle}" />
+                            <TextBlock Grid.Column="3" Text="{Binding Client.Company}" Style="{StaticResource ListViewHeading}" />
+                            <TextBlock Grid.Column="4" Text="{Binding Total, Converter={StaticResource MoneyConverter}}" Style="{StaticResource ListViewSubtitle}" />
 
                             <StackPanel VerticalAlignment="Center" Margin="0,0,15,0" Grid.Column="5">
                                 <TextBlock Text="{Binding InvoiceDate, Converter={StaticResource DateConverter}, ConverterParameter=MonthShort}" Style="{StaticResource Month}" />
