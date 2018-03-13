@@ -1,8 +1,10 @@
-﻿using MonetaFMS.Common;
+﻿using Microsoft.Toolkit.Uwp.UI;
+using MonetaFMS.Common;
 using MonetaFMS.Interfaces;
 using MonetaFMS.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -57,6 +59,8 @@ namespace MonetaFMS.ViewModels
             set { SetProperty(ref isPaid, value); }
         }
 
+        public ObservableCollection<InvoiceItem> Items { get; set; } = new ObservableCollection<InvoiceItem>();
+
         public InvoiceDetailPageViewModel()
         {
             InvoiceService = Services.Services.InvoiceService;
@@ -71,6 +75,11 @@ namespace MonetaFMS.ViewModels
             InvoiceDate = Invoice.InvoiceDate?.ToString("MMM dd, yyyy");
             DueDate = Invoice.DueDate?.ToString("MMM dd, yyyy");
             IsPaid = Invoice.Status.InvoiceStatusType == InvoiceStatusType.Paid;
+
+            foreach (InvoiceItem i in Invoice.Items)
+            {
+                Items.Add(i);
+            }
         }
 
         internal void UpdatePaymentStatus()
