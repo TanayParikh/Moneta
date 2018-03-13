@@ -32,11 +32,17 @@
             <Setter Property="Foreground" Value="#828282" />
             <Setter Property="FontWeight" Value="SemiLight" />
             <Setter Property="FontSize" Value="15" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
         </Style>
         <Style x:Name="DayOfMonth" TargetType="TextBlock" BasedOn="{StaticResource Subtitle}">
             <Setter Property="FontWeight" Value="SemiLight" />
             <Setter Property="FontSize" Value="26" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
         </Style>
+        <Style x:Name="Headings" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#828282" />
+        </Style>
+
         <Converters:MoneyConverter x:Key="MoneyConverter" />
         <Converters:DateConverter x:Key="DateConverter" />
         <Converters:InvoiceStatusToColorConverter x:Key="InvoiceStatusToColorConverter" />
@@ -44,6 +50,7 @@
 
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -101,7 +108,25 @@
             </CommandBar>
         </Grid>
 
-        <ListView Grid.Row="3" x:Name="InvoicesList" ItemsSource="{Binding AllInvoices}" ItemClick="ListView_ItemClick" Loaded="InvoicesList_Loaded" IsItemClickEnabled="True">
+
+        <Grid HorizontalAlignment="Stretch" Margin="15, 0, 15, 10"  Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="8*" />
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Text="Status" Grid.Column="0" Grid.ColumnSpan="2" Margin="15, 0" Style="{StaticResource Headings}" />
+            <TextBlock Text="Invoice #" Grid.Column="2" Style="{StaticResource Headings}" />
+            <TextBlock Text="Company Name" Grid.Column="3" Style="{StaticResource Headings}" />
+            <TextBlock Text="Total" Grid.Column="4" Style="{StaticResource Headings}" />
+            <TextBlock Text="Issued" Grid.Column="5" Margin="-10,0,0,0" Style="{StaticResource Headings}" />
+        </Grid>
+        
+        <ListView Grid.Row="4" x:Name="InvoicesList" ItemsSource="{Binding AllInvoices}" ItemClick="ListView_ItemClick" Loaded="InvoicesList_Loaded" IsItemClickEnabled="True">
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
@@ -145,11 +170,11 @@
                                        VerticalAlignment="Center"
                                        Grid.Column="1"
                                        MaxLines="1"/>
-                            <TextBlock Grid.Column="2" Text="{Binding Id}" TextAlignment="Left" Margin="38, 0, 0 0" Style="{StaticResource Subtitle}" />
+                            <TextBlock Grid.Column="2" Text="{Binding Id}" Style="{StaticResource Subtitle}" />
                             <TextBlock Grid.Column="3" Text="{Binding Client.Company}" FontWeight="SemiBold" Foreground="#282828" Style="{StaticResource Subtitle}" />
                             <TextBlock Grid.Column="4" Text="{Binding Total, Converter={StaticResource MoneyConverter}}" Style="{StaticResource Subtitle}" />
 
-                            <StackPanel VerticalAlignment="Center" Grid.Column="5">
+                            <StackPanel VerticalAlignment="Center" Margin="0,0,15,0" Grid.Column="5">
                                 <TextBlock Text="{Binding InvoiceDate, Converter={StaticResource DateConverter}, ConverterParameter=MonthShort}" Style="{StaticResource Month}" />
                                 <TextBlock Text="{Binding InvoiceDate, Converter={StaticResource DateConverter}, ConverterParameter=DayOfMonth}" Style="{StaticResource DayOfMonth}" />
                             </StackPanel>
