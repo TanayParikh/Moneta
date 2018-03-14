@@ -10,24 +10,33 @@ namespace MonetaFMS.Converters
 {
     public class MoneyConverter : IValueConverter
     {
-
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            if (value is decimal i)
+            if (value is decimal d)
             {
-                string format = (parameter is string p && p == "Round") ? "C0" : "C2";
+                string format = "C2";
 
-                if (i < 10_000)
+                if (parameter is string p)
                 {
-                    return ((int)i).ToString(format, CultureInfo.CurrentCulture).Replace(",", "");
+                    if (p == "HideIf0" && d == 0)
+                        return string.Empty;
+                    else if (p == "Round")
+                        format = "C0";
                 }
-                else if (i < 100_000)
+                
+                if (d < 10_000)
                 {
-                    return ((int)i).ToString(format, CultureInfo.CurrentCulture).Replace(',', ' ');
+                    return d.ToString(format, CultureInfo.CurrentCulture).Replace(",", "");
+                }
+                else if (d < 100_000)
+                {
+                    return d.ToString(format, CultureInfo.CurrentCulture).Replace(',', ' ');
                 }
                 else
                 {
-                    return ((int)i / 1000).ToString(format, CultureInfo.CurrentCulture).Replace(',', ' ') + "K";
+                    return format == "C0" ?
+                        (d / 1000).ToString(format, CultureInfo.CurrentCulture).Replace(',', ' ') + "K" :
+                        d.ToString(format, CultureInfo.CurrentCulture).Replace(',', ' ');
                 }
             }
 
@@ -36,7 +45,21 @@ namespace MonetaFMS.Converters
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)
         {
-            throw new NotImplementedException();
+            if (value is string v)
+            {
+                v = v.Replace(",", "").Replace(" ", "").Replace("$", "");
+                
+                if (v.Last() == 'K' && decimal.TryParse(v.Substring(0, v.Length - 1), out decimal decimalValue))
+                {
+                    return decimalValue * 1000;
+                }
+                else if (decimal.TryParse(v, out decimalValue))
+                {
+                    return decimalValue;
+                }
+            }
+
+            return value;
         }
     }
 }
