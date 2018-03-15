@@ -4,8 +4,19 @@ namespace MonetaFMS.Models
 {
     public class InvoiceItem : Record
     {
-        public string Description { get; set; }
-        public decimal Price { get; set; }
+        string _description;
+        public string Description
+        {
+            get { return _description; }
+            set { SetProperty(ref _description, value); }
+        }
+
+        decimal _price;
+        public decimal Price
+        {
+            get { return _price; }
+            set { SetProperty(ref _price, value); }
+        }
 
         private decimal _taxPercentage;
         public decimal TaxPercentage
@@ -16,12 +27,12 @@ namespace MonetaFMS.Models
             {
                 if (value < 0 || value > 1)
                     throw new ArgumentOutOfRangeException("Tax percentage must be between 0 and 1");
-
-                _taxPercentage = value;
+                
+                SetProperty(ref _taxPercentage, value);
             }
         }
-        public int InvoiceId { get; set; }
 
+        public int InvoiceId { get; set; }
 
         public InvoiceItem(int id, DateTime creation, string note, string description, decimal price, decimal taxPercentage, int invoiceId)
             : this(note, description, price, taxPercentage, invoiceId)
