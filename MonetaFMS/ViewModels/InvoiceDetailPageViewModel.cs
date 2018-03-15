@@ -15,7 +15,7 @@ namespace MonetaFMS.ViewModels
     {
         IInvoiceService InvoiceService { get; set; }
 
-        Invoice Invoice { get; set; }
+        public Invoice Invoice { get; set; }
 
         string invoiceId;
         public string InvoiceId
@@ -59,8 +59,16 @@ namespace MonetaFMS.ViewModels
             set { SetProperty(ref isPaid, value); }
         }
 
-        public ObservableCollection<InvoiceItem> Items { get; set; } = new ObservableCollection<InvoiceItem>();
+        bool isEditMode;
+        public bool IsEditMode
+        {
+            get { return isEditMode; }
+            set { SetProperty(ref isEditMode, value); }
+        }
 
+        public ObservableCollection<InvoiceItem> Items { get; set; } = new ObservableCollection<InvoiceItem>();
+        public ObservableCollection<Client> Clients { get; set; } = new ObservableCollection<Client>(Services.Services.ClientService.AllItems);
+        
         public InvoiceDetailPageViewModel()
         {
             InvoiceService = Services.Services.InvoiceService;
@@ -80,6 +88,22 @@ namespace MonetaFMS.ViewModels
             {
                 Items.Add(i);
             }
+        }
+
+        internal void NewItem()
+        {
+            Items.Insert(0, new InvoiceItem(-1, DateTime.Now, "", "", 0, 0, Invoice.Id));
+        }
+
+        internal void SaveInvoice()
+        {
+            InvoiceService.UpdateEntry(Invoice);
+        }
+
+        internal void CancelInvoiceEdit()
+        {
+            Items.Clear();
+            SetupInvoice(Invoice);
         }
 
         internal void UpdatePaymentStatus()
