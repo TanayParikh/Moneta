@@ -8,15 +8,24 @@
     xmlns:lottieUwp="using:LottieUWP"
     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     xmlns:Converters="using:MonetaFMS.Converters"
+    Name="InvoiceDetails"
     mc:Ignorable="d">
 
     <Page.Resources>
+        <Style x:Name="InvoiceItemEditField" TargetType="TextBox">
+            <Setter Property="Height" Value="35" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="FontSize" Value="18" />
+        </Style>
         <Converters:MoneyConverter x:Key="MoneyConverter" />
+        <Converters:PercentageConverter x:Key="PercentageConverter" />
         <Converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </Page.Resources>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
@@ -24,22 +33,54 @@
 
         <StackPanel Grid.Row="0" x:Name="InvoiceDetailsHeader" Margin="0, 0, 0, 10" VerticalAlignment="Center">
             <TextBlock FontWeight="Bold" Text="{Binding InvoiceId}" FontSize="25" Foreground="DarkGray" HorizontalAlignment="Center" />
-            <TextBlock Text="{Binding CompanyName}" FontWeight="Bold" Margin="0, 0, 0, 5" FontSize="30" HorizontalAlignment="Center" />
-            <TextBlock Text="{Binding ClientName}" FontSize="25" FontWeight="SemiBold" Margin="0, 0, 0, 10" Foreground="DarkGray" HorizontalAlignment="Center" />
+            
+            <TextBlock Text="{Binding CompanyName}" FontWeight="Bold" Margin="0, 0, 0, 5" FontSize="30" HorizontalAlignment="Center"
+                       Visibility="{Binding IsEditMode, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Reverse}" />
+            <TextBlock Text="{Binding ClientName}" FontSize="25" FontWeight="SemiBold" Margin="0, 0, 0, 10" 
+                       Visibility="{Binding IsEditMode, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Reverse}"
+                       Foreground="DarkGray" HorizontalAlignment="Center" />
+
+            <ComboBox x:Name="ClientsComboBox" HorizontalAlignment="Center" Height="44" Width="350" 
+                      ItemsSource="{Binding Clients}" Margin="0, 10" 
+                      Visibility="{Binding IsEditMode, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock Text="{Binding Company}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+
+
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <TextBlock VerticalAlignment="Center" FontSize="16" Foreground="DarkGray" Margin="0, 0, 40, 0">
+                <TextBlock VerticalAlignment="Center" FontSize="16" Foreground="DarkGray" Margin="0, 0, 60, 0"
+                           Visibility="{Binding IsEditMode, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Reverse}">
                     <Run Text="Invoice Date:" FontWeight="SemiBold" />
                     <Run Text="{Binding InvoiceDate}" FontWeight="Light" />
                 </TextBlock>
-                <ToggleSwitch IsOn="{Binding IsPaid, Mode=TwoWay}" OffContent="Unpaid" OnContent="Paid" Margin="30, 0" Name="InvoicePaymentStatusToggle" Toggled="InvoicePaymentStatusToggle_Toggled" />
-                <TextBlock VerticalAlignment="Center" FontSize="16" Foreground="DarkGray">
+                <DatePicker x:Name="InvoiceDatePicker" Header="Invoice Date" MinWidth="175" MaxWidth="200" MonthFormat="{}{month.abbreviated}"
+                             Margin="0, 0, 60, 0" Visibility="{Binding IsEditMode, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                <ToggleSwitch IsOn="{Binding IsPaid, Mode=TwoWay}" OffContent="Unpaid" OnContent="Paid" VerticalAlignment="Center" VerticalContentAlignment="Center"
+                              Margin="30, 0" Toggled="InvoicePaymentStatusToggle_Toggled" />
+                <TextBlock VerticalAlignment="Center" FontSize="16" Foreground="DarkGray"
+                           Visibility="{Binding IsEditMode, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Reverse}">
                     <Run Text="Due Date:" FontWeight="SemiBold" />
                     <Run Text="{Binding DueDate}" FontWeight="Light" />
                 </TextBlock>
+                <DatePicker x:Name="DueDatePicker" Header="Due Date" MinWidth="175" MaxWidth="200" MonthFormat="{}{month.abbreviated}"
+                            Visibility="{Binding IsEditMode, Converter={StaticResource BooleanToVisibilityConverter}}" />
             </StackPanel>
         </StackPanel>
-        
-        <ListView Grid.Row="1" Background="#f8f8f8" x:Name="ItemsList" ItemsSource="{Binding Items}">
+
+        <Grid Grid.Row="1" Background="#f8f8f8" HorizontalAlignment="Stretch"
+              Visibility="{Binding IsEditMode, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Button Click="NewItem_Click" Content="Add New Item" Foreground="DarkGray" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Height="63" Margin="19, 22, 19, 7" HorizontalContentAlignment="Center" Background="Transparent" VerticalContentAlignment="Center" />
+            <Rectangle HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Stroke="DarkGray" Opacity=".4" Margin="19, 22, 19, 7"
+                StrokeDashArray="5" StrokeDashCap="Round" Height="63" />
+        </Grid>
+
+        <ListView Grid.Row="2" Background="#f8f8f8" x:Name="ItemsList" ItemsSource="{Binding Items}">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <controls:DropShadowPanel Style="{StaticResource ListViewRowDropshadow}">
@@ -50,20 +91,37 @@
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
 
-                            <TextBlock Margin="30, 0, 0, 0" Grid.Column="0" Text="{Binding Description}" Style="{StaticResource ListViewHeading}" />
-                            <TextBlock Grid.Column="1" Text="{Binding Price, Converter={StaticResource MoneyConverter}}" Style="{StaticResource ListViewSubtitle}" />
-                            <TextBlock Margin="0, 0, 15, 0" Grid.Column="2" Text="{Binding TaxPercentage, Converter={StaticResource MoneyConverter}}" Style="{StaticResource ListViewSubtitle}" />
+                            <TextBlock Margin="30, 0, 0, 0" Grid.Column="0" Text="{Binding Description, Mode=TwoWay}" Style="{StaticResource ListViewHeading}"
+                                     Visibility="{Binding ElementName=InvoiceDetails, Path=DataContext.IsEditMode, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Reverse}" />
+                            <TextBlock Grid.Column="1" Text="{Binding Price, Mode=TwoWay, Converter={StaticResource MoneyConverter}}" Style="{StaticResource ListViewSubtitle}"
+                                     Visibility="{Binding ElementName=InvoiceDetails, Path=DataContext.IsEditMode, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Reverse}" />
+                            <TextBlock Margin="0, 0, 15, 0" Grid.Column="2" Text="{Binding TaxPercentage, Converter={StaticResource PercentageConverter}}" Style="{StaticResource ListViewSubtitle}"
+                                     Visibility="{Binding ElementName=InvoiceDetails, Mode=TwoWay, Path=DataContext.IsEditMode, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Reverse}" />
+
+                            <TextBox Margin="30, 0, 60, 0" Grid.Column="0" Text="{Binding Description, Mode=TwoWay}"  Style="{StaticResource InvoiceItemEditField}"
+                                     Visibility="{Binding ElementName=InvoiceDetails, Path=DataContext.IsEditMode, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                            <TextBox Margin="15, 0" Grid.Column="1" Text="{Binding Price, Mode=TwoWay, Converter={StaticResource MoneyConverter}, ConverterParameter=HideIf0}" Style="{StaticResource InvoiceItemEditField}"
+                                     Visibility="{Binding ElementName=InvoiceDetails, Path=DataContext.IsEditMode, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                            <TextBox Margin="25, 0, 25, 0" Grid.Column="2" Text="{Binding TaxPercentage, Mode=TwoWay, Converter={StaticResource PercentageConverter}}" Style="{StaticResource InvoiceItemEditField}"
+                                     Visibility="{Binding ElementName=InvoiceDetails, Mode=TwoWay, Path=DataContext.IsEditMode, Converter={StaticResource BooleanToVisibilityConverter}}" />
                         </Grid>
                     </controls:DropShadowPanel>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
 
-        <CommandBar Grid.Row="2" DefaultLabelPosition="Right" Background="{StaticResource SystemControlAcrylicElementMediumHighBrush}">
-            <AppBarButton Label="Edit" Icon="Edit"/>
+        <CommandBar Visibility="{Binding IsEditMode, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Reverse}"
+                    Grid.Row="3" DefaultLabelPosition="Right" Background="{StaticResource SystemControlAcrylicElementMediumHighBrush}">
+            <AppBarButton Click="EditInvoice_Click" Label="Edit" Icon="Edit"/>
             <AppBarButton Label="Print" Icon="Print" />
             <AppBarButton Label="Email" Icon="Send"/>
             <AppBarButton Label="Delete" Icon="Delete"/>
+        </CommandBar>
+
+        <CommandBar Visibility="{Binding IsEditMode, Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Grid.Row="3" DefaultLabelPosition="Right" Background="{StaticResource SystemControlAcrylicElementMediumHighBrush}">
+            <AppBarButton Click="Cancel_Click" Label="Cancel" Icon="Cancel"/>
+            <AppBarButton Click="Save_Click" Label="Save" Icon="Save" />
         </CommandBar>
     </Grid>
 </Page>

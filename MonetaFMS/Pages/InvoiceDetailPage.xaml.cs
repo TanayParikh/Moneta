@@ -26,6 +26,7 @@ namespace MonetaFMS.Pages
     public sealed partial class InvoiceDetailPage : Page
     {
         public InvoiceDetailPageViewModel ViewModel { get; set; } = new InvoiceDetailPageViewModel();
+        public bool IsEditMode { get; set; } = false;
 
         public InvoiceDetailPage()
         {
@@ -38,6 +39,7 @@ namespace MonetaFMS.Pages
             base.OnNavigatedTo(e);
 
             ViewModel.SetupInvoice(e.Parameter as Invoice);
+            ItemsList.ItemsSource = ViewModel.Items;
 
             ConnectedAnimation headerAnimation = ConnectedAnimationService.GetForCurrentView().GetAnimation("InvoiceToDetails");
 
@@ -55,12 +57,30 @@ namespace MonetaFMS.Pages
 
         private void EditInvoice_Click(object sender, RoutedEventArgs e)
         {
+            ViewModel.IsEditMode = IsEditMode = true;
+            ClientsComboBox.SelectedItem = ViewModel.Invoice.Client;
+        }
 
+        private void Save_Click(object sender, RoutedEventArgs e)
+        {
+            ViewModel.IsEditMode = IsEditMode = false;
+            ViewModel.SaveInvoice();
+        }
+
+        private void Cancel_Click(object sender, RoutedEventArgs e)
+        {
+            ViewModel.IsEditMode = IsEditMode = false;
+            ViewModel.CancelInvoiceEdit();
         }
 
         private void InvoicePaymentStatusToggle_Toggled(object sender, RoutedEventArgs e)
         {
             ViewModel.UpdatePaymentStatus();
+        }
+
+        private void NewItem_Click(object sender, RoutedEventArgs e)
+        {
+            ViewModel.NewItem();
         }
     }
 }
