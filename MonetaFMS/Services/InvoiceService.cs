@@ -38,7 +38,7 @@ namespace MonetaFMS.Services
 
         public override Invoice CreateEntry(Invoice newValue)
         {
-            if (newValue.Id != 0)
+            if (newValue.Id != -1)
                 throw new ArgumentException("Invalid invoice entry creation, Id is already set.");
             else if (newValue.Client == null)
                 throw new ArgumentException("Invalid invoice entry creation, client has not been set.");
@@ -73,6 +73,8 @@ namespace MonetaFMS.Services
 
         public override bool UpdateEntry(Invoice updatedValue)
         {
+            bool invoiceUpdated, itemsUpdated = true;
+
             using (var command = new SqliteCommand())
             {
                 string updateQuery = $"UPDATE {TableName} SET ClientID=@ClientID, InvoiceDate=@InvoiceDate, Type=@Type, Paid=@Paid, DueDate=@DueDate, Note=@Note"
@@ -82,8 +84,16 @@ namespace MonetaFMS.Services
                 SetParameters(command, updatedValue);
                 command.Parameters.Add(new SqliteParameter("@InvoiceID", DbType.Int32) { Value = updatedValue.Id });
 
-                return DBService.UpdateValue(command);
+                invoiceUpdated = DBService.UpdateValue(command);
             }
+
+            foreach (var item in updatedValue.Items)
+            {
+                itemsUpdated = itemsUpdated && 
+                    (item.Id >= 0) ? ItemsService.UpdateEntry(item) : ItemsService.CreateEntry(item).Id >= 0;
+            }
+
+            return invoiceUpdated && itemsUpdated;
         }
 
         protected override Invoice ParseFromReader(SqliteDataReader reader)

@@ -32,7 +32,7 @@ namespace MonetaFMS.Services
 
         public override InvoiceItem CreateEntry(InvoiceItem newValue)
         {
-            if (newValue.Id != 0)
+            if (newValue.Id != -1)
                 throw new ArgumentException("Invalid item entry creation, Id is already set.");
 
             using (var command = new SqliteCommand())
