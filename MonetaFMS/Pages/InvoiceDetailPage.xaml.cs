@@ -1,4 +1,5 @@
-﻿using MonetaFMS.Models;
+﻿using MonetaFMS.Converters;
+using MonetaFMS.Models;
 using MonetaFMS.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -27,6 +28,9 @@ namespace MonetaFMS.Pages
     {
         public InvoiceDetailPageViewModel ViewModel { get; set; } = new InvoiceDetailPageViewModel();
         public bool IsEditMode { get; set; } = false;
+
+        private MoneyConverter MoneyConverter { get; } = new MoneyConverter();
+        private PercentageConverter PercentageConverter { get; } = new PercentageConverter();
 
         public InvoiceDetailPage()
         {
@@ -57,6 +61,7 @@ namespace MonetaFMS.Pages
 
         private void EditInvoice_Click(object sender, RoutedEventArgs e)
         {
+            ViewModel.EditInvoice();
             ViewModel.IsEditMode = IsEditMode = true;
             ClientsComboBox.SelectedItem = ViewModel.Invoice.Client;
         }
@@ -81,6 +86,32 @@ namespace MonetaFMS.Pages
         private void NewItem_Click(object sender, RoutedEventArgs e)
         {
             ViewModel.NewItem();
+        }
+
+        private void ItemPrice_KeyDown(object sender, KeyRoutedEventArgs e)
+        {
+            try
+            {
+                // Doesn't register key if key leads to invalid input
+                e.Handled = MoneyConverter.ConvertBack(((TextBox)sender).Text + Convert.ToChar(e.Key)) == null;
+            }
+            catch (Exception)
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void ItemTaxPercentage_KeyDown(object sender, KeyRoutedEventArgs e)
+        {
+            try
+            {
+                // Doesn't register key if key leads to invalid input
+                e.Handled = PercentageConverter.ConvertBack(((TextBox)sender).Text + Convert.ToChar(e.Key)) == null;
+            }
+            catch (Exception)
+            {
+                e.Handled = true;
+            }
         }
     }
 }

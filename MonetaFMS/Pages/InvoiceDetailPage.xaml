@@ -8,6 +8,7 @@
     xmlns:lottieUwp="using:LottieUWP"
     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     xmlns:Converters="using:MonetaFMS.Converters"
+    xmlns:extensions="using:Microsoft.Toolkit.Uwp.UI.Extensions"
     Name="InvoiceDetails"
     mc:Ignorable="d">
 
@@ -100,9 +101,9 @@
 
                             <TextBox Margin="30, 0, 60, 0" Grid.Column="0" Text="{Binding Description, Mode=TwoWay}"  Style="{StaticResource InvoiceItemEditField}"
                                      Visibility="{Binding ElementName=InvoiceDetails, Path=DataContext.IsEditMode, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                            <TextBox Margin="15, 0" Grid.Column="1" Text="{Binding Price, Mode=TwoWay, Converter={StaticResource MoneyConverter}, ConverterParameter=HideIf0}" Style="{StaticResource InvoiceItemEditField}"
+                            <TextBox KeyDown="ItemPrice_KeyDown" Margin="15, 0" Grid.Column="1" Text="{Binding Price, Mode=TwoWay, Converter={StaticResource MoneyConverter}, ConverterParameter=HideIf0}" Style="{StaticResource InvoiceItemEditField}"
                                      Visibility="{Binding ElementName=InvoiceDetails, Path=DataContext.IsEditMode, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                            <TextBox Margin="25, 0, 25, 0" Grid.Column="2" Text="{Binding TaxPercentage, Mode=TwoWay, Converter={StaticResource PercentageConverter}}" Style="{StaticResource InvoiceItemEditField}"
+                            <TextBox KeyDown="ItemTaxPercentage_KeyDown" Margin="25, 0, 25, 0" Grid.Column="2" Text="{Binding TaxPercentage, Mode=TwoWay, Converter={StaticResource PercentageConverter}}" Style="{StaticResource InvoiceItemEditField}"
                                      Visibility="{Binding ElementName=InvoiceDetails, Mode=TwoWay, Path=DataContext.IsEditMode, Converter={StaticResource BooleanToVisibilityConverter}}" />
                         </Grid>
                     </controls:DropShadowPanel>
