@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 
 namespace MonetaFMS.Models
 {
@@ -34,6 +35,7 @@ namespace MonetaFMS.Models
 
         public int InvoiceId { get; set; }
 
+        [JsonConstructor]
         public InvoiceItem(int id, DateTime creation, string note, string description, decimal price, decimal taxPercentage, int invoiceId)
             : this(note, description, price, taxPercentage, invoiceId)
         {
@@ -48,6 +50,11 @@ namespace MonetaFMS.Models
             Price = price;
             TaxPercentage = taxPercentage;
             InvoiceId = invoiceId;
+        }
+
+        public static InvoiceItem NewInvoiceItem(int invoiceId = -1)
+        {
+            return new InvoiceItem(-1, DateTime.Now, "", "", 0, 0, invoiceId);
         }
     }
 }

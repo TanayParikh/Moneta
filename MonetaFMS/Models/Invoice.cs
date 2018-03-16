@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -46,7 +47,7 @@ namespace MonetaFMS.Models
             }
         }
 
-
+        [JsonConstructor]
         public Invoice(int id, DateTime creation, string note, Client client, List<InvoiceItem> items,
             DateTime? invoiceDate, DateTime? dueDate, InvoiceType invoiceType, InvoiceStatus status)
             : this(note, client, items, invoiceDate, dueDate, invoiceType, status)

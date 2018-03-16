@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 
 namespace MonetaFMS.Models
 {
@@ -13,6 +14,13 @@ namespace MonetaFMS.Models
     {
         public InvoiceStatusType InvoiceStatusType { get; private set; }
         public string AdditionalInfo { get; private set; }
+
+        [JsonConstructor]
+        public InvoiceStatus(InvoiceStatusType statusType, string additionalInfo)
+        {
+            InvoiceStatusType = statusType;
+            AdditionalInfo = additionalInfo;
+        }
 
         public InvoiceStatus(DateTime? invoiceDueDate, bool paid)
         {

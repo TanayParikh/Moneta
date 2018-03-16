@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,6 +17,7 @@ namespace MonetaFMS.Models
         public string ImageReference { get; set; }
         public Invoice Invoice { get; set; }
 
+        [JsonConstructor]
         public Expense(int id, DateTime creation, string note, string description, ExpenseCategory category,
             DateTime date, decimal taxComponent, decimal totalCost, string imageReference, Invoice invoice)
             : this(note, description, category, date, taxComponent, totalCost, imageReference, invoice)
