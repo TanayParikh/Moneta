@@ -69,6 +69,8 @@ namespace MonetaFMS.ViewModels
         public ObservableCollection<InvoiceItem> Items { get; set; } = new ObservableCollection<InvoiceItem>();
         public ObservableCollection<Client> Clients { get; set; } = new ObservableCollection<Client>(Services.Services.ClientService.AllItems);
         
+        private Invoice InvoiceBackup { get; set; }
+
         public InvoiceDetailPageViewModel()
         {
             InvoiceService = Services.Services.InvoiceService;
@@ -90,9 +92,14 @@ namespace MonetaFMS.ViewModels
             }
         }
 
+        internal void EditInvoice()
+        {
+            InvoiceBackup = Extensions.Clone(Invoice);
+        }
+
         internal void NewItem()
         {
-            Items.Insert(0, new InvoiceItem(-1, DateTime.Now, "", "", 0, 0, Invoice.Id));
+            Items.Insert(0, InvoiceItem.NewInvoiceItem(Invoice.Id));
         }
 
         internal void SaveInvoice()
@@ -103,7 +110,7 @@ namespace MonetaFMS.ViewModels
         internal void CancelInvoiceEdit()
         {
             Items.Clear();
-            SetupInvoice(Invoice);
+            SetupInvoice(InvoiceBackup);
         }
 
         internal void UpdatePaymentStatus()
