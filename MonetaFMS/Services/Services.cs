@@ -10,7 +10,7 @@ namespace MonetaFMS.Services
 {
     public static class Services
     {
-        public static ConfigurationService ConfigurationService { get; set; }
+        public static SettingsService SettingsService { get; set; }
         public static DBService DBService { get; set; }
         static DemoDataService DemoDataService { get; set; }
 
@@ -23,7 +23,7 @@ namespace MonetaFMS.Services
 
         public static void InstantiateServices()
         {
-            ConfigurationService = new ConfigurationService();
+            SettingsService = new SettingsService();
             DBService = new DBService();
 
             ClientService = new ClientService(DBService);
