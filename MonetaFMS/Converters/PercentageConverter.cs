@@ -7,7 +7,7 @@ using Windows.UI.Xaml.Data;
 
 namespace MonetaFMS.Converters
 {
-    class PercentageConverter : IValueConverter
+    public class PercentageConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
@@ -22,18 +22,17 @@ namespace MonetaFMS.Converters
             return value;
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        public object ConvertBack(object value, Type targetType = null, object parameter = null, string language = null)
         {
             if (value is string percentage)
             {
-                if (percentage.Last() == '%')
-                    percentage.Substring(0, percentage.Length - 1);
+                percentage = percentage.Replace(",", "").Replace(" ", "").Replace("%", "");
 
                 if (decimal.TryParse(percentage, out decimal p))
                     return p / 100;
             }
 
-            return value;
+            return null;
         }
     }
 }
