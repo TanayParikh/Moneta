@@ -14,6 +14,7 @@ namespace MonetaFMS.Services
     {
         IClientService ClientService { get; set; }
         IItemsService ItemsService { get; set; }
+        IPDFService PDFService { get; set; }
 
         protected override string TableName => DBService.Tables.Invoices.ToString();
 
@@ -144,6 +145,11 @@ namespace MonetaFMS.Services
         public decimal GetInvoiceTotal(Invoice invoice)
         {
             return invoice.Items.Sum(i => i.Price + i.Price * i.TaxPercentage);
+        }
+
+        public void PrintInvoice(Invoice invoice)
+        {
+            PDFService.GenerateInvoicePDF(invoice);
         }
     }
 }
