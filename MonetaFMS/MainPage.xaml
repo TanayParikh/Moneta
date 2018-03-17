@@ -19,7 +19,7 @@
         <NavigationView x:Name="NavView"
                 SelectionChanged="NavView_SelectionChanged"
                 Loaded="NavView_Loaded"
-                IsPaneOpen="{Binding Path=ViewModel.IsPaneOpen}"
+                IsPaneOpen="{Binding IsPaneOpen}"
                 Canvas.ZIndex="0">
 
             <NavigationView.MenuItems>
