@@ -17,8 +17,6 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 
-// The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
-
 namespace MonetaFMS.Pages
 {
     /// <summary>
@@ -86,6 +84,11 @@ namespace MonetaFMS.Pages
         private void NewItem_Click(object sender, RoutedEventArgs e)
         {
             ViewModel.NewItem();
+        }
+
+        private void Print_Click(object sender, RoutedEventArgs e)
+        {
+            ViewModel.PrintInvoice();
         }
 
         private void ItemPrice_KeyDown(object sender, KeyRoutedEventArgs e)

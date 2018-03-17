@@ -114,7 +114,7 @@
         <CommandBar Visibility="{Binding IsEditMode, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Reverse}"
                     Grid.Row="3" DefaultLabelPosition="Right" Background="{StaticResource SystemControlAcrylicElementMediumHighBrush}">
             <AppBarButton Click="EditInvoice_Click" Label="Edit" Icon="Edit"/>
-            <AppBarButton Label="Print" Icon="Print" />
+            <AppBarButton Click="Print_Click" Label="Print" Icon="Print" />
             <AppBarButton Label="Email" Icon="Send"/>
             <AppBarButton Label="Delete" Icon="Delete"/>
         </CommandBar>

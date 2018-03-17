@@ -102,6 +102,11 @@ namespace MonetaFMS.ViewModels
             Items.Insert(0, InvoiceItem.NewInvoiceItem(Invoice.Id));
         }
 
+        internal void PrintInvoice()
+        {
+            InvoiceService.PrintInvoice(Invoice);
+        }
+
         internal void SaveInvoice()
         {
             InvoiceService.UpdateEntry(Invoice);
