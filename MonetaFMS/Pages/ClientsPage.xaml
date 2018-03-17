@@ -28,14 +28,22 @@
                                     Foreground="Black">
             <controls:MasterDetailsView.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel Margin="0,8">
-                        <TextBlock Text="{Binding Company}" 
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <PersonPicture VerticalAlignment="Center" Grid.Column="0" MaxWidth="45" DisplayName="{Binding Company}" />
+                        <StackPanel Margin="15,8,10,8" Grid.Column="1">
+                            <TextBlock Text="{Binding Company}" 
                                    Style="{ThemeResource SubtitleTextBlockStyle}"/>
-                        <TextBlock Text="{Binding FullName}" 
+                            <TextBlock Text="{Binding FullName}" 
                                    Style="{ThemeResource BodyTextBlockStyle}"
                                    Opacity=".6" 
                                    MaxLines="1"/>
-                    </StackPanel>
+                        </StackPanel>
+                    </Grid>
                 </DataTemplate>
             </controls:MasterDetailsView.ItemTemplate>
             <controls:MasterDetailsView.DetailsTemplate>
