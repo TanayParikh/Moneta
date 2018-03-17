@@ -43,7 +43,7 @@ namespace MonetaFMS.Converters
             throw new InvalidOperationException();
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        public object ConvertBack(object value, Type targetType = null, object parameter = null, string language = null)
         {
             if (value is string v)
             {
@@ -59,7 +59,7 @@ namespace MonetaFMS.Converters
                 }
             }
 
-            return value;
+            return null;
         }
     }
 }
