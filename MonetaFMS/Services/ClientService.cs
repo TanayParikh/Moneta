@@ -34,7 +34,7 @@ namespace MonetaFMS.Services
 
         public override Client CreateEntry(Client newValue)
         {
-            if (newValue.Id != 0)
+            if (newValue.Id != -1)
                 throw new ArgumentException("Invalid client entry creation, Id is already set.");
 
             using (var command = new SqliteCommand())
@@ -105,5 +105,9 @@ namespace MonetaFMS.Services
             command.Parameters.Add(new SqliteParameter("@Address", DbType.String) { Value = val.Address });
             command.Parameters.Add(new SqliteParameter("@Note", DbType.String) { Value = val.Note });
         }
+
+        public Client NewClient() => 
+            new Client(id: -1, creation: DateTime.Now, note: string.Empty, firstName: string.Empty, lastName: string.Empty, 
+                company: string.Empty, address: string.Empty, phoneNumber: string.Empty, email: string.Empty);
     }
 }

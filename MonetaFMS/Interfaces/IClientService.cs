@@ -9,5 +9,6 @@ namespace MonetaFMS.Interfaces
 {
     public interface IClientService : ITableService<Client>
     {
+        Client NewClient();
     }
 }
