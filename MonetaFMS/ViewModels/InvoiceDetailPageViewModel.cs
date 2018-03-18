@@ -14,56 +14,61 @@ namespace MonetaFMS.ViewModels
     public class InvoiceDetailPageViewModel : BindableBase
     {
         IInvoiceService InvoiceService { get; set; }
+        
+        Invoice _invoice;
+        public Invoice Invoice
+        {
+            get { return _invoice; }
+            set { SetProperty(ref _invoice, value); }
+        }
 
-        public Invoice Invoice { get; set; }
-
-        string invoiceId;
+        string _invoiceId;
         public string InvoiceId
         {
-            get { return invoiceId; }
-            set { SetProperty(ref invoiceId, value); }
+            get { return _invoiceId; }
+            set { SetProperty(ref _invoiceId, value); }
         }
 
-        string companyName;
+        string _companyName;
         public string CompanyName
         {
-            get { return companyName; }
-            set { SetProperty(ref companyName, value); }
+            get { return _companyName; }
+            set { SetProperty(ref _companyName, value); }
         }
 
-        string clientName;
+        string _clientName;
         public string ClientName
         {
-            get { return clientName; }
-            set { SetProperty(ref clientName, value); }
+            get { return _clientName; }
+            set { SetProperty(ref _clientName, value); }
         }
 
-        string invoiceDate;
+        string _invoiceDate;
         public string InvoiceDate
         {
-            get { return invoiceDate; }
-            set { SetProperty(ref invoiceDate, value); }
+            get { return _invoiceDate; }
+            set { SetProperty(ref _invoiceDate, value); }
         }
 
-        string dueDate;
+        string _dueDate;
         public string DueDate
         {
-            get { return dueDate; }
-            set { SetProperty(ref dueDate, value); }
+            get { return _dueDate; }
+            set { SetProperty(ref _dueDate, value); }
         }
 
-        bool isPaid;
+        bool _isPaid;
         public bool IsPaid
         {
-            get { return isPaid; }
-            set { SetProperty(ref isPaid, value); }
+            get { return _isPaid; }
+            set { SetProperty(ref _isPaid, value); }
         }
 
-        bool isEditMode;
+        bool _isEditMode;
         public bool IsEditMode
         {
-            get { return isEditMode; }
-            set { SetProperty(ref isEditMode, value); }
+            get { return _isEditMode; }
+            set { SetProperty(ref _isEditMode, value); }
         }
 
         public ObservableCollection<InvoiceItem> Items { get; set; } = new ObservableCollection<InvoiceItem>();
@@ -79,16 +84,30 @@ namespace MonetaFMS.ViewModels
         public void SetupInvoice(Invoice invoice)
         {
             Invoice = invoice;
-            InvoiceId = "#" + Invoice.Id;
-            CompanyName = Invoice.Client.Company;
-            ClientName = Invoice.Client.FullName;
+            InvoiceId = Invoice.Id == -1 ? "Creating a New Invoice" : "#" + Invoice.Id;
+
+            if (Invoice.Client != null)
+            {
+                CompanyName = Invoice.Client.Company;
+                ClientName = Invoice.Client.FullName;
+            }
+            
             InvoiceDate = Invoice.InvoiceDate?.ToString("MMM dd, yyyy");
             DueDate = Invoice.DueDate?.ToString("MMM dd, yyyy");
             IsPaid = Invoice.Status.InvoiceStatusType == InvoiceStatusType.Paid;
 
-            foreach (InvoiceItem i in Invoice.Items)
+            Items.Clear();
+
+            if (Invoice.Id == -1)
             {
-                Items.Add(i);
+                NewItem();
+            }
+            else
+            {
+                foreach (InvoiceItem i in Invoice.Items)
+                {
+                    Items.Add(i);
+                }
             }
         }
 
@@ -99,7 +118,7 @@ namespace MonetaFMS.ViewModels
 
         internal void NewItem()
         {
-            Items.Insert(0, InvoiceItem.NewInvoiceItem(Invoice.Id));
+            Items.Insert(0, InvoiceService.NewInvoiceItem(Invoice.Id));
         }
 
         internal void PrintInvoice()
@@ -107,14 +126,22 @@ namespace MonetaFMS.ViewModels
             InvoiceService.PrintInvoice(Invoice);
         }
 
-        internal void SaveInvoice()
+        internal bool SaveInvoice()
         {
-            InvoiceService.UpdateEntry(Invoice);
+            Invoice.Items = Items.ToList();
+            Invoice.Status = new InvoiceStatus(Invoice.DueDate, IsPaid);
+
+            bool result = Invoice.Id == -1 ?
+                InvoiceService.CreateEntry(Invoice).Id > 0 :
+                InvoiceService.UpdateEntry(Invoice);
+
+            SetupInvoice(Invoice);
+
+            return result;
         }
 
         internal void CancelInvoiceEdit()
         {
-            Items.Clear();
             SetupInvoice(InvoiceBackup);
         }
 

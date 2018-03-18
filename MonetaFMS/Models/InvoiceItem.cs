@@ -51,10 +51,5 @@ namespace MonetaFMS.Models
             TaxPercentage = taxPercentage;
             InvoiceId = invoiceId;
         }
-
-        public static InvoiceItem NewInvoiceItem(int invoiceId = -1)
-        {
-            return new InvoiceItem(-1, DateTime.Now, "", "", 0, 0, invoiceId);
-        }
     }
 }
