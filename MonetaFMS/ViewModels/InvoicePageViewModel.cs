@@ -1,5 +1,6 @@
 ﻿using Microsoft.Toolkit.Uwp.UI;
 using MonetaFMS.Common;
+using MonetaFMS.Interfaces;
 using MonetaFMS.Models;
 using System;
 using System.Collections.Generic;
@@ -26,12 +27,19 @@ namespace MonetaFMS.ViewModels
         
         private ObservableCollection<Invoice> _allInvoices { get; set; }
         public AdvancedCollectionView AllInvoices { get; set; }
+
+        public IInvoiceService InvoiceService { get; set; }
         
         public InvoicePageViewModel()
         {
             GenerateStats();
             _allInvoices = new ObservableCollection<Invoice>(Services.Services.InvoiceService.AllItems);
             AllInvoices = new AdvancedCollectionView(_allInvoices);
+
+            // Default sorts to descending id
+            AllInvoices.SortDescriptions.Add(new SortDescription("Id", SortDirection.Descending));
+
+            InvoiceService = Services.Services.InvoiceService;
         }
 
         public decimal Revenue
@@ -102,11 +110,32 @@ namespace MonetaFMS.ViewModels
             }
         }
 
-        internal void InvoiceSelected(Invoice clickedItem)
+        internal void Search(string text)
         {
+            string[] searchComponents = text.Split(' ');
+            Dictionary<string, string> searchMapping = new Dictionary<string, string>();
 
+            for (int i = 0; i < searchComponents.Length; ++i)
+            {
+                string[] component = searchComponents[i].Split(':', StringSplitOptions.RemoveEmptyEntries);
+
+                if (component.Length > 2)
+                {
+                    component = new string[]{ component[0], string.Join(':', component.Skip(1)) };
+                }
+
+                if (component.Length == 2)
+                {
+                    //AllInvoices.Filter
+                }
+            }
+
+            if (int.TryParse(text, out int searchInt))
+            {
+                AllInvoices.Filter = i => (i as Invoice).Id == searchInt;
+            }
         }
-
+        
         private void GenerateStats()
         {
             var revenue = payables = overdue = 0;
