@@ -23,8 +23,7 @@ namespace MonetaFMS.Services
 
         public SettingsService()
         {
-            MonetaSettings = GetRoamingData<MonetaSettings>(RoamingDataKey.MonetaSettings);
-            BusinessProfile = GetRoamingData<BusinessProfile>(RoamingDataKey.MonetaBusinessProfile);
+            RestoreSettings();
         }
 
         private T GetRoamingData<T>(RoamingDataKey key) where T : class, new()
@@ -75,6 +74,12 @@ namespace MonetaFMS.Services
             {
                 return false;
             }
+        }
+
+        public void RestoreSettings()
+        {
+            MonetaSettings = GetRoamingData<MonetaSettings>(RoamingDataKey.MonetaSettings);
+            BusinessProfile = GetRoamingData<BusinessProfile>(RoamingDataKey.MonetaBusinessProfile);
         }
     }
 }

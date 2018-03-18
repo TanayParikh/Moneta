@@ -20,5 +20,6 @@ namespace MonetaFMS.Interfaces
 
         Task<StorageFolder> GetFutureAccessFolder(FutureAccessToken token);
         bool AddFutureAccessFolder(FutureAccessToken token, StorageFolder folder);
+        void RestoreSettings();
     }
 }
