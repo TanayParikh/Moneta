@@ -45,8 +45,6 @@ namespace MonetaFMS.Pages
 
         private void ListView_ItemClick(object sender, ItemClickEventArgs e)
         {
-            ViewModel.InvoiceSelected((Invoice)e.ClickedItem);
-
             if (InvoicesList.ContainerFromItem(e.ClickedItem) is ListViewItem container)
             {
                 // Stash the clicked item f or use later. We'll need it when we connect back
@@ -56,6 +54,13 @@ namespace MonetaFMS.Pages
             }
 
             Frame.Navigate(typeof(InvoiceDetailPage), _storedItem);
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            if (e.NavigationMode == NavigationMode.Back &&
+                ViewModel.InvoiceService.AllItems.Count == ViewModel.AllInvoices.Count + 1)
+                ViewModel.AllInvoices.Add(ViewModel.InvoiceService.AllItems.Last());
         }
 
         private void SearchBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
@@ -78,6 +83,11 @@ namespace MonetaFMS.Pages
                     await InvoicesList.TryStartConnectedAnimationAsync(animation, _storedItem, "DetailToInvoice");
                 }
             }
+        }
+
+        private void CreateInvoice_Click(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(InvoiceDetailPage), ViewModel.InvoiceService.NewInvoice());
         }
     }
 }

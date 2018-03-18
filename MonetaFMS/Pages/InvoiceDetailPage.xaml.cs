@@ -1,11 +1,14 @@
-﻿using MonetaFMS.Converters;
+﻿using MonetaFMS.Common;
+using MonetaFMS.Converters;
 using MonetaFMS.Models;
 using MonetaFMS.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Text;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -19,10 +22,7 @@ using Windows.UI.Xaml.Navigation;
 
 namespace MonetaFMS.Pages
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
-    public sealed partial class InvoiceDetailPage : Page
+    public sealed partial class InvoiceDetailPage : PageBase
     {
         public InvoiceDetailPageViewModel ViewModel { get; set; } = new InvoiceDetailPageViewModel();
         public bool IsEditMode { get; set; } = false;
@@ -32,8 +32,11 @@ namespace MonetaFMS.Pages
 
         public InvoiceDetailPage()
         {
-            this.InitializeComponent();
+            InitializeComponent();
             DataContext = ViewModel;
+
+            AnimationView = LottieAnimationView;
+            FadesEnabled = true;
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -49,6 +52,8 @@ namespace MonetaFMS.Pages
             {
                 headerAnimation.TryStart(InvoiceDetailsHeader);
             }
+
+            ViewModel.IsEditMode = IsEditMode = ViewModel.Invoice.Id == -1;
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
@@ -64,10 +69,10 @@ namespace MonetaFMS.Pages
             ClientsComboBox.SelectedItem = ViewModel.Invoice.Client;
         }
 
-        private void Save_Click(object sender, RoutedEventArgs e)
+        private async void Save_Click(object sender, RoutedEventArgs e)
         {
+            await PlayAnimation(ViewModel.SaveInvoice());
             ViewModel.IsEditMode = IsEditMode = false;
-            ViewModel.SaveInvoice();
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e)
@@ -78,7 +83,8 @@ namespace MonetaFMS.Pages
 
         private void InvoicePaymentStatusToggle_Toggled(object sender, RoutedEventArgs e)
         {
-            ViewModel.UpdatePaymentStatus();
+            if (!ViewModel.IsEditMode)
+                ViewModel.UpdatePaymentStatus();
         }
 
         private void NewItem_Click(object sender, RoutedEventArgs e)
@@ -96,7 +102,7 @@ namespace MonetaFMS.Pages
             try
             {
                 // Doesn't register key if key leads to invalid input
-                e.Handled = MoneyConverter.ConvertBack(((TextBox)sender).Text + Convert.ToChar(e.Key)) == null;
+                e.Handled = MoneyConverter.ConvertBack(((TextBox)sender).Text + Utilities.GetCharFromKey(e.Key)) == null;
             }
             catch (Exception)
             {
@@ -109,12 +115,18 @@ namespace MonetaFMS.Pages
             try
             {
                 // Doesn't register key if key leads to invalid input
-                e.Handled = PercentageConverter.ConvertBack(((TextBox)sender).Text + Convert.ToChar(e.Key)) == null;
+                e.Handled = PercentageConverter.ConvertBack(((TextBox)sender).Text + Utilities.GetCharFromKey(e.Key)) == null;
             }
             catch (Exception)
             {
                 e.Handled = true;
             }
+        }
+
+        private void TextBox_Paste(object sender, TextControlPasteEventArgs e)
+        {
+            // Disables TB Paste for price / tax %
+            e.Handled = true;
         }
     }
 }

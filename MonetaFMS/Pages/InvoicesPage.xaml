@@ -88,7 +88,7 @@
                         VerticalAlignment="Center"
                         DefaultLabelPosition="Right"
                         Background="{ThemeResource SystemControlBackgroundAltHighBrush}">
-                <AppBarButton Label="Create Invoice">
+                <AppBarButton Click="CreateInvoice_Click" Label="Create Invoice">
                     <AppBarButton.Icon>
                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xECC8;"/>
                     </AppBarButton.Icon>
