@@ -9,13 +9,57 @@ namespace MonetaFMS.Models
 {
     public class Invoice : Record
     {
-        public Client Client { get; set; }
-        public List<InvoiceItem> Items { get; set; }
-        public DateTime? InvoiceDate { get; set; }
-        public DateTime? DueDate { get; set; }
-        public InvoiceType InvoiceType { get; set; }
-        public InvoiceStatus Status { get; set; }
-        
+        InvoiceType _invoiceType;
+        public InvoiceType InvoiceType
+        {
+            get { return _invoiceType; }
+            set { SetProperty(ref _invoiceType, value); }
+        }
+
+        Client _client;
+        public Client Client
+        {
+            get { return _client; }
+            set { SetProperty(ref _client, value); }
+        }
+
+        InvoiceStatus _status;
+        public InvoiceStatus Status
+        {
+            get { return _status; }
+            set { SetProperty(ref _status, value); }
+        }
+
+        DateTime? _invoiceDate;
+        public DateTime? InvoiceDate
+        {
+            get { return _invoiceDate; }
+            set { SetProperty(ref _invoiceDate, value); }
+        }
+
+        DateTime? _dueDate;
+        public DateTime? DueDate
+        {
+            get { return _dueDate; }
+            set { SetProperty(ref _dueDate, value); }
+        }
+
+        List<InvoiceItem> _items;
+        public List<InvoiceItem> Items
+        {
+            get { return _items; }
+            set
+            {
+                if (value != _items)
+                {
+                    OnPropertyChanged(nameof(Subtotal));
+                    OnPropertyChanged(nameof(TaxAmount));
+                    OnPropertyChanged(nameof(Total));
+                }
+
+                SetProperty(ref _items, value);
+            }
+        }
 
         public decimal Subtotal => Items.Sum(i => i.Price);
         public decimal TaxAmount => Items.Sum(i => i.TaxPercentage * i.Price);
