@@ -99,6 +99,7 @@
     <Compile Include="Common\Extensions.cs" />
     <Compile Include="Common\Utilities.cs" />
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
+    <Compile Include="Converters\DateTimeToDateTimeOffsetConverter.cs" />
     <Compile Include="Converters\InvoiceStatusToColorConverter.cs" />
     <Compile Include="Converters\DateConverter.cs" />
     <Compile Include="Converters\PercentageConverter.cs" />
