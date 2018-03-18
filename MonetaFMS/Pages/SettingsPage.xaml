@@ -63,10 +63,15 @@
                     </StackPanel>
                 </PivotItem>
                 <PivotItem Header="Moneta Settings">
-                    <StackPanel Orientation="Horizontal" VerticalAlignment="Top">
-                        <Button Name="MonetaDirectory" Margin="25" Width="200" Height="50" Content="Select Moneta Directory" Click="MonetaDirectory_Click" />
+                    <StackPanel Margin="20">
+                        <ToggleSwitch Name="OpenPDFOnCreationToggle" Header="Open PDF Upon Creation" IsOn="{Binding MonetaSettings.OpenPDFOnCreation, Mode=TwoWay}" OffContent="Just Create PDF" OnContent="Open PDF" VerticalAlignment="Center" VerticalContentAlignment="Center"
+                                  Margin="30, 0" Toggled="SaveMonetaSettings" />
+                    
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Top">
+                            <Button Name="MonetaDirectory" Margin="25" Width="200" Height="50" Content="Select Moneta Directory" Click="MonetaDirectory_Click" />
 
-                        <Button Name="BackupDirectory" Margin="25" Width="200" Height="50" Content="Select Backup Directory" Click="BackupDirectory_Click" />
+                            <Button Name="BackupDirectory" Margin="25" Width="200" Height="50" Content="Select Backup Directory" Click="BackupDirectory_Click" />
+                        </StackPanel>
                     </StackPanel>
                 </PivotItem>
                 <PivotItem Header="About Moneta">
