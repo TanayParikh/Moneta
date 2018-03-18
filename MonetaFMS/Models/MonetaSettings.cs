@@ -10,8 +10,9 @@ namespace MonetaFMS.Models
 {
     public class MonetaSettings : BindableBase
     {
-        bool _openPDFOnCreation = true;
-        int _invoiceCreditPeriod = 30;
+        bool _openPDFOnCreation;
+        int _invoiceCreditPeriod;
+        double _taxPercentage;
 
         [JsonProperty]
         public bool OpenPDFOnCreation
@@ -27,13 +28,26 @@ namespace MonetaFMS.Models
             set { SetProperty(ref _invoiceCreditPeriod, value); }
         }
 
+        [JsonProperty]
+        public double TaxPercentage
+        {
+            get { return _taxPercentage; }
+            set { SetProperty(ref _taxPercentage, value); }
+        }
+
         [JsonConstructor]
-        public MonetaSettings(bool openPDFOnCreation, int invoiceCreditPeriod)
+        public MonetaSettings(bool openPDFOnCreation, int invoiceCreditPeriod, double taxPercentage)
         {
             OpenPDFOnCreation = openPDFOnCreation;
             InvoiceCreditPeriod = invoiceCreditPeriod;
+            TaxPercentage = taxPercentage;
         }
         
-        public MonetaSettings() { }
+        public MonetaSettings()
+        {
+            OpenPDFOnCreation = true;
+            InvoiceCreditPeriod = 30;
+            TaxPercentage = 13d;
+        }
     }
 }

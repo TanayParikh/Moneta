@@ -67,18 +67,33 @@
                         <ToggleSwitch Name="OpenPDFOnCreationToggle" Header="Open PDF Upon Creation" IsOn="{Binding MonetaSettings.OpenPDFOnCreation, Mode=TwoWay}" OffContent="Just Create PDF" 
                                       OnContent="Open PDF" VerticalAlignment="Center" VerticalContentAlignment="Center" Margin="30, 10" />
 
-                        <Grid>
+                        <Grid Width="450" HorizontalAlignment="Left">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
 
-                            <Slider Width="380" Name="CreditPeriodSlider" HorizontalAlignment="Left" Margin="30, 20" Value="{Binding MonetaSettings.InvoiceCreditPeriod, Mode=TwoWay}"
-                                    Header="Default Credit Period (Days till invoice becomes due)" Maximum="180" Minimum="0" 
+                            <Slider Width="330" Name="CreditPeriodSlider" HorizontalAlignment="Left" Margin="30, 20" Value="{Binding MonetaSettings.InvoiceCreditPeriod, Mode=TwoWay}"
+                                    Header="Credit Grace Period" Maximum="180" Minimum="0" 
                                     TickFrequency="10" TickPlacement="Outside" />
-                            <TextBlock Grid.Column="1">
+                            <TextBlock Grid.Column="1" VerticalAlignment="Center">
                                 <Run Text="{Binding ElementName=CreditPeriodSlider, Path=Value}" />
                                 <Run Text=" days" />
+                            </TextBlock>
+                        </Grid>
+
+                        <Grid Width="450" HorizontalAlignment="Left">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <Slider Width="330" Name="TaxPercentageSlider" HorizontalAlignment="Left" Margin="30, 20" Value="{Binding MonetaSettings.TaxPercentage, Mode=TwoWay}"
+                                    Header="Tax Rate" Maximum="25" Minimum="0" StepFrequency=".25"
+                                    TickFrequency="1" TickPlacement="Outside" />
+                            <TextBlock Grid.Column="1" VerticalAlignment="Center">
+                                <Run Text="{Binding ElementName=TaxPercentageSlider, Path=Value}" />
+                                <Run Text=" %" />
                             </TextBlock>
                         </Grid>
 
