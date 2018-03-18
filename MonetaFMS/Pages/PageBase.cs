@@ -33,11 +33,11 @@ namespace MonetaFMS.Pages
             if (FadesEnabled)
                 ((Storyboard) Resources["AnimationFadeIn"])?.Begin();
 
-            AnimationView.Speed = 2f;
+            AnimationView.Speed = 0.5f;
             AnimationView.RepeatCount = 0;
             AnimationView.PlayAnimation();
 
-            await Task.Delay(2700);
+            await Task.Delay(2500);
 
             if (FadesEnabled)
                 ((Storyboard) Resources["AnimationFadeOut"])?.Begin();

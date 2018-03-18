@@ -287,6 +287,9 @@
     <PackageReference Include="iTextSharp-LGPL">
       <Version>4.1.6</Version>
     </PackageReference>
+    <PackageReference Include="LottieUWP">
+      <Version>2.5.1</Version>
+    </PackageReference>
     <PackageReference Include="Microsoft.Data.SQLite">
       <Version>1.1.1</Version>
     </PackageReference>
@@ -305,12 +308,6 @@
     <PackageReference Include="Newtonsoft.Json">
       <Version>11.0.1</Version>
     </PackageReference>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="LottieUWP\LottieUWP.csproj">
-      <Project>{5A0C3503-795B-49ED-AF1E-DF08D9A09574}</Project>
-      <Name>LottieUWP</Name>
-    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
