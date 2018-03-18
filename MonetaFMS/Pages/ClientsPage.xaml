@@ -10,18 +10,26 @@
     xmlns:lottieUwp="using:LottieUWP"
     mc:Ignorable="d">
 
+    <Page.Resources>
+        <Storyboard x:Name="AnimationFadeIn">
+            <DoubleAnimation From="0" To="1" Storyboard.TargetName="LottieAnimationView" Storyboard.TargetProperty="Opacity" Duration="0:0:0.15" />
+            <DoubleAnimation From="1" To="0" Storyboard.TargetName="ContentFrame" Storyboard.TargetProperty="Opacity" Duration="0:0:0.15" />
+        </Storyboard>
+        <Storyboard x:Name="AnimationFadeOut">
+            <DoubleAnimation From="1" To="0" Storyboard.TargetName="LottieAnimationView" Storyboard.TargetProperty="Opacity" Duration="0:0:0.35" />
+            <DoubleAnimation From="0" To="1" Storyboard.TargetName="ContentFrame" Storyboard.TargetProperty="Opacity" Duration="0:0:0.35" />
+        </Storyboard>
+    </Page.Resources>
+
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-
-
-        <!--<lottieUwp:LottieAnimationView
-                            x:Name="LottieAnimationWrapper"
-                            RepeatCount="0"
-                            Margin="0,-40,0,0"
-                            Width="75"
-                            Height="75"
-                            Grid.Column="1"
-                            VerticalAlignment="Center"
-                            HorizontalAlignment="Center"/>-->
+        <lottieUwp:LottieAnimationView
+                        x:Name="LottieAnimationView"
+                        AccessKey="LottieAnimationView"
+                        RepeatCount="0"
+                        Opacity="0"
+                        Margin="0,-40,0,0"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center"/>
 
         <controls:MasterDetailsView ItemsSource="{Binding AllClients}"
                                     NoSelectionContent="Select a User"
@@ -80,7 +88,7 @@
                 <DataTemplate>
                     <StackPanel HorizontalAlignment="Center" 
                                 VerticalAlignment="Center">
-                        <SymbolIcon RenderTransformOrigin=".5,.5" Symbol="Contact">
+                        <SymbolIcon RenderTransformOrigin=".5,.5" HorizontalAlignment="Center" Symbol="Contact">
                             <SymbolIcon.RenderTransform>
                                 <CompositeTransform 
                                   ScaleX="2" 
@@ -88,9 +96,8 @@
                             </SymbolIcon.RenderTransform>
                         </SymbolIcon>
 
-                        <TextBlock Text="{Binding}" 
-                                   FontSize="24" 
-                                   Margin="0,20"/>
+                        <TextBlock Text="{Binding}" HorizontalAlignment="Center"
+                                   FontSize="24" Margin="0,20"/>
                     </StackPanel>
                 </DataTemplate>
             </controls:MasterDetailsView.NoSelectionContentTemplate>

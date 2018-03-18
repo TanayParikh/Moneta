@@ -34,7 +34,8 @@ namespace MonetaFMS.Pages
             InitializeComponent();
             DataContext = ViewModel;
 
-            //AnimationView = LottieAnimationWrapper;
+            AnimationView = LottieAnimationView;
+            FadesEnabled = true;
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
