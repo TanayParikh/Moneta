@@ -21,14 +21,18 @@ namespace MonetaFMS.Services
 
         public static IBusinessStatsService BusinessStatsService { get; set; }
 
+        public static IPDFService PDFService { get; set; }
+
         public static void InstantiateServices()
         {
             SettingsService = new SettingsService();
             DBService = new DBService();
 
+            PDFService = new PDFService(SettingsService);
+
             ClientService = new ClientService(DBService);
             ItemsService = new ItemsService(DBService);
-            InvoiceService = new InvoiceService(DBService, ClientService, ItemsService);
+            InvoiceService = new InvoiceService(DBService, ClientService, ItemsService, PDFService);
             ExpenseService = new ExpenseService(DBService, InvoiceService);
             BusinessStatsService = new BusinessStatsService(ClientService, InvoiceService, ExpenseService);
             // DemoDataService = new DemoDataService(DBService, ClientService, ExpenseService, InvoiceService, ItemsService);

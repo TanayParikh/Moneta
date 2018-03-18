@@ -30,10 +30,11 @@ namespace MonetaFMS.Services
             DueDate
         }
 
-        public InvoiceService(DBService dBService, IClientService clientService, IItemsService itemsService) : base(dBService)
+        public InvoiceService(DBService dBService, IClientService clientService, IItemsService itemsService, IPDFService pdfService) : base(dBService)
         {
             ClientService = clientService;
             ItemsService = itemsService;
+            PDFService = pdfService;
             AllItems = GetAllFromDB();
         }
 

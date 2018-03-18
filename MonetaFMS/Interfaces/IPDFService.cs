@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MonetaFMS.Interfaces
 {
-    interface IPDFService
+    public interface IPDFService
     {
         bool GenerateInvoicePDF(Invoice invoice);
         bool GenerateProfitLossPDF(Invoice invoice);
