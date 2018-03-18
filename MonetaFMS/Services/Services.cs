@@ -32,7 +32,7 @@ namespace MonetaFMS.Services
 
             ClientService = new ClientService(DBService);
             ItemsService = new ItemsService(DBService);
-            InvoiceService = new InvoiceService(DBService, ClientService, ItemsService, PDFService);
+            InvoiceService = new InvoiceService(DBService, ClientService, ItemsService, PDFService, SettingsService);
             ExpenseService = new ExpenseService(DBService, InvoiceService);
             BusinessStatsService = new BusinessStatsService(ClientService, InvoiceService, ExpenseService);
             // DemoDataService = new DemoDataService(DBService, ClientService, ExpenseService, InvoiceService, ItemsService);

@@ -15,6 +15,7 @@ namespace MonetaFMS.Services
         IClientService ClientService { get; set; }
         IItemsService ItemsService { get; set; }
         IPDFService PDFService { get; set; }
+        ISettingsService SettingsService { get; set; }
 
         protected override string TableName => DBService.Tables.Invoices.ToString();
 
@@ -30,11 +31,19 @@ namespace MonetaFMS.Services
             DueDate
         }
 
-        public InvoiceService(DBService dBService, IClientService clientService, IItemsService itemsService, IPDFService pdfService) : base(dBService)
+        public Invoice NewInvoice() => new Invoice(id: -1, creation: DateTime.Now, note: string.Empty, client: null, items: new List<InvoiceItem>(),
+                invoiceDate: DateTime.Now, dueDate: DateTime.Now.AddDays(SettingsService.MonetaSettings.InvoiceCreditPeriod),
+                invoiceType: InvoiceType.Invoice, status: new InvoiceStatus(InvoiceStatusType.Due, ""));
+
+        public InvoiceItem NewInvoiceItem(int invoiceId = -1) =>
+            new InvoiceItem(id: -1, creation: DateTime.Now, note: "", description: "", price: 0, taxPercentage: Convert.ToDecimal(SettingsService.MonetaSettings.TaxPercentage / 100d), invoiceId: invoiceId);
+
+        public InvoiceService(DBService dBService, IClientService clientService, IItemsService itemsService, IPDFService pdfService, ISettingsService settingsService) : base(dBService)
         {
             ClientService = clientService;
             ItemsService = itemsService;
             PDFService = pdfService;
+            SettingsService = settingsService;
             AllItems = GetAllFromDB();
         }
 
@@ -59,6 +68,12 @@ namespace MonetaFMS.Services
             }
 
             AllItems.Add(newValue);
+
+            foreach (var item in newValue.Items)
+            {
+                item.InvoiceId = newValue.Id;
+                ItemsService.CreateEntry(item);
+            }
 
             return newValue;
         }

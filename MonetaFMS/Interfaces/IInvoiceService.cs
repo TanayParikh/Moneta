@@ -9,6 +9,9 @@ namespace MonetaFMS.Interfaces
 {
     public interface IInvoiceService : ITableService<Invoice>
     {
+        Invoice NewInvoice();
+        InvoiceItem NewInvoiceItem(int invoiceId = -1);
+
         decimal GetInvoiceTotal(int id);
         decimal GetInvoiceTotal(Invoice invoice);
         void PrintInvoice(Invoice invoice);
