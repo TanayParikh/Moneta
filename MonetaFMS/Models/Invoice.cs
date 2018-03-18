@@ -15,37 +15,11 @@ namespace MonetaFMS.Models
         public DateTime? DueDate { get; set; }
         public InvoiceType InvoiceType { get; set; }
         public InvoiceStatus Status { get; set; }
+        
 
-
-        public decimal? _subtotal;
-        public decimal Subtotal
-        {
-            get
-            {
-                _subtotal = _subtotal == null ? Items.Sum(i => i.Price) : _subtotal;
-                return (decimal)_subtotal;
-            }
-        }
-
-        public decimal? _taxAmount;
-        public decimal TaxAmount
-        {
-            get
-            {
-                _taxAmount = _taxAmount == null ? Items.Sum(i => i.TaxPercentage * i.Price) : _taxAmount;
-                return (decimal)_taxAmount;
-            }
-        }
-
-        public decimal? _total;
-        public decimal Total
-        {
-            get
-            {
-                _total = _total == null ? Items.Sum(i => i.Price * (1 + i.TaxPercentage)) : _total;
-                return (decimal)_total;
-            }
-        }
+        public decimal Subtotal => Items.Sum(i => i.Price);
+        public decimal TaxAmount => Items.Sum(i => i.TaxPercentage * i.Price);
+        public decimal Total => TaxAmount + Subtotal;
 
         [JsonConstructor]
         public Invoice(int id, DateTime creation, string note, Client client, List<InvoiceItem> items,
