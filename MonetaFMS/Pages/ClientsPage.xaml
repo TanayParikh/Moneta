@@ -32,8 +32,27 @@
                         HorizontalAlignment="Center"/>
 
         <controls:MasterDetailsView ItemsSource="{Binding AllClients}"
-                                    NoSelectionContent="Select a User"
-                                    Foreground="Black">
+                                    NoSelectionContent="Select a Client"
+                                    Foreground="Black"
+                                    Name="ContentFrame"
+                                    SelectedItem="{Binding SelectedClient, Mode=TwoWay}">
+            <controls:MasterDetailsView.MasterHeader>
+                <Grid>
+                    <AutoSuggestBox x:Name="SearchBox" Width="225" HorizontalAlignment="Left"
+                        TextChanged="SearchBox_TextChanged"
+                        VerticalAlignment="Center" QueryIcon="Find"/>
+                    <CommandBar HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        DefaultLabelPosition="Right"
+                        Background="{ThemeResource SystemControlBackgroundAltHighBrush}">
+                        <AppBarButton Click="CreateClient_Click">
+                            <AppBarButton.Icon>
+                                <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE8FA;"/>
+                            </AppBarButton.Icon>
+                        </AppBarButton>
+                    </CommandBar>
+                </Grid>
+            </controls:MasterDetailsView.MasterHeader>
             <controls:MasterDetailsView.ItemTemplate>
                 <DataTemplate>
                     <Grid>
@@ -58,7 +77,7 @@
                 <DataTemplate>
                     <RelativePanel Margin="24">
                         <StackPanel>
-                            <TextBox FontSize="36" Text="{Binding Company}" PlaceholderText="Company Name" IsTextPredictionEnabled="False" IsSpellCheckEnabled="False" x:Name="CompanyName" Margin="0,24,0,0" MaxLength="75" Width="400" FontWeight="SemiBold" HorizontalAlignment="Left" InputScope="AlphanumericFullWidth"/>
+                            <TextBox FontSize="36" Text="{Binding Company, Mode=TwoWay}" PlaceholderText="Company Name" IsTextPredictionEnabled="False" IsSpellCheckEnabled="False" x:Name="CompanyName" Margin="0,24,0,0" MaxLength="75" Width="400" FontWeight="SemiBold" HorizontalAlignment="Left" InputScope="AlphanumericFullWidth"/>
 
 
                             <Grid>
@@ -68,17 +87,17 @@
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
 
-                                <TextBox Grid.Column="0" Text="{Binding FirstName}" Header="First Name" x:Name="FirstName" PlaceholderText= "First Name" Margin="0,24,0,0" MaxLength="50" Width="190"  HorizontalAlignment="Left" InputScope="PersonalFullName"/>
-                                <TextBox Grid.Column="2" Text="{Binding LastName}" Header="Last Name" x:Name="LastName" PlaceholderText= "Last Name" Margin="0,24,0,0" MaxLength="50" Width="190"  HorizontalAlignment="Left" InputScope="PersonalFullName"/>
+                                <TextBox Grid.Column="0" Text="{Binding FirstName, Mode=TwoWay}" Header="First Name" x:Name="FirstName" PlaceholderText= "First Name" Margin="0,24,0,0" MaxLength="50" Width="190"  HorizontalAlignment="Left" InputScope="PersonalFullName"/>
+                                <TextBox Grid.Column="2" Text="{Binding LastName, Mode=TwoWay}" Header="Last Name" x:Name="LastName" PlaceholderText= "Last Name" Margin="0,24,0,0" MaxLength="50" Width="190"  HorizontalAlignment="Left" InputScope="PersonalFullName"/>
                             </Grid>
 
-                            <TextBox Text="{Binding Email}" extensions:TextBoxRegex.ValidationType="Email" x:Name="Email" Header="Email" PlaceholderText="Email" Margin="0,24,0,0" MaxLength="50" Width="400" HorizontalAlignment="Left" InputScope="EmailNameOrAddress" />
-                            <TextBox Text="{Binding PhoneNumber}" extensions:TextBoxRegex.Regex="^\s*\+?\s*([0-9][\s-]*){9,}$" x:Name="PhoneNumber" PlaceholderText="Phone Number" Header="Phone Number" Margin="0,24,0,0" MaxLength="15" Width="400" HorizontalAlignment="Left" InputScope="TelephoneNumber" />
-                            <TextBox Text="{Binding Address}" x:Name="Address" Header="Address" PlaceholderText="Address" Margin="0,24,0,0" MaxLength="50" Width="400" HorizontalAlignment="Left" InputScope="EmailNameOrAddress" />
+                            <TextBox Text="{Binding Email, Mode=TwoWay}" extensions:TextBoxRegex.ValidationType="Email" x:Name="Email" Header="Email" PlaceholderText="Email" Margin="0,24,0,0" MaxLength="50" Width="400" HorizontalAlignment="Left" InputScope="EmailNameOrAddress" />
+                            <TextBox Text="{Binding PhoneNumber, Mode=TwoWay}" extensions:TextBoxRegex.Regex="^\s*\+?\s*([0-9][\s-]*){9,}$" x:Name="PhoneNumber" PlaceholderText="Phone Number" Header="Phone Number" Margin="0,24,0,0" MaxLength="15" Width="400" HorizontalAlignment="Left" InputScope="TelephoneNumber" />
+                            <TextBox Text="{Binding Address, Mode=TwoWay}" x:Name="Address" Header="Address" PlaceholderText="Address" Margin="0,24,0,0" MaxLength="50" Width="400" HorizontalAlignment="Left" InputScope="EmailNameOrAddress" />
 
                             <StackPanel Orientation="Horizontal">
-                                <Button Content="Save" Margin="0,24" />
-                                <Button Content="Cancel" Margin="24"/>
+                                <Button Click="SaveClient_Click" Content="Save" Margin="0,24" />
+                                <Button Click="CancelClient_Click" Content="Cancel" Margin="24"/>
                             </StackPanel>
                         </StackPanel>
                     </RelativePanel>

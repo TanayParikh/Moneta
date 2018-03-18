@@ -67,7 +67,22 @@ namespace MonetaFMS.Pages
             }
         }
 
-        private void LottieAnimationWrapper_GettingFocus(UIElement sender, GettingFocusEventArgs args)
+        private async void SaveClient_Click(object sender, RoutedEventArgs e)
+        {
+            await PlayAnimation(ViewModel.SaveClient());
+        }
+
+        private void CancelClient_Click(object sender, RoutedEventArgs e)
+        {
+            ViewModel.CancelClientEdit();
+        }
+
+        private void CreateClient_Click(object sender, RoutedEventArgs e)
+        {
+            ViewModel.CreateClient();
+        }
+
+        private void SearchBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
         {
 
         }
