@@ -33,7 +33,7 @@
 
 
         <Grid Margin="24,10,24,24" Name="ContentFrame" AccessKey="ContentFrame" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-            <Pivot x:Name="rootPivot">
+            <Pivot x:Name="SettingsPivot" SelectionChanged="SettingsPivot_SelectionChanged">
                 <PivotItem Header="Business Profile">
                     <StackPanel DataContext="{Binding BusinessProfile}">
                         <TextBox FontSize="36" Text="{Binding Company, Mode=TwoWay}" PlaceholderText="Company" IsTextPredictionEnabled="False" IsSpellCheckEnabled="False" x:Name="Company" Margin="0,24,0,0" MaxLength="75" Width="400" FontWeight="SemiBold" HorizontalAlignment="Left" InputScope="AlphanumericFullWidth"/>
@@ -64,9 +64,26 @@
                 </PivotItem>
                 <PivotItem Header="Moneta Settings">
                     <StackPanel Margin="20">
-                        <ToggleSwitch Name="OpenPDFOnCreationToggle" Header="Open PDF Upon Creation" IsOn="{Binding MonetaSettings.OpenPDFOnCreation, Mode=TwoWay}" OffContent="Just Create PDF" OnContent="Open PDF" VerticalAlignment="Center" VerticalContentAlignment="Center"
-                                  Margin="30, 0" Toggled="SaveMonetaSettings" />
-                    
+                        <ToggleSwitch Name="OpenPDFOnCreationToggle" Header="Open PDF Upon Creation" IsOn="{Binding MonetaSettings.OpenPDFOnCreation, Mode=TwoWay}" OffContent="Just Create PDF" 
+                                      OnContent="Open PDF" VerticalAlignment="Center" VerticalContentAlignment="Center" Margin="30, 10" />
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <Slider Width="380" Name="CreditPeriodSlider" HorizontalAlignment="Left" Margin="30, 20" Value="{Binding MonetaSettings.InvoiceCreditPeriod, Mode=TwoWay}"
+                                    Header="Default Credit Period (Days till invoice becomes due)" Maximum="180" Minimum="0" 
+                                    TickFrequency="10" TickPlacement="Outside" />
+                            <TextBlock Grid.Column="1">
+                                <Run Text="{Binding ElementName=CreditPeriodSlider, Path=Value}" />
+                                <Run Text=" days" />
+                            </TextBlock>
+                        </Grid>
+
+                        <Button Name="SaveMonetaSettings" Margin="25" Width="100" Height="30" Content="Save" Click="SaveMonetaSettings_Click" />
+
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Top">
                             <Button Name="MonetaDirectory" Margin="25" Width="200" Height="50" Content="Select Moneta Directory" Click="MonetaDirectory_Click" />
 

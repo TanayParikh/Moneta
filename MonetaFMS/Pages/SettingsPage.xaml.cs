@@ -37,19 +37,12 @@ namespace MonetaFMS.Pages
             InitializeComponent();
             DataContext = ViewModel;
 
-            SetDefaultSettings();
-
             AnimationView = LottieAnimationView;
             FadesEnabled = true;
 
             SetLogo();
         }
-
-        private void SetDefaultSettings()
-        {
-            OpenPDFOnCreationToggle.IsEnabled = !ViewModel.MonetaSettings.OpenPDFOnCreation;
-        }
-
+        
         private async void BackupDirectory_Click(object sender, RoutedEventArgs e)
         {
             Windows.Storage.StorageFolder folder = await GetFolder();
@@ -109,16 +102,15 @@ namespace MonetaFMS.Pages
         {
             Logo_PointerPressed(null, null);
         }
-
-        private async void SaveMonetaSettings(object sender, RoutedEventArgs e)
+        
+        private void SettingsPivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (e.OriginalSource is ToggleSwitch toggle)
-            {
-                if (toggle.IsEnabled)
-                    await PlayAnimation(ViewModel.SaveMonetaSettings());
+            ViewModel.RestoreSettings();
+        }
 
-                toggle.IsEnabled = true;
-            }
+        private async void SaveMonetaSettings_Click(object sender, RoutedEventArgs e)
+        {
+            await PlayAnimation(ViewModel.SaveMonetaSettings());
         }
     }
 }

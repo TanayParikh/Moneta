@@ -23,8 +23,6 @@ namespace MonetaFMS.ViewModels
         MonetaSettings _monetaSettings;
         BusinessProfile _businessProfile;
 
-        string _logoPath;
-
         public StorageFolder BackupDirectory
         {
             get { return _backupDirectory; }
@@ -84,6 +82,11 @@ namespace MonetaFMS.ViewModels
         internal bool SaveMonetaSettings()
         {
             return SettingsService.UpdateMonetaSettings(MonetaSettings);
+        }
+
+        internal void RestoreSettings()
+        {
+            SettingsService.RestoreSettings();
         }
 
         internal async Task<StorageFile> GetLogo()
