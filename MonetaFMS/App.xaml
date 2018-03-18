@@ -54,18 +54,10 @@
                         <Setter Property="Foreground" Value="#282828" />
                     </Style>
 
-
-                    <ResourceDictionary.ThemeDictionaries>
-                        <ResourceDictionary x:Key="Default">
-                            <SolidColorBrush x:Key="SystemControlHighlightAccentBrush" Color="Orange" />
-                        </ResourceDictionary>
-                        <ResourceDictionary x:Key="Dark">
-                            <SolidColorBrush x:Key="SystemControlHighlightAccentBrush" Color="Green" />
-                        </ResourceDictionary>
-                        <ResourceDictionary x:Key="Light">
-                            <SolidColorBrush x:Key="SystemControlHighlightAccentBrush" Color="GreenYellow" />
-                        </ResourceDictionary>
-                    </ResourceDictionary.ThemeDictionaries>
+                    <SolidColorBrush x:Key="NavigationViewSelectionIndicatorForeground" Color="Green" />
+                    <SolidColorBrush x:Key="SystemControlHighlightAccentBrush" Color="Green" />
+                    <SolidColorBrush x:Key="UserAccentColor" Color="Green" />
+                    <SolidColorBrush x:Key="BorderBrush" Color="Green" />
                 </ResourceDictionary>
                 
             </ResourceDictionary.MergedDictionaries>
