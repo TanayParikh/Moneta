@@ -255,7 +255,13 @@ namespace MonetaFMS.Services
             doc.Add(invoiceIDElement);
 
             AddSpacing(doc, 1);
-            doc.Add(new Paragraph(invoice.InvoiceDate.Value.ToString("MMMM d, yyyy"), Lato[9]));
+
+            string invoiceDates = $"Invoice Date: {invoice.InvoiceDate.Value.ToString("MMMM d, yyyy")}";
+
+            if (!DateTime.Equals(invoice.InvoiceDate.Value.Date, invoice.DueDate.Value.Date))
+                invoiceDates += $"{new string(' ', 20)}Due Date: {invoice.DueDate.Value.ToString("MMMM d, yyyy")}";
+
+            doc.Add(new Paragraph(invoiceDates, Lato[9]));
         }
 
         private void AddSpacing(Document doc, int numLines)
