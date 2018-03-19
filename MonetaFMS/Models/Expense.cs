@@ -9,13 +9,55 @@ namespace MonetaFMS.Models
 {
     public class Expense : Record
     {
-        public string Description { get; set; }
-        public ExpenseCategory Category { get; set; }
-        public DateTime Date { get; set; }
-        public decimal TaxComponent { get; set; }
-        public decimal TotalCost { get; set; }
-        public string ImageReference { get; set; }
-        public Invoice Invoice { get; set; }
+
+        ExpenseCategory _category;
+        public ExpenseCategory Category
+        {
+            get { return _category; }
+            set { SetProperty(ref _category, value); }
+        }
+
+        string _description;
+        public string Description
+        {
+            get { return _description; }
+            set { SetProperty(ref _description, value); }
+        }
+
+        decimal _totalCost;
+        public decimal TotalCost
+        {
+            get { return _totalCost; }
+            set { SetProperty(ref _totalCost, value); }
+        }
+
+        decimal _taxComponent;
+        public decimal TaxComponent
+        {
+            get { return _taxComponent; }
+            set { SetProperty(ref _taxComponent, value); }
+        }
+
+        DateTime _date;
+        public DateTime Date
+        {
+            get { return _date; }
+            set { SetProperty(ref _date, value); }
+        }
+
+        string _imageReference;
+        public string ImageReference
+        {
+            get { return _imageReference; }
+            set { SetProperty(ref _imageReference, value); }
+        }
+
+        Invoice _invoice;
+        public Invoice Invoice
+        {
+            get { return _invoice; }
+            set { SetProperty(ref _invoice, value); }
+        }
 
         [JsonConstructor]
         public Expense(int id, DateTime creation, string note, string description, ExpenseCategory category,
