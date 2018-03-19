@@ -59,6 +59,13 @@
                         <Setter Property="Foreground" Value="#828282" />
                     </Style>
 
+                    <Style x:Name="ListViewItemEditField" TargetType="TextBox">
+                        <Setter Property="Height" Value="35" />
+                        <Setter Property="VerticalContentAlignment" Value="Center" />
+                        <Setter Property="VerticalAlignment" Value="Center" />
+                        <Setter Property="FontSize" Value="18" />
+                    </Style>
+
 
                     <Style x:Name="StatHeader" TargetType="TextBlock">
                         <Setter Property="FontWeight" Value="Bold" />

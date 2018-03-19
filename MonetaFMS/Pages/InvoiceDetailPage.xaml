@@ -12,13 +12,6 @@
     mc:Ignorable="d">
 
     <Page.Resources>
-        <Style x:Name="InvoiceItemEditField" TargetType="TextBox">
-            <Setter Property="Height" Value="35" />
-            <Setter Property="VerticalContentAlignment" Value="Center" />
-            <Setter Property="VerticalAlignment" Value="Center" />
-            <Setter Property="FontSize" Value="18" />
-        </Style>
-
         <Storyboard x:Name="AnimationFadeIn">
             <DoubleAnimation From="0" To="1" Storyboard.TargetName="LottieAnimationView" Storyboard.TargetProperty="Opacity" Duration="0:0:0.15" />
             <DoubleAnimation From="1" To="0" Storyboard.TargetName="ContentFrame" Storyboard.TargetProperty="Opacity" Duration="0:0:0.15" />
@@ -129,11 +122,11 @@
                                 <TextBlock Margin="0, 0, 15, 0" Grid.Column="2" Text="{Binding TaxPercentage, Converter={StaticResource PercentageConverter}}" Style="{StaticResource ListViewSubtitle}"
                                          Visibility="{Binding ElementName=InvoiceDetails, Mode=TwoWay, Path=DataContext.IsEditMode, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Reverse}" />
 
-                                <TextBox Margin="30, 0, 60, 0" Grid.Column="0" Text="{Binding Description, Mode=TwoWay}"  Style="{StaticResource InvoiceItemEditField}"
+                                <TextBox Margin="30, 0, 60, 0" Grid.Column="0" Text="{Binding Description, Mode=TwoWay}"  Style="{StaticResource ListViewItemEditField}"
                                          Visibility="{Binding ElementName=InvoiceDetails, Path=DataContext.IsEditMode, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                                <TextBox KeyDown="ItemPrice_KeyDown" Margin="15, 0" Grid.Column="1" Text="{Binding Price, Mode=TwoWay, Converter={StaticResource MoneyConverter}, ConverterParameter=HideIf0}" Style="{StaticResource InvoiceItemEditField}"
+                                <TextBox KeyDown="ItemPrice_KeyDown" Margin="15, 0" Grid.Column="1" Text="{Binding Price, Mode=TwoWay, Converter={StaticResource MoneyConverter}, ConverterParameter=HideIf0}" Style="{StaticResource ListViewItemEditField}"
                                          Visibility="{Binding ElementName=InvoiceDetails, Path=DataContext.IsEditMode, Converter={StaticResource BooleanToVisibilityConverter}}" Paste="TextBox_Paste" />
-                                <TextBox KeyDown="ItemTaxPercentage_KeyDown" Margin="25, 0, 25, 0" Grid.Column="2" Text="{Binding TaxPercentage, Mode=TwoWay, Converter={StaticResource PercentageConverter}}" Style="{StaticResource InvoiceItemEditField}"
+                                <TextBox KeyDown="ItemTaxPercentage_KeyDown" Margin="25, 0, 25, 0" Grid.Column="2" Text="{Binding TaxPercentage, Mode=TwoWay, Converter={StaticResource PercentageConverter}}" Style="{StaticResource ListViewItemEditField}"
                                          Visibility="{Binding ElementName=InvoiceDetails, Mode=TwoWay, Path=DataContext.IsEditMode, Converter={StaticResource BooleanToVisibilityConverter}}" Paste="TextBox_Paste" />
                             </Grid>
                         </controls:DropShadowPanel>
