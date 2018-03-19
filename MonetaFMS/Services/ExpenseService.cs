@@ -38,7 +38,7 @@ namespace MonetaFMS.Services
 
         public override Expense CreateEntry(Expense newValue)
         {
-            if (newValue.Id != 0)
+            if (newValue.Id != -1)
                 throw new ArgumentException("Invalid expense entry creation, Id is already set.");
 
             using (var command = new SqliteCommand())
@@ -58,6 +58,9 @@ namespace MonetaFMS.Services
 
             return newValue;
         }
+
+        public Expense NewExpense() => 
+            new Expense(id: -1, creation: DateTime.Now, note: string.Empty, description: string.Empty, category: ExpenseCategory.Accounting, date: DateTime.Now, taxComponent: 0, totalCost: 0, imageReference: string.Empty, invoice: null);
 
         public override bool DeleteEntry(Expense deletedValue)
         {

@@ -9,5 +9,6 @@ namespace MonetaFMS.Interfaces
 {
     public interface IExpenseService : ITableService<Expense>
     {
+        Expense NewExpense();
     }
 }
