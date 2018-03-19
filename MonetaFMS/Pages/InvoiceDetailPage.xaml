@@ -7,7 +7,6 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:lottieUwp="using:LottieUWP"
     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
-    xmlns:Converters="using:MonetaFMS.Converters"
     xmlns:extensions="using:Microsoft.Toolkit.Uwp.UI.Extensions"
     Name="InvoiceDetails"
     mc:Ignorable="d">
@@ -28,11 +27,6 @@
             <DoubleAnimation From="1" To="0" Storyboard.TargetName="LottieAnimationView" Storyboard.TargetProperty="Opacity" Duration="0:0:0.35" />
             <DoubleAnimation From="0" To="1" Storyboard.TargetName="ContentFrame" Storyboard.TargetProperty="Opacity" Duration="0:0:0.35" />
         </Storyboard>
-        
-        <Converters:MoneyConverter x:Key="MoneyConverter" />
-        <Converters:PercentageConverter x:Key="PercentageConverter" />
-        <Converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-        <Converters:DateTimeToDateTimeOffsetConverter x:Key="DateTimeToDateTimeOffsetConverter" />
     </Page.Resources>
 
     <Grid>

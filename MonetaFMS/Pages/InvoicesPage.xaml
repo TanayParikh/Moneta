@@ -7,35 +7,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:lottieUwp="using:LottieUWP"
     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
-    xmlns:Converters="using:MonetaFMS.Converters"
     Loaded="Page_Loaded"
     mc:Ignorable="d">
-
-    <Page.Resources>
-        <Style x:Name="StatHeader" TargetType="TextBlock">
-            <Setter Property="FontWeight" Value="Bold" />
-            <Setter Property="FontSize" Value="18" />
-        </Style>
-        <Style x:Name="StatValue" TargetType="TextBlock">
-            <Setter Property="FontWeight" Value="Bold" />
-            <Setter Property="FontSize" Value="48" />
-        </Style>
-        <Style x:Key="Month" TargetType="TextBlock" BasedOn="{StaticResource ListViewSubtitle}">
-            <Setter Property="Foreground" Value="#828282" />
-            <Setter Property="FontWeight" Value="SemiLight" />
-            <Setter Property="FontSize" Value="15" />
-            <Setter Property="HorizontalAlignment" Value="Center" />
-        </Style>
-        <Style x:Name="DayOfMonth" TargetType="TextBlock" BasedOn="{StaticResource ListViewSubtitle}">
-            <Setter Property="FontWeight" Value="SemiLight" />
-            <Setter Property="FontSize" Value="26" />
-            <Setter Property="HorizontalAlignment" Value="Center" />
-        </Style>
-        
-        <Converters:MoneyConverter x:Key="MoneyConverter" />
-        <Converters:DateConverter x:Key="DateConverter" />
-        <Converters:InvoiceStatusToColorConverter x:Key="InvoiceStatusToColorConverter" />
-    </Page.Resources>
 
     <Grid>
         <Grid.RowDefinitions>

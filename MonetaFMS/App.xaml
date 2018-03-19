@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:MonetaFMS"
     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:Converters="using:MonetaFMS.Converters"
     RequestedTheme="Light">
 
     <Application.Resources>
@@ -58,6 +59,37 @@
                         <Setter Property="Foreground" Value="#828282" />
                     </Style>
 
+
+                    <Style x:Name="StatHeader" TargetType="TextBlock">
+                        <Setter Property="FontWeight" Value="Bold" />
+                        <Setter Property="FontSize" Value="18" />
+                    </Style>
+                    <Style x:Name="StatValue" TargetType="TextBlock">
+                        <Setter Property="FontWeight" Value="Bold" />
+                        <Setter Property="FontSize" Value="48" />
+                    </Style>
+                    <Style x:Key="Month" TargetType="TextBlock" BasedOn="{StaticResource ListViewSubtitle}">
+                        <Setter Property="Foreground" Value="#828282" />
+                        <Setter Property="FontWeight" Value="SemiLight" />
+                        <Setter Property="FontSize" Value="15" />
+                        <Setter Property="HorizontalAlignment" Value="Center" />
+                    </Style>
+                    <Style x:Name="DayOfMonth" TargetType="TextBlock" BasedOn="{StaticResource ListViewSubtitle}">
+                        <Setter Property="FontWeight" Value="SemiLight" />
+                        <Setter Property="FontSize" Value="26" />
+                        <Setter Property="HorizontalAlignment" Value="Center" />
+                    </Style>
+
+                    
+                    <!-- Value  Converters  -->
+                    <Converters:MoneyConverter x:Key="MoneyConverter" />
+                    <Converters:DateConverter x:Key="DateConverter" />
+                    <Converters:InvoiceStatusToColorConverter x:Key="InvoiceStatusToColorConverter" />
+                    <Converters:DateTimeToDateTimeOffsetConverter x:Key="DateTimeToDateTimeOffsetConverter" />
+                    <Converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+                    <Converters:PercentageConverter x:Key="PercentageConverter" />
+
+                    <!-- Theme Brushes -->
                     <SolidColorBrush x:Key="NavigationViewSelectionIndicatorForeground" Color="Green" />
                     <SolidColorBrush x:Key="SystemControlHighlightAccentBrush" Color="Green" />
                     <SolidColorBrush x:Key="UserAccentColor" Color="Green" />
