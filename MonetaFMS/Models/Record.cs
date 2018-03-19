@@ -9,9 +9,26 @@ namespace MonetaFMS.Models
 {
     public abstract class Record : BindableBase
     {
-        public int Id { get; set; }
-        public DateTime CreationDate { get; set; }
-        public string Note { get; set; }
+        int _id;
+        public int Id
+        {
+            get { return _id; }
+            set { SetProperty(ref _id, value); }
+        }
+
+        DateTime _creationDate;
+        public DateTime CreationDate
+        {
+            get { return _creationDate; }
+            set { SetProperty(ref _creationDate, value); }
+        }
+
+        string _note;
+        public string Note
+        {
+            get { return _note; }
+            set { SetProperty(ref _note, value); }
+        }
 
         protected Record()
         {
