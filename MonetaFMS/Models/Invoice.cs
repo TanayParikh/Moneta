@@ -50,14 +50,12 @@ namespace MonetaFMS.Models
             get { return _items; }
             set
             {
-                if (value != _items)
+                if (SetProperty(ref _items, value))
                 {
                     OnPropertyChanged(nameof(Subtotal));
                     OnPropertyChanged(nameof(TaxAmount));
                     OnPropertyChanged(nameof(Total));
                 }
-
-                SetProperty(ref _items, value);
             }
         }
 

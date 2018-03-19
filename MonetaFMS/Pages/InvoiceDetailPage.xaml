@@ -133,8 +133,33 @@
                 </ListView.ItemTemplate>
             </ListView>
 
+
+
             <CommandBar Visibility="{Binding IsEditMode, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Reverse}"
-                        Grid.Row="3" DefaultLabelPosition="Right" Background="{StaticResource SystemControlAcrylicElementMediumHighBrush}">
+                        Grid.Row="3" DefaultLabelPosition="Right" VerticalContentAlignment="Center" Background="{StaticResource SystemControlAcrylicElementMediumHighBrush}">
+                <CommandBar.Content>
+                    <Grid VerticalAlignment="Center">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="200" />
+                            <ColumnDefinition Width="200" />
+                            <ColumnDefinition Width="200" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock HorizontalAlignment="Left" Margin="20,0,0,0" Grid.Column="0" Style="{StaticResource ListViewSubtitle}">
+                            <Run FontWeight="SemiBold">Subtotal: </Run>
+                            <Run Text="{Binding Invoice.Subtotal, Converter={StaticResource MoneyConverter}}"></Run>
+                        </TextBlock>
+                        <TextBlock HorizontalAlignment="Left" Grid.Column="1" Style="{StaticResource ListViewSubtitle}">
+                            <Run FontWeight="SemiBold">Tax Amount: </Run>
+                            <Run Text="{Binding Invoice.TaxAmount, Converter={StaticResource MoneyConverter}}"></Run>
+                        </TextBlock>
+                        <TextBlock HorizontalAlignment="Left" Grid.Column="2" Style="{StaticResource ListViewSubtitle}">
+                            <Run FontWeight="SemiBold">Total: </Run>
+                            <Run Text="{Binding Invoice.Total, Converter={StaticResource MoneyConverter}}"></Run>
+                        </TextBlock>
+                    </Grid>
+                </CommandBar.Content>
+                <AppBarSeparator />
                 <AppBarButton Click="EditInvoice_Click" Label="Edit" Icon="Edit"/>
                 <AppBarButton Click="Print_Click" Label="Print" Icon="Print" />
                 <AppBarButton Label="Email" Icon="Send"/>
