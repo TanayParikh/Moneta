@@ -50,6 +50,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
@@ -96,14 +97,27 @@
                 </StackPanel>
             </StackPanel>
 
-            <Grid Grid.Row="1" Background="#f8f8f8" HorizontalAlignment="Stretch"
+
+            <Grid HorizontalAlignment="Stretch" Margin="27, 15, 12, 10" Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="4*" />
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Text="Item Description" Grid.Column="0" Grid.ColumnSpan="2" Style="{StaticResource Headings}" />
+                <TextBlock Text="Price" Grid.Column="1" Style="{StaticResource Headings}" />
+                <TextBlock Text="Tax %" Grid.Column="2" Style="{StaticResource Headings}" />
+            </Grid>
+
+            <Grid Grid.Row="2" Background="#f8f8f8" HorizontalAlignment="Stretch"
                   Visibility="{Binding IsEditMode, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <Button Click="NewItem_Click" Content="Add New Item" Foreground="DarkGray" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Height="63" Margin="19, 22, 19, 7" HorizontalContentAlignment="Center" Background="Transparent" VerticalContentAlignment="Center" />
                 <Rectangle HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Stroke="DarkGray" Opacity=".4" Margin="19, 22, 19, 7"
                     StrokeDashArray="5" StrokeDashCap="Round" Height="63" />
             </Grid>
 
-            <ListView Grid.Row="2" Background="#f8f8f8" x:Name="ItemsList" ItemsSource="{Binding Items}">
+            <ListView Grid.Row="3" Background="#f8f8f8" x:Name="ItemsList" ItemsSource="{Binding Items}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <controls:DropShadowPanel Style="{StaticResource ListViewRowDropshadow}">
@@ -136,7 +150,7 @@
 
 
             <CommandBar Visibility="{Binding IsEditMode, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Reverse}"
-                        Grid.Row="3" DefaultLabelPosition="Right" VerticalContentAlignment="Center" Background="{StaticResource SystemControlAcrylicElementMediumHighBrush}">
+                        Grid.Row="4" DefaultLabelPosition="Right" VerticalContentAlignment="Center" Background="{StaticResource SystemControlAcrylicElementMediumHighBrush}">
                 <CommandBar.Content>
                     <Grid VerticalAlignment="Center">
                         <Grid.ColumnDefinitions>
@@ -167,7 +181,7 @@
             </CommandBar>
 
             <CommandBar Visibility="{Binding IsEditMode, Converter={StaticResource BooleanToVisibilityConverter}}"
-                        Grid.Row="3" DefaultLabelPosition="Right" Background="{StaticResource SystemControlAcrylicElementMediumHighBrush}">
+                        Grid.Row="4" DefaultLabelPosition="Right" Background="{StaticResource SystemControlAcrylicElementMediumHighBrush}">
                 <AppBarButton Click="Cancel_Click" Label="Cancel" Icon="Cancel"/>
                 <AppBarButton Click="Save_Click" Label="Save" Icon="Save" />
             </CommandBar>

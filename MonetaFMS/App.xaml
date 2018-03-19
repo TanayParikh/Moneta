@@ -54,6 +54,10 @@
                         <Setter Property="Foreground" Value="#282828" />
                     </Style>
 
+                    <Style x:Name="Headings" TargetType="TextBlock">
+                        <Setter Property="Foreground" Value="#828282" />
+                    </Style>
+
                     <SolidColorBrush x:Key="NavigationViewSelectionIndicatorForeground" Color="Green" />
                     <SolidColorBrush x:Key="SystemControlHighlightAccentBrush" Color="Green" />
                     <SolidColorBrush x:Key="UserAccentColor" Color="Green" />

@@ -31,9 +31,6 @@
             <Setter Property="FontSize" Value="26" />
             <Setter Property="HorizontalAlignment" Value="Center" />
         </Style>
-        <Style x:Name="Headings" TargetType="TextBlock">
-            <Setter Property="Foreground" Value="#828282" />
-        </Style>
         
         <Converters:MoneyConverter x:Key="MoneyConverter" />
         <Converters:DateConverter x:Key="DateConverter" />
