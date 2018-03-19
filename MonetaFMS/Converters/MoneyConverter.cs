@@ -45,9 +45,12 @@ namespace MonetaFMS.Converters
 
         public object ConvertBack(object value, Type targetType = null, object parameter = null, string language = null)
         {
-            if (value is string v)
+            if (value is string v && v != null)
             {
                 v = v.Replace(",", "").Replace(" ", "").Replace("$", "");
+
+                if (string.IsNullOrEmpty(v))
+                    return 0;
                 
                 if (v.Last() == 'K' && decimal.TryParse(v.Substring(0, v.Length - 1), out decimal decimalValue))
                 {
