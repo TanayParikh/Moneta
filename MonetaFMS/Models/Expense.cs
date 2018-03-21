@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -49,7 +50,21 @@ namespace MonetaFMS.Models
         public string ImageReference
         {
             get { return _imageReference; }
-            set { SetProperty(ref _imageReference, value); }
+            set
+            {
+                if (SetProperty(ref _imageReference, value))
+                {
+                    DocumentName = string.IsNullOrEmpty(ImageReference) ? null : Path.GetFileName(ImageReference);
+                    OnPropertyChanged(nameof(DocumentName));
+                }
+            }
+        }
+
+        string _documentName;
+        public string DocumentName
+        {
+            get { return _documentName; }
+            set { SetProperty(ref _documentName, value); }
         }
 
         Invoice _invoice;
