@@ -80,7 +80,7 @@ namespace MonetaFMS.ViewModels
         
         internal void OnPageLoaded()
         {
-            Timer.Interval = new TimeSpan(0, 0, 0, 0, 1);
+            Timer.Interval = new TimeSpan(0, 0, 0, 0, 15);
             Timer.Tick += (s, e) =>
             {
                 RevenueDisplayed = Incrementor(RevenueDisplayed, Revenue);
@@ -97,7 +97,7 @@ namespace MonetaFMS.ViewModels
 
         public decimal Incrementor(decimal displayValue, decimal finalValue)
         {
-            var increment = finalValue / 120;
+            var increment = finalValue / 50;
 
             if (displayValue + increment >= finalValue)
             {
@@ -105,9 +105,7 @@ namespace MonetaFMS.ViewModels
                 return finalValue;
             }
             else
-            {
                 return displayValue + increment;
-            }
         }
 
         internal void Search(string text)
