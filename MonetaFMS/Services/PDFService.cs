@@ -80,7 +80,7 @@ namespace MonetaFMS.Services
 
         private async void LaunchFile(string invoicePath)
         {
-            var file = await (await ApplicationData.Current.LocalFolder.GetFolderAsync("Invoices")).GetFileAsync(Path.GetFileName(invoicePath));
+            var file = await (await ApplicationData.Current.LocalFolder.GetFolderAsync("Invoices"))?.GetFileAsync(Path.GetFileName(invoicePath));
 
             if (file != null)
             {
