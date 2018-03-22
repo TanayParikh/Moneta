@@ -5,9 +5,123 @@
     xmlns:local="using:MonetaFMS.Pages"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     mc:Ignorable="d">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Page.Resources>
+        <Storyboard x:Name="ExpandExpenseItem">
+            <DoubleAnimation From="63" To="300" Storyboard.TargetProperty="Height" Duration="0:0:0.25" />
+        </Storyboard>
 
+        <Style x:Name="ExpensePriceField" TargetType="TextBox">
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+    </Page.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        
+        <Grid Grid.Row="0" Grid.Column="0" Margin="30,0,30,15">
+            <AutoSuggestBox x:Name="SearchBox" Width="296" HorizontalAlignment="Left"
+                        TextChanged="SearchBox_TextChanged"
+                        VerticalAlignment="Center" QueryIcon="Find"/>
+            <CommandBar HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        DefaultLabelPosition="Right"
+                        Background="{ThemeResource SystemControlBackgroundAltHighBrush}">
+                <AppBarButton Click="CreateExpense_Click" Label="Create Expense">
+                    <AppBarButton.Icon>
+                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xECC8;"/>
+                    </AppBarButton.Icon>
+                </AppBarButton>
+            </CommandBar>
+        </Grid>
+
+
+        <Grid HorizontalAlignment="Stretch" Margin="12, 0, 12, 10"  Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="6*" />
+                <ColumnDefinition Width="3*" />
+                <ColumnDefinition Width="1.5*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Text="Description" Grid.Column="0" Grid.ColumnSpan="2" Margin="15, 0" Style="{StaticResource Headings}" />
+            <TextBlock Text="Category" Grid.Column="1" Style="{StaticResource Headings}" />
+            <TextBlock Text="Cost" Grid.Column="2" Style="{StaticResource Headings}" />
+            <TextBlock Text="Date" Grid.Column="3" Style="{StaticResource Headings}" />
+        </Grid>
+
+        <ListView Grid.Row="2" x:Name="ExpensesList" ItemsSource="{Binding AllExpenses}"
+                  ItemClick="ListView_ItemClick" IsItemClickEnabled="True" Background="#f8f8f8">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <controls:DropShadowPanel Name="DropShadow" Style="{StaticResource ListViewRowDropshadow}" VerticalAlignment="Stretch">
+                        <Grid x:Name="connectedElement">
+                            <Grid x:Name="ExpensePreview" Style="{StaticResource ListViewRow}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="6*" />
+                                    <ColumnDefinition Width="3*" />
+                                    <ColumnDefinition Width="1.5*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="{Binding Description}" Margin="25,0,0,0" Style="{StaticResource ListViewHeading}" />
+                                <TextBlock Grid.Column="1" Text="{Binding Category}" Style="{StaticResource ListViewSubtitle}" />
+                                <TextBlock Grid.Column="2" Text="{Binding TotalCost, Converter={StaticResource MoneyConverter}}" Style="{StaticResource ListViewSubtitle}" />
+
+                                <StackPanel VerticalAlignment="Center" Margin="0,0,15,0" Grid.Column="5">
+                                    <TextBlock Text="{Binding Date, Converter={StaticResource DateConverter}, ConverterParameter=MonthShort}" Style="{StaticResource Month}" />
+                                    <TextBlock Text="{Binding Date, Converter={StaticResource DateConverter}, ConverterParameter=DayOfMonth}" Style="{StaticResource DayOfMonth}" />
+                                </StackPanel>
+                            </Grid>
+                            <Grid x:Name="ExpenseDetail" Height="350" Style="{StaticResource ListViewRow}" Visibility="Collapsed">
+                                <StackPanel Margin="30, 20">
+                                    <TextBox Text="{Binding Description, Mode=TwoWay}" Style="{StaticResource ListViewItemEditField}" />
+
+                                    <Grid Margin="0, 20">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="2*" />
+                                            <ColumnDefinition Width="2*" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <ComboBox x:Name="ExpenseCategoriesComboBox" HorizontalAlignment="Center" MinWidth="175" Width="200" ItemsSource="{Binding ElementName=ExpensesList, Path=DataContext.ExpenseCategories}" 
+                                                  Margin="0, 10" Header="Expense Category" SelectedItem="{Binding Category, Mode=TwoWay}" />
+
+                                        <DatePicker Grid.Column="1" x:Name="ExpenseDatePicker" HorizontalAlignment="Center" Header="Receipt Date" MinWidth="175" MaxWidth="200" MonthFormat="{}{month.abbreviated}"
+                                            Date="{Binding Date, Mode=TwoWay, Converter={StaticResource DateTimeToDateTimeOffsetConverter}}" />
+
+                                        <TextBox KeyDown="Cost_KeyDown" MinWidth="100" Header="Total" HorizontalAlignment="Center" Grid.Column="2" Text="{Binding TotalCost, Mode=TwoWay, Converter={StaticResource MoneyConverter}, ConverterParameter=HideIf0}" Style="{StaticResource ExpensePriceField}" />
+                                        <TextBox KeyDown="Cost_KeyDown" MinWidth="100" Header="Tax Component" HorizontalAlignment="Center" Grid.Column="3" Text="{Binding TaxComponent, Mode=TwoWay, Converter={StaticResource MoneyConverter}, ConverterParameter=HideIf0}" Style="{StaticResource ExpensePriceField}" />
+                                    </Grid>
+
+                                    <Grid Name="AttachBox" CanDrag="True" AllowDrop="True" DragEnter="AttachBox_DragEnter" DragOver="AttachBox_DragOver" DragLeave="AttachBox_DragLeave" Drop="AttachBox_Drop">
+                                        <Grid Name="IdleState" CanDrag="True" AllowDrop="True" DragEnter="AttachBox_DragEnter" DragOver="AttachBox_DragOver" DragLeave="AttachBox_DragLeave" Drop="AttachBox_Drop">
+                                            <Rectangle HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Stroke="DarkGray" Opacity=".4" StrokeDashArray="5" StrokeDashCap="Round" Height="100" />
+                                            <TextBlock PointerPressed="Document_PointerPressed" Text="{Binding DocumentName, TargetNullValue='Attach a Receipt (Hint: Drag into box)'}"  VerticalAlignment="Center" HorizontalAlignment="Center" />
+                                        </Grid>
+                                        <Grid Name="ActiveState" Visibility="Collapsed" CanDrag="True" AllowDrop="True" DragOver="AttachBox_DragOver" DragEnter="AttachBox_DragEnter" DragLeave="AttachBox_DragLeave" Drop="AttachBox_Drop">
+                                            <Rectangle HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Stroke="Green" Fill="LightGreen" Opacity=".4" StrokeDashArray="5" StrokeDashCap="Round" Height="100" />
+                                            <TextBlock Text="Let the file go!" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                                        </Grid>
+                                    </Grid>
+
+                                    <StackPanel Orientation="Horizontal" Margin="10,0" HorizontalAlignment="Center">
+                                        <Button Margin="15" Click="Cancel_Click" Content="Cancel" />
+                                        <Button Margin="15" Click="Save_Click" Content="Save" />
+                                    </StackPanel>
+                                </StackPanel>
+                            </Grid>
+                        </Grid> 
+                    </controls:DropShadowPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
     </Grid>
 </Page>

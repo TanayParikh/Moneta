@@ -162,6 +162,7 @@
     <Compile Include="Services\Services.cs" />
     <Compile Include="ViewModels\ClientPageViewModel.cs" />
     <Compile Include="ViewModels\DashboardPageViewModel.cs" />
+    <Compile Include="ViewModels\ExpensesPageViewModel.cs" />
     <Compile Include="ViewModels\InvoiceDetailPageViewModel.cs" />
     <Compile Include="ViewModels\InvoicePageViewModel.cs" />
     <Compile Include="ViewModels\MainPageViewModel.cs" />
