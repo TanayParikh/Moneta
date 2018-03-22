@@ -96,6 +96,9 @@ namespace MonetaFMS.ViewModels
 
         internal async Task OpenDoc()
         {
+            if (string.IsNullOrEmpty(Expense.DocumentName))
+                return;
+
             var file = await(await ApplicationData.Current.LocalFolder.GetFolderAsync("Receipts"))?.GetFileAsync(Expense.DocumentName);
 
             if (file != null)

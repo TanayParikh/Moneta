@@ -26,7 +26,7 @@ namespace MonetaFMS.Pages
     public sealed partial class ExpensesPage : Page
     {
         public ExpensesPageViewModel ViewModel { get; set; } = new ExpensesPageViewModel();
-        private (Grid preview, Grid detail) PreviousItem { get; set; }
+        private (Grid Preview, Grid Detail) PreviousItem { get; set; }
         private MoneyConverter MoneyConverter { get; } = new MoneyConverter();
         
         public ExpensesPage()
@@ -62,10 +62,10 @@ namespace MonetaFMS.Pages
 
         private void ClosePreviousItem()
         {
-            if (PreviousItem.preview != null)
-                PreviousItem.preview.Visibility = Visibility.Visible;
-            if (PreviousItem.detail != null)
-                PreviousItem.detail.Visibility = Visibility.Collapsed;
+            if (PreviousItem.Preview != null)
+                PreviousItem.Preview.Visibility = Visibility.Visible;
+            if (PreviousItem.Detail != null)
+                PreviousItem.Detail.Visibility = Visibility.Collapsed;
         }
 
         public T Child<T>(DependencyObject parent, string name) where T : FrameworkElement
@@ -127,14 +127,14 @@ namespace MonetaFMS.Pages
 
         private void AttachBox_DragLeave(object sender, DragEventArgs e)
         {
-            Child<Grid>(PreviousItem.detail, "IdleState").Visibility = Visibility.Visible;
-            Child<Grid>(PreviousItem.detail, "ActiveState").Visibility = Visibility.Collapsed;
+            Child<Grid>(PreviousItem.Detail, "IdleState").Visibility = Visibility.Visible;
+            Child<Grid>(PreviousItem.Detail, "ActiveState").Visibility = Visibility.Collapsed;
         }
 
         private void AttachBox_DragEnter(object sender, DragEventArgs e)
         {
-            Child<Grid>(PreviousItem.detail, "IdleState").Visibility = Visibility.Collapsed;
-            Child<Grid>(PreviousItem.detail, "ActiveState").Visibility = Visibility.Visible;
+            Child<Grid>(PreviousItem.Detail, "IdleState").Visibility = Visibility.Collapsed;
+            Child<Grid>(PreviousItem.Detail, "ActiveState").Visibility = Visibility.Visible;
         }
 
         private async void AttachBox_Drop(object sender, DragEventArgs e)
@@ -142,14 +142,9 @@ namespace MonetaFMS.Pages
             if (e.DataView.Contains(StandardDataFormats.StorageItems))
             {
                 var items = await e.DataView.GetStorageItemsAsync();
+
                 if (items.Count > 0)
-                {
                     await ViewModel.SetExpenseDocumentation(items[0] as StorageFile);
-                    //var bitmapImage = new BitmapImage();
-                    //bitmapImage.SetSource(await storageFile.OpenAsync(FileAccessMode.Read));
-                    // Set the image on the main page to the dropped image
-                    //Image.Source = bitmapImage;
-                }
             }
 
             AttachBox_DragLeave(null, null);
