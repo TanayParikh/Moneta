@@ -54,18 +54,12 @@ namespace MonetaFMS.Models
             {
                 if (SetProperty(ref _imageReference, value))
                 {
-                    DocumentName = string.IsNullOrEmpty(ImageReference) ? null : Path.GetFileName(ImageReference);
                     OnPropertyChanged(nameof(DocumentName));
                 }
             }
         }
-
-        string _documentName;
-        public string DocumentName
-        {
-            get { return _documentName; }
-            set { SetProperty(ref _documentName, value); }
-        }
+        
+        public string DocumentName => string.IsNullOrEmpty(ImageReference) ? null : Path.GetFileName(ImageReference);
 
         Invoice _invoice;
         public Invoice Invoice
