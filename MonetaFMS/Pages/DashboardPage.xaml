@@ -7,7 +7,15 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Margin="24,10,24,24" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <WebView x:Name="webviews" />
+    <Grid Margin="24,10,24,5" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <!--<ToggleSwitch x:Name="AdvancedSettingsToggle" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,10,0" Header="Show Settings" />
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" 
+                    Visibility="{Binding ElementName=AdvancedSettingsToggle, Path=IsOn, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <DatePicker x:Name="StartDatePicker" Header="Start Date" MinWidth="175" MaxWidth="200" MonthFormat="{}{month.abbreviated}" Margin="20"
+                                 Date="{Binding StartDate, Mode=TwoWay, Converter={StaticResource DateTimeToDateTimeOffsetConverter}}" />
+            <DatePicker x:Name="EndDatePicker" Header="End Date" MinWidth="175" MaxWidth="200" MonthFormat="{}{month.abbreviated}" Margin="20"
+                                 Date="{Binding EndDate, Mode=TwoWay, Converter={StaticResource DateTimeToDateTimeOffsetConverter}}" />
+        </StackPanel>-->
+        <WebView x:Name="DashboardWebview" HorizontalAlignment="Center" VerticalAlignment="Stretch" />
     </Grid>
 </Page>

@@ -27,14 +27,48 @@ namespace MonetaFMS.ViewModels
         IInvoiceService InvoiceService { get; set; }
         IBusinessStatsService BusinessStatsService { get; set; }
 
-        private string pieChartHTML;
-        
-        public string PieChartHTML
+        private string _topClientsData;
+        public string TopClientsData
         {
-            get { return pieChartHTML; }
-            set { SetProperty(ref pieChartHTML, value); }
+            get { return _topClientsData; }
+            set { SetProperty(ref _topClientsData, value); }
         }
-        
+
+        private string _topExpensesData;
+        public string TopExpensesData
+        {
+            get { return _topExpensesData; }
+            set { SetProperty(ref _topExpensesData, value); }
+        }
+
+        private string _performanceData;
+        public string PerformanceData
+        {
+            get { return _performanceData; }
+            set { SetProperty(ref _performanceData, value); }
+        }
+
+        private bool _showAdvancedSettings;
+        public bool ShowAdvancedSettings
+        {
+            get { return _showAdvancedSettings; }
+            set { SetProperty(ref _showAdvancedSettings, value); }
+        }
+
+        private DateTime _startDate = DateTime.Now.AddMonths(-6);
+        public DateTime StartDate
+        {
+            get { return _startDate; }
+            set { if (SetProperty(ref _startDate, value)) SetStats(); }
+        }
+
+        private DateTime _endDate = DateTime.Now;
+        public DateTime EndDate
+        {
+            get { return _endDate; }
+            set { if (SetProperty(ref _endDate, value)) SetStats(); }
+        }
+
         string[] backgroundColours =
                     {
                             "rgb(255, 99, 132)", // red
@@ -51,11 +85,20 @@ namespace MonetaFMS.ViewModels
             ClientService = Services.Services.ClientService;
             InvoiceService = Services.Services.InvoiceService;
             BusinessStatsService = Services.Services.BusinessStatsService;
+
+            SetStats();
         }
 
-        public string GetTopClients()
+        public void SetStats()
         {
-            Dictionary<Client, Decimal> topClients = BusinessStatsService.GetTopClients(DateTime.Now.AddMonths(-6), DateTime.Now, 5);
+            TopClientsData = GetTopClients();
+            TopExpensesData = GetTopExpenseCategories();
+            PerformanceData = GetPastPerformance();
+        }
+
+        private string GetTopClients()
+        {
+            Dictionary<Client, Decimal> topClients = BusinessStatsService.GetTopClients(StartDate, EndDate, 5);
 
             var graphData = new GraphData
             {
@@ -73,9 +116,9 @@ namespace MonetaFMS.ViewModels
             return JsonConvert.SerializeObject(graphData);
         }
 
-        public string GetTopExpenseCategories()
+        private string GetTopExpenseCategories()
         {
-            Dictionary<ExpenseCategory, Decimal> topExpenses = BusinessStatsService.GetTopExpenseCategories(DateTime.Now.AddMonths(-6), DateTime.Now, 5);
+            Dictionary<ExpenseCategory, Decimal> topExpenses = BusinessStatsService.GetTopExpenseCategories(StartDate, EndDate, 5);
 
             var graphData = new GraphData
             {
@@ -93,9 +136,9 @@ namespace MonetaFMS.ViewModels
             return JsonConvert.SerializeObject(graphData);
         }
 
-        public string GetPastPerformance()
+        private string GetPastPerformance()
         {
-            List<(string month, decimal revenue, decimal expenses)> pastPerformance = BusinessStatsService.GetPerformance(DateTime.Now.AddMonths(-6), DateTime.Now);
+            List<(string month, decimal revenue, decimal expenses)> pastPerformance = BusinessStatsService.GetPerformance(StartDate, EndDate);
            
             string[] backgroundColorGreen = { "rgba(151, 205, 118, .7)" };
             string[] backgroundColorBlue = { "rgba(31, 200, 219, .7)" };
