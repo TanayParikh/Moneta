@@ -20,44 +20,44 @@ namespace MonetaFMS.Services
             InvoiceService = invoiceService;
             ExpenseService = expenseService;
         }
-
-        List<(string month, decimal revenue, decimal expenses)> IBusinessStatsService.GetPerformance(int numMonths)
+        
+        /// <summary>
+        /// Revenue and expense data for [ start, end ]
+        /// </summary>
+        /// <param name="start"></param>
+        /// <param name="end"></param>
+        /// <returns></returns>
+        public List<(string month, decimal revenue, decimal expenses)> GetPerformance(DateTime start, DateTime end)
         {
-            List<(string, decimal, decimal)> performance = new List<(string, decimal, decimal)>(numMonths);
+            List<(string, decimal, decimal)> performance = new List<(string, decimal, decimal)>();
 
-            // Accounts for current month in calc
-            numMonths--;
+            var monthlyInvoiceData = InvoiceService.AllItems
+                .Where(i => i.InvoiceDate >= start && i.InvoiceDate <= end)
+                .GroupBy(i => new DateTime(i.InvoiceDate.Value.Year, i.InvoiceDate.Value.Month, 1))
+                .Select(monthlyInvoices => (calendarMonth: monthlyInvoices.Key, total: monthlyInvoices.Sum(i => i.Total)))
+                .ToList();
 
-            DateTime startOfPerformanceRange = DateTime.Now.AddMonths(-1 * numMonths);
+            var monthlyExpenseData = ExpenseService.AllItems
+                .Where(e => e.Date >= start && e.Date <= end)
+                .GroupBy(e => new DateTime(e.Date.Year, e.Date.Month, 1))
+                .Select(monthlyExpenses => (calendarMonth: monthlyExpenses.Key, total: monthlyExpenses.Sum(i => i.TotalCost)))
+                .ToList();
 
-            var invoicesIn1 = InvoiceService.AllItems
-                .Where(i => i.InvoiceDate > startOfPerformanceRange)
-                .GroupBy(i => i.InvoiceDate?.Month)
-                .OrderBy(monthsInvoices => monthsInvoices.ElementAt(0).InvoiceDate)
-                .Select(monthsInvoices => (monthsInvoices.ElementAt(0).InvoiceDate?.ToString("MMMM"), monthsInvoices.Sum(i => i.Total))).ToList();
-
-            var expensesIn1 = ExpenseService.AllItems
-                .Where(i => i.Date > startOfPerformanceRange)
-                .GroupBy(i => i.Date.Month)
-                .OrderBy(monthsExpenses => monthsExpenses.ElementAt(0).Date)
-                .Select(monthsExpenses => (monthsExpenses.ElementAt(0).Date.ToString("MMMM"), monthsExpenses.Sum(i => i.TotalCost))).ToList();
+            DateTime curMonth = start;
             
-            while (startOfPerformanceRange <= DateTime.Now)
+            while (curMonth <= end)
             {
-                var monthName = startOfPerformanceRange.ToString("MMMM");
-                if (invoicesIn1.Count(g => g.Item1 == monthName) == 0)
-                    invoicesIn1.Add((monthName, 0));
-                if (expensesIn1.Count(g => g.Item1 == monthName) == 0)
-                    expensesIn1.Add((monthName, 0));
+                performance.Add((curMonth.ToString("MMMM"),
+                    monthlyInvoiceData.FirstOrDefault(month => EqualCalendarMonths(month.calendarMonth, curMonth)).total,
+                    monthlyExpenseData.FirstOrDefault(month => EqualCalendarMonths(month.calendarMonth, curMonth)).total));
 
-                startOfPerformanceRange = startOfPerformanceRange.AddMonths(1);
+                curMonth = curMonth.AddMonths(1);
             }
 
-            return (from i in invoicesIn1
-                    join e in expensesIn1
-                    on i.Item1 equals e.Item1
-                    select (i.Item1, i.Item2, e.Item2)).ToList();
+            return performance;
         }
+
+        private bool EqualCalendarMonths(DateTime d1, DateTime d2) => d1.Month == d2.Month && d1.Year == d2.Year;
 
         public Dictionary<Client, decimal> GetTopClients(int numClients)
         {

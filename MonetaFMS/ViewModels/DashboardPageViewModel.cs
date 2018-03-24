@@ -5,8 +5,6 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MonetaFMS.ViewModels
 {
@@ -27,7 +25,7 @@ namespace MonetaFMS.ViewModels
 
         IClientService ClientService { get; set; }
         IInvoiceService InvoiceService { get; set; }
-        IBusinessStatsService BusinessService { get; set; }
+        IBusinessStatsService BusinessStatsService { get; set; }
 
         private string pieChartHTML;
         
@@ -52,13 +50,13 @@ namespace MonetaFMS.ViewModels
         {
             ClientService = Services.Services.ClientService;
             InvoiceService = Services.Services.InvoiceService;
-            BusinessService = Services.Services.BusinessStatsService;
+            BusinessStatsService = Services.Services.BusinessStatsService;
             //GetDashboardStats();
         }
 
         public string GetTopClients()
         {
-            Dictionary<Client, Decimal> topClients = BusinessService.GetTopClients(5);
+            Dictionary<Client, Decimal> topClients = BusinessStatsService.GetTopClients(5);
 
             var graphData = new GraphData
             {
@@ -78,7 +76,7 @@ namespace MonetaFMS.ViewModels
 
         public string GetTopExpenseCategories()
         {
-            Dictionary<ExpenseCategory, Decimal> topExpenses = BusinessService.GetTopExpenseCategories(5);
+            Dictionary<ExpenseCategory, Decimal> topExpenses = BusinessStatsService.GetTopExpenseCategories(5);
 
             var graphData = new GraphData
             {
@@ -98,8 +96,8 @@ namespace MonetaFMS.ViewModels
 
         public string GetPastPerformance()
         {
-            List<(string month, decimal revenue, decimal expenses)> pastPerformance = Services.Services.BusinessStatsService.GetPerformance(6);
-
+            List<(string month, decimal revenue, decimal expenses)> pastPerformance = BusinessStatsService.GetPerformance(DateTime.Now.AddMonths(-6), DateTime.Now);
+           
             string[] backgroundColorGreen = { "rgba(151, 205, 118, .7)" };
             string[] backgroundColorBlue = { "rgba(31, 200, 219, .7)" };
 
