@@ -27,20 +27,31 @@ namespace MonetaFMS.Services
 
             // Accounts for current month in calc
             numMonths--;
-            
+
             DateTime startOfPerformanceRange = DateTime.Now.AddMonths(-1 * numMonths);
 
             var invoicesIn1 = InvoiceService.AllItems
                 .Where(i => i.InvoiceDate > startOfPerformanceRange)
                 .GroupBy(i => i.InvoiceDate?.Month)
                 .OrderBy(monthsInvoices => monthsInvoices.ElementAt(0).InvoiceDate)
-                .Select(monthsInvoices => (monthsInvoices.ElementAt(0).InvoiceDate?.ToString("MMMM"), monthsInvoices.Sum(i => i.Total)));
+                .Select(monthsInvoices => (monthsInvoices.ElementAt(0).InvoiceDate?.ToString("MMMM"), monthsInvoices.Sum(i => i.Total))).ToList();
 
             var expensesIn1 = ExpenseService.AllItems
                 .Where(i => i.Date > startOfPerformanceRange)
                 .GroupBy(i => i.Date.Month)
                 .OrderBy(monthsExpenses => monthsExpenses.ElementAt(0).Date)
-                .Select(monthsExpenses => (monthsExpenses.ElementAt(0).Date.ToString("MMMM"), monthsExpenses.Sum(i => i.TotalCost)));
+                .Select(monthsExpenses => (monthsExpenses.ElementAt(0).Date.ToString("MMMM"), monthsExpenses.Sum(i => i.TotalCost))).ToList();
+            
+            while (startOfPerformanceRange <= DateTime.Now)
+            {
+                var monthName = startOfPerformanceRange.ToString("MMMM");
+                if (invoicesIn1.Count(g => g.Item1 == monthName) == 0)
+                    invoicesIn1.Add((monthName, 0));
+                if (expensesIn1.Count(g => g.Item1 == monthName) == 0)
+                    expensesIn1.Add((monthName, 0));
+
+                startOfPerformanceRange = startOfPerformanceRange.AddMonths(1);
+            }
 
             return (from i in invoicesIn1
                     join e in expensesIn1
