@@ -301,8 +301,9 @@ namespace MonetaFMS.Services
         private string GetInvoicePath(Invoice invoice)
         {
             //var monetaFolder = Services.SettingsService.GetFutureAccessFolder(FutureAccessToken.MonetaFolderToken).Result;
+            var company = Common.Utilities.MakeValidFileName(invoice.Client.Company);
             var invoiceFolderPath = Path.Combine(ApplicationData.Current.LocalFolder.Path, "Invoices");
-            var invoicePath = Path.Combine(invoiceFolderPath, $"{invoice.Client.Company} - {invoice.Id}.pdf");
+            var invoicePath = Path.Combine(invoiceFolderPath, $"{company} - {invoice.Id}.pdf");
 
             if (File.Exists(invoicePath))
             {
@@ -310,7 +311,7 @@ namespace MonetaFMS.Services
 
                 do
                 {
-                    invoicePath = Path.Combine(invoiceFolderPath, $"{invoice.Client.Company} - {invoice.Id} ({++counter}).pdf");
+                    invoicePath = Path.Combine(invoiceFolderPath, $"{company} - {invoice.Id} ({++counter}).pdf");
 
                 } while (File.Exists(invoicePath));
             }

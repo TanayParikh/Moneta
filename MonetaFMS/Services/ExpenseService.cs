@@ -96,7 +96,7 @@ namespace MonetaFMS.Services
 
             ExpenseCategory category = ExpenseCategory.MISC;
             Enum.TryParse(Convert.ToString(reader[Columns.ExpenseCategory.ToString()]), out category);
-            
+
             DateTime date = DateTime.Now;
             if (reader[Columns.Date.ToString()] is Int64 timestamp && timestamp != 0)
                 date = Convert.ToDateTime(timestamp);
@@ -106,7 +106,12 @@ namespace MonetaFMS.Services
             decimal taxComponent = ConvertToDollars(Convert.ToInt32(reader[Columns.TaxAmount.ToString()]));
             decimal totalCost = ConvertToDollars(Convert.ToInt32(reader[Columns.TotalAmount.ToString()]));
             string imageReference = Convert.ToString(reader[Columns.ImageReference.ToString()]);
-            Invoice invoice = InvoiceService.ReadEntry(Convert.ToInt32(reader[Columns.InvoiceID.ToString()]));
+            Invoice invoice = null;
+
+            if ((reader[Columns.InvoiceID.ToString()] is string invoiceIdRaw) && int.TryParse(invoiceIdRaw, out int invoiceId))
+            {
+                invoice = InvoiceService.ReadEntry(Convert.ToInt32(reader[Columns.InvoiceID.ToString()]));
+            }
 
             return new Expense(id, creationDate, note, description, category, date, taxComponent, totalCost, imageReference, invoice);
         }
