@@ -131,11 +131,21 @@
 		{
 			var revenueExpenseData = {
 			  type: 'line',
-				options: {
-					tooltips: pieTooltip
+		      options: {
+				tooltips: pieTooltip,
+				scales: {
+					yAxes: [{
+						ticks: {
+							// Include a dollar sign in the ticks
+							callback: function(value, index, values) {
+								return '$' + value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+							}
+						}
+					}]
 				}
+			  }
 			};
-			
+
 			revenueExpenseData.data = JSON.parse(data);
 			
 			var ctx = document.getElementById('invoices-chart-area').getContext('2d');
