@@ -44,19 +44,18 @@ namespace MonetaFMS.ViewModels
                             "rgb(54, 162, 235)", // blue
                             "rgb(153, 102, 255)", // purple
                             "rgb(201, 203, 207)" // grey
-                        };
+                    };
 
         public DashboardPageViewModel()
         {
             ClientService = Services.Services.ClientService;
             InvoiceService = Services.Services.InvoiceService;
             BusinessStatsService = Services.Services.BusinessStatsService;
-            //GetDashboardStats();
         }
 
         public string GetTopClients()
         {
-            Dictionary<Client, Decimal> topClients = BusinessStatsService.GetTopClients(5);
+            Dictionary<Client, Decimal> topClients = BusinessStatsService.GetTopClients(DateTime.Now.AddMonths(-6), DateTime.Now, 5);
 
             var graphData = new GraphData
             {
@@ -76,7 +75,7 @@ namespace MonetaFMS.ViewModels
 
         public string GetTopExpenseCategories()
         {
-            Dictionary<ExpenseCategory, Decimal> topExpenses = BusinessStatsService.GetTopExpenseCategories(5);
+            Dictionary<ExpenseCategory, Decimal> topExpenses = BusinessStatsService.GetTopExpenseCategories(DateTime.Now.AddMonths(-6), DateTime.Now, 5);
 
             var graphData = new GraphData
             {

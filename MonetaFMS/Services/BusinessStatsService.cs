@@ -21,24 +21,22 @@ namespace MonetaFMS.Services
             ExpenseService = expenseService;
         }
         
-        /// <summary>
-        /// Revenue and expense data for [ start, end ]
-        /// </summary>
-        /// <param name="start"></param>
-        /// <param name="end"></param>
-        /// <returns></returns>
+        private bool EqualCalendarMonths(DateTime d1, DateTime d2) => d1.Month == d2.Month && d1.Year == d2.Year;
+
+        private bool InRange(DateTime start, DateTime end, DateTime date) => date >= start && date <= end;
+        
         public List<(string month, decimal revenue, decimal expenses)> GetPerformance(DateTime start, DateTime end)
         {
             List<(string, decimal, decimal)> performance = new List<(string, decimal, decimal)>();
 
             var monthlyInvoiceData = InvoiceService.AllItems
-                .Where(i => i.InvoiceDate >= start && i.InvoiceDate <= end)
+                .Where(i => InRange(start, end, i.InvoiceDate.Value))
                 .GroupBy(i => new DateTime(i.InvoiceDate.Value.Year, i.InvoiceDate.Value.Month, 1))
                 .Select(monthlyInvoices => (calendarMonth: monthlyInvoices.Key, total: monthlyInvoices.Sum(i => i.Total)))
                 .ToList();
 
             var monthlyExpenseData = ExpenseService.AllItems
-                .Where(e => e.Date >= start && e.Date <= end)
+                .Where(e => InRange(start, end, e.Date))
                 .GroupBy(e => new DateTime(e.Date.Year, e.Date.Month, 1))
                 .Select(monthlyExpenses => (calendarMonth: monthlyExpenses.Key, total: monthlyExpenses.Sum(i => i.TotalCost)))
                 .ToList();
@@ -56,28 +54,28 @@ namespace MonetaFMS.Services
 
             return performance;
         }
-
-        private bool EqualCalendarMonths(DateTime d1, DateTime d2) => d1.Month == d2.Month && d1.Year == d2.Year;
-
-        public Dictionary<Client, decimal> GetTopClients(int numClients)
+        
+        public Dictionary<Client, decimal> GetTopClients(DateTime start, DateTime end, int numClients)
         {
             Dictionary<Client, decimal> topClients = ClientService.AllItems.ToDictionary(c => c, c => (decimal)0);
 
             foreach (Invoice i in InvoiceService.AllItems)
             {
-                topClients[i.Client] += i.Total;
+                if (InRange(start, end, i.InvoiceDate.Value))
+                    topClients[i.Client] += i.Total;
             }
 
             return topClients.OrderByDescending(tc => tc.Value).Take(numClients).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
         }
 
-        public Dictionary<ExpenseCategory, decimal> GetTopExpenseCategories(int numCategories)
+        public Dictionary<ExpenseCategory, decimal> GetTopExpenseCategories(DateTime start, DateTime end, int numCategories)
         {
             Dictionary<ExpenseCategory, decimal> topExpenseCategories = Enum.GetValues(typeof(ExpenseCategory)).Cast<ExpenseCategory>().ToDictionary(c => c, c => (decimal)0);
 
             foreach (Expense e in ExpenseService.AllItems)
             {
-                topExpenseCategories[e.Category] += e.TotalCost;
+                if (InRange(start, end, e.Date))
+                    topExpenseCategories[e.Category] += e.TotalCost;
             }
 
             return topExpenseCategories.OrderByDescending(tc => tc.Value).Take(numCategories).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
