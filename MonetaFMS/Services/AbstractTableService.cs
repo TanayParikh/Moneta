@@ -49,16 +49,16 @@ namespace MonetaFMS.Services
                         {
                             allItems.Add(ParseFromReader(reader));
                         }
-                        catch (Exception e)
+                        catch
                         {
                             // Invalid entry read
                         }
                     }
                 }
             }
-            catch (SqliteException e)
+            catch (SqliteException)
             {
-                return allItems;
+                return new List<T>();
             }
 
             return allItems;

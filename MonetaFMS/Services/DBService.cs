@@ -84,7 +84,7 @@ namespace MonetaFMS.Services
                     RestoreDB();
                 }
             }
-            catch (SqliteException e)
+            catch (SqliteException)
             {
                 RestoreDB();
             }
@@ -136,7 +136,7 @@ namespace MonetaFMS.Services
                     return command.ExecuteNonQuery() != 0;
                 }
             }
-            catch (Exception ex)
+            catch (SqliteException)
             {
                 return false;
             }

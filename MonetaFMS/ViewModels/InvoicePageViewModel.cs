@@ -32,7 +32,6 @@ namespace MonetaFMS.ViewModels
         
         public InvoicePageViewModel()
         {
-            GenerateStats();
             _allInvoices = new ObservableCollection<Invoice>(Services.Services.InvoiceService.AllItems);
             AllInvoices = new AdvancedCollectionView(_allInvoices);
 
@@ -40,6 +39,8 @@ namespace MonetaFMS.ViewModels
             AllInvoices.SortDescriptions.Add(new SortDescription("Id", SortDirection.Descending));
 
             InvoiceService = Services.Services.InvoiceService;
+
+            GenerateStats();
         }
 
         public decimal Revenue
@@ -139,7 +140,7 @@ namespace MonetaFMS.ViewModels
             var revenue = payables = overdue = 0;
             var firstOfYear = new DateTime(DateTime.Now.Year, 1, 1);
 
-            foreach (Invoice i in Services.Services.InvoiceService.AllItems)
+            foreach (Invoice i in InvoiceService.AllItems)
             {
                 var invoiceTotal = i.Total;
 
