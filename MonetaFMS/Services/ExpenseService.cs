@@ -66,12 +66,7 @@ namespace MonetaFMS.Services
         {
             throw new NotImplementedException();
         }
-
-        public override Expense ReadEntry(int id)
-        {
-            return AllItems.FirstOrDefault(e => e.Id == id);
-        }
-
+        
         public override bool UpdateEntry(Expense updatedValue)
         {
             using (var command = new SqliteCommand())

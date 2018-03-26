@@ -1,5 +1,6 @@
 ﻿using Microsoft.Data.Sqlite;
 using MonetaFMS.Interfaces;
+using MonetaFMS.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace MonetaFMS.Services
 {
-    public abstract class AbstractTableService<T> : ITableService<T>
+    public abstract class AbstractTableService<T> : ITableService<T> where T : Record
     {
         protected DBService DBService { get; set; }
         
@@ -23,7 +24,7 @@ namespace MonetaFMS.Services
         public List<T> AllItems { get; set; }
         public abstract T CreateEntry(T newValue);
         public abstract bool DeleteEntry(T deletedValue);
-        public abstract T ReadEntry(int id);
+        public virtual T ReadEntry(int id) => AllItems?.FirstOrDefault(i => i.Id == id);
         public abstract bool UpdateEntry(T updatedValue);
         #endregion
 
@@ -65,7 +66,7 @@ namespace MonetaFMS.Services
         }
 
         protected abstract T ParseFromReader(SqliteDataReader reader);
-
+        
         protected decimal ConvertToDollars(int cents) => cents / (decimal)100;
         protected int ConvertToCents(decimal dollars) => (int)(dollars * 100);
     }

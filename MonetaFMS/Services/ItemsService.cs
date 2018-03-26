@@ -58,11 +58,6 @@ namespace MonetaFMS.Services
             throw new NotImplementedException();
         }
 
-        public override InvoiceItem ReadEntry(int id)
-        {
-            return AllItems?.FirstOrDefault(i => i.Id == id);
-        }
-
         public override bool UpdateEntry(InvoiceItem updatedValue)
         {
             using (var command = new SqliteCommand())

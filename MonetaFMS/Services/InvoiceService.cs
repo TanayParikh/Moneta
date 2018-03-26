@@ -95,11 +95,6 @@ namespace MonetaFMS.Services
             throw new NotImplementedException();
         }
 
-        public override Invoice ReadEntry(int id)
-        {
-            return AllItems.FirstOrDefault(i => i.Id == id);
-        }
-
         public override bool UpdateEntry(Invoice updatedValue)
         {
             bool invoiceUpdated, itemsUpdated = true, paymentsUpdated = true;
