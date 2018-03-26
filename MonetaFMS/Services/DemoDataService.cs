@@ -10,11 +10,12 @@ namespace MonetaFMS.Services
 {
     class DemoDataService
     {
-        private DBService DBService;
-        private IClientService ClientService;
-        private IExpenseService ExpenseService;
-        private IInvoiceService InvoiceService;
-        private IItemsService ItemsService;
+        private DBService DBService { get; set; }
+        private IClientService ClientService { get; set; }
+        private IExpenseService ExpenseService { get; set; }
+        private IInvoiceService InvoiceService { get; set; }
+        private IItemsService ItemsService { get; set; }
+        private IPaymentsService PaymentsService { get; set; }
 
         private const int NUM_CLIENTS = 50;
         private const int NUM_INVOICES = 250;
@@ -23,13 +24,15 @@ namespace MonetaFMS.Services
 
         private Random random = new Random();
 
-        public DemoDataService(DBService dBService, IClientService clientService, IExpenseService expenseService, IInvoiceService invoiceService, IItemsService itemsService)
+        public DemoDataService(DBService dBService, IClientService clientService, IExpenseService expenseService, 
+            IInvoiceService invoiceService, IItemsService itemsService, IPaymentsService paymentsService)
         {
             DBService = dBService;
             ClientService = clientService;
             ExpenseService = expenseService;
             InvoiceService = invoiceService;
             ItemsService = itemsService;
+            PaymentsService = paymentsService;
 
             PopulateDatabase();
         }
@@ -42,6 +45,7 @@ namespace MonetaFMS.Services
             PopulateInvoices();
             PopulateItems();
             PopulateExpenses();
+            PopulatePayments();
         }
 
         private void PopulateExpenses()
@@ -57,9 +61,15 @@ namespace MonetaFMS.Services
                 var cost = Convert.ToDecimal(commerce.Price());
                 var taxComponent = cost * (decimal)random.NextDouble() / 2;
 
-                Expense e = new Expense(hacker.Phrase(), commerce.ProductName(), (ExpenseCategory)random.Next(numExpenseCategories), DateTime.Now.AddDays(random.Next(-360, 50)), taxComponent, cost, image.Image(), invoice);
+                Expense e = new Expense(-1, DateTime.Now, hacker.Phrase(), commerce.ProductName(), (ExpenseCategory)random.Next(numExpenseCategories), DateTime.Now.AddDays(random.Next(-360, 50)), taxComponent, cost, image.Image(), invoice);
                 ExpenseService.CreateEntry(e);
             }
+        }
+
+        private void PopulatePayments()
+        {
+            foreach (var i in InvoiceService.AllItems)
+                PopulatePayments(i);
         }
 
         private void PopulateItems()
@@ -70,7 +80,7 @@ namespace MonetaFMS.Services
                 var hacker = new Bogus.DataSets.Hacker();
                 var invoice = GetRandomElement(InvoiceService.AllItems);
 
-                InvoiceItem item = new InvoiceItem(string.Empty, commerce.ProductName(), Convert.ToDecimal(commerce.Price()), (decimal)(random.NextDouble() / 5d), invoice.Id);
+                InvoiceItem item = new InvoiceItem(-1, DateTime.Now, string.Empty, commerce.ProductName(), Convert.ToDecimal(commerce.Price()), Math.Round((decimal)(random.NextDouble() / 5d), 2), invoice.Id);
                 ItemsService.CreateEntry(item);
                 invoice.Items.Add(item);
             }
@@ -85,12 +95,36 @@ namespace MonetaFMS.Services
                 var company = new Bogus.DataSets.Company();
                 var client = GetRandomElement(ClientService.AllItems);
                 var items = new List<InvoiceItem>();
+                var payments = new List<InvoicePayment>();
                 var dueDate = DateTime.Now.AddDays(random.Next(-60, 90));
                 var invoiceDate = DateTime.Now.AddDays(random.Next(-360, 50));
 
-                Invoice invoice = new Invoice(company.CatchPhrase(), client, items, invoiceDate, dueDate, (InvoiceType)random.Next(numInvoiceTypes), new InvoiceStatus(dueDate, random.Next(2) == 1));
+                Invoice invoice = new Invoice(-1, DateTime.Now, company.CatchPhrase(), client, items, payments, invoiceDate, dueDate, (InvoiceType)random.Next(numInvoiceTypes), new InvoiceStatus(dueDate, random.Next(2) == 1));
                 InvoiceService.CreateEntry(invoice);
             }
+        }
+
+        private void PopulatePayments(Invoice invoice)
+        {
+            var commerce = new Bogus.DataSets.Commerce();
+            var numPayments = random.Next(1, 5);
+
+            var paymentAmount = (invoice.Status.InvoiceStatusType == InvoiceStatusType.Paid ? invoice.Total : (invoice.Total / 2)) / numPayments;
+            
+            var payments = new List<InvoicePayment>(numPayments);
+
+            for (int i = 0; i < numPayments - 1; ++i)
+            {
+                payments.Add(new InvoicePayment(-1, DateTime.Now, commerce.ProductName(), invoice.InvoiceDate.Value.AddDays(random.Next(0, 90)), paymentAmount, invoice.Id));
+            }
+
+            var balance = invoice.Total - payments.Sum(p => p.AmountPaid);
+            payments.Add(new InvoicePayment(-1, DateTime.Now, commerce.ProductName(), invoice.InvoiceDate.Value.AddDays(random.Next(0, 90)), paymentAmount, invoice.Id));
+
+            invoice.Payments.AddRange(payments);
+
+            foreach (var p in payments)
+                PaymentsService.CreateEntry(p);
         }
 
         private void PopulateClients()
@@ -98,7 +132,7 @@ namespace MonetaFMS.Services
             for (int i = 0; i < NUM_CLIENTS; ++i)
             {
                 var person = new Bogus.Person();
-                Client c = new Client(person.Company.Bs, person.FirstName, person.LastName, person.Company.Name, person.Address.Street + ", " + person.Address.City + ", " + person.Address.ZipCode, person.Phone, person.Email);
+                Client c = new Client(-1, DateTime.Now, person.Company.Bs, person.FirstName, person.LastName, person.Company.Name, person.Address.Street + ", " + person.Address.City + ", " + person.Address.ZipCode, person.Phone, person.Email);
                 ClientService.CreateEntry(c);
             }
         }

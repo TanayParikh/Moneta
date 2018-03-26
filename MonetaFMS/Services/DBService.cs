@@ -61,7 +61,8 @@ namespace MonetaFMS.Services
             Invoices,
             Clients,
             Expenses,
-            Items
+            Items,
+            Payments
         }
 
         public DBService()
