@@ -12,18 +12,21 @@ namespace MonetaFMS.Converters
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            if (value is DateTime date && parameter is string param)
+            if (value is DateTime date)
             {
-                if (param == "MonthShort")
+                if (parameter is string param)
                 {
-                    return date.ToString("MMM");
-                }
-                else if (param == "DayOfMonth")
-                {
-                    return date.Day;
+                    if (param == "MonthShort")
+                    {
+                        return date.ToString("MMM");
+                    }
+                    else if (param == "DayOfMonth")
+                    {
+                        return date.Day;
+                    }
                 }
 
-                return date.ToString();
+                return date.ToString("MMM dd, yyyy");
             }
 
             return string.Empty;
