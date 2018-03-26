@@ -85,56 +85,126 @@
             </StackPanel>
 
 
-            <Grid HorizontalAlignment="Stretch" Margin="27, 15, 12, 10" Grid.Row="1">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="4*" />
-                    <ColumnDefinition Width="1*" />
-                    <ColumnDefinition Width="1*" />
-                </Grid.ColumnDefinitions>
+            <Pivot x:Name="rootPivot" Grid.Row="3">
+                <PivotItem Header="Items">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        
+                        <Grid HorizontalAlignment="Stretch" Margin="27, 15, 12, 10" Grid.Row="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="4*" />
+                                <ColumnDefinition Width="1*" />
+                                <ColumnDefinition Width="1*" />
+                            </Grid.ColumnDefinitions>
 
-                <TextBlock Text="Item Description" Grid.Column="0" Grid.ColumnSpan="2" Style="{StaticResource Headings}" />
-                <TextBlock Text="Price" Grid.Column="1" Style="{StaticResource Headings}" />
-                <TextBlock Text="Tax %" Grid.Column="2" Style="{StaticResource Headings}" />
-            </Grid>
+                            <TextBlock Text="Item Description" Grid.Column="0" Grid.ColumnSpan="2" Style="{StaticResource Headings}" />
+                            <TextBlock Text="Price" Grid.Column="1" Style="{StaticResource Headings}" />
+                            <TextBlock Text="Tax %" Grid.Column="2" Style="{StaticResource Headings}" />
+                        </Grid>
 
-            <Grid Grid.Row="2" Background="#f8f8f8" HorizontalAlignment="Stretch"
+                        <Grid Grid.Row="1" Background="#f8f8f8" HorizontalAlignment="Stretch"
                   Visibility="{Binding IsEditMode, Converter={StaticResource BooleanToVisibilityConverter}}">
-                <Button Click="NewItem_Click" Content="Add New Item" Foreground="DarkGray" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Height="63" Margin="19, 22, 19, 7" HorizontalContentAlignment="Center" Background="Transparent" VerticalContentAlignment="Center" />
-                <Rectangle HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Stroke="DarkGray" Opacity=".4" Margin="19, 22, 19, 7"
+                            <Button Click="NewItem_Click" Content="Add New Item" Foreground="DarkGray" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Height="63" Margin="19, 22, 19, 7" HorizontalContentAlignment="Center" Background="Transparent" VerticalContentAlignment="Center" />
+                            <Rectangle HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Stroke="DarkGray" Opacity=".4" Margin="19, 22, 19, 7"
                     StrokeDashArray="5" StrokeDashCap="Round" Height="63" />
-            </Grid>
+                        </Grid>
 
-            <ListView Grid.Row="3" Background="#f8f8f8" x:Name="ItemsList" ItemsSource="{Binding Items}">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <controls:DropShadowPanel Style="{StaticResource ListViewRowDropshadow}">
-                            <Grid x:Name="connectedElement" Style="{StaticResource ListViewRow}">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="4*" />
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
+                        <ListView Grid.Row="2" Background="#f8f8f8" x:Name="ItemsList" ItemsSource="{Binding Items}">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <controls:DropShadowPanel Style="{StaticResource ListViewRowDropshadow}">
+                                        <Grid x:Name="connectedElement" Style="{StaticResource ListViewRow}">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="4*" />
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
 
-                                <TextBlock Margin="30, 0, 0, 0" Grid.Column="0" Text="{Binding Description, Mode=TwoWay}" Style="{StaticResource ListViewHeading}"
+                                            <TextBlock Margin="30, 0, 0, 0" Grid.Column="0" Text="{Binding Description, Mode=TwoWay}" Style="{StaticResource ListViewHeading}"
                                          Visibility="{Binding ElementName=InvoiceDetails, Path=DataContext.IsEditMode, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Reverse}" />
-                                <TextBlock Grid.Column="1" Text="{Binding Price, Mode=TwoWay, Converter={StaticResource MoneyConverter}}" Style="{StaticResource ListViewSubtitle}"
+                                            <TextBlock Grid.Column="1" Text="{Binding Price, Mode=TwoWay, Converter={StaticResource MoneyConverter}}" Style="{StaticResource ListViewSubtitle}"
                                          Visibility="{Binding ElementName=InvoiceDetails, Path=DataContext.IsEditMode, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Reverse}" />
-                                <TextBlock Margin="0, 0, 15, 0" Grid.Column="2" Text="{Binding TaxPercentage, Converter={StaticResource PercentageConverter}}" Style="{StaticResource ListViewSubtitle}"
+                                            <TextBlock Margin="0, 0, 15, 0" Grid.Column="2" Text="{Binding TaxPercentage, Converter={StaticResource PercentageConverter}}" Style="{StaticResource ListViewSubtitle}"
                                          Visibility="{Binding ElementName=InvoiceDetails, Mode=TwoWay, Path=DataContext.IsEditMode, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Reverse}" />
 
-                                <TextBox Margin="30, 0, 60, 0" Grid.Column="0" Text="{Binding Description, Mode=TwoWay}"  Style="{StaticResource ListViewItemEditField}"
+                                            <TextBox Margin="30, 0, 60, 0" Grid.Column="0" Text="{Binding Description, Mode=TwoWay}"  Style="{StaticResource ListViewItemEditField}"
                                          Visibility="{Binding ElementName=InvoiceDetails, Path=DataContext.IsEditMode, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                                <TextBox KeyDown="ItemPrice_KeyDown" Margin="15, 0" Grid.Column="1" Text="{Binding Price, Mode=TwoWay, Converter={StaticResource MoneyConverter}, ConverterParameter=HideIf0}" Style="{StaticResource ListViewItemEditField}"
+                                            <TextBox KeyDown="ItemPrice_KeyDown" Margin="15, 0" Grid.Column="1" Text="{Binding Price, Mode=TwoWay, Converter={StaticResource MoneyConverter}, ConverterParameter=HideIf0}" Style="{StaticResource ListViewItemEditField}"
                                          Visibility="{Binding ElementName=InvoiceDetails, Path=DataContext.IsEditMode, Converter={StaticResource BooleanToVisibilityConverter}}" Paste="TextBox_Paste" />
-                                <TextBox KeyDown="ItemTaxPercentage_KeyDown" Margin="25, 0, 25, 0" Grid.Column="2" Text="{Binding TaxPercentage, Mode=TwoWay, Converter={StaticResource PercentageConverter}}" Style="{StaticResource ListViewItemEditField}"
+                                            <TextBox KeyDown="ItemTaxPercentage_KeyDown" Margin="25, 0, 25, 0" Grid.Column="2" Text="{Binding TaxPercentage, Mode=TwoWay, Converter={StaticResource PercentageConverter}}" Style="{StaticResource ListViewItemEditField}"
                                          Visibility="{Binding ElementName=InvoiceDetails, Mode=TwoWay, Path=DataContext.IsEditMode, Converter={StaticResource BooleanToVisibilityConverter}}" Paste="TextBox_Paste" />
-                            </Grid>
-                        </controls:DropShadowPanel>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+                                        </Grid>
+                                    </controls:DropShadowPanel>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </Grid>
+                </PivotItem>
+                <PivotItem Header="Invoice Details">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+
+                        <Grid HorizontalAlignment="Stretch" Margin="27, 15, 12, 10" Grid.Row="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="2*" />
+                                <ColumnDefinition Width="1*" />
+                                <ColumnDefinition Width="1*" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Text="Payment Detail" Grid.Column="0" Style="{StaticResource Headings}" />
+                            <TextBlock Text="Amount Paid" Grid.Column="1" Style="{StaticResource Headings}" />
+                            <TextBlock Text="Date Paid" Grid.Column="2" Style="{StaticResource Headings}" />
+                        </Grid>
+
+                        <Grid Grid.Row="1" Background="#f8f8f8" HorizontalAlignment="Stretch"
+                  Visibility="{Binding IsEditMode, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <Button Click="NewPayment_Click" Content="Record New Payment" Foreground="DarkGray" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Height="63" Margin="19, 22, 19, 7" HorizontalContentAlignment="Center" Background="Transparent" VerticalContentAlignment="Center" />
+                            <Rectangle HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Stroke="DarkGray" Opacity=".4" Margin="19, 22, 19, 7"
+                    StrokeDashArray="5" StrokeDashCap="Round" Height="63" />
+                        </Grid>
+
+                        <ListView Grid.Row="2" Background="#f8f8f8" x:Name="PaymentsList" ItemsSource="{Binding Payments}">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <controls:DropShadowPanel Style="{StaticResource ListViewRowDropshadow}">
+                                        <Grid x:Name="connectedElement" Style="{StaticResource ListViewRow}">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="2*" />
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
+
+                                            <TextBlock Margin="30, 0, 0, 0" Grid.Column="0" Text="{Binding Note, Mode=TwoWay}" Style="{StaticResource ListViewHeading}"
+                                                        Visibility="{Binding ElementName=InvoiceDetails, Path=DataContext.IsEditMode, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Reverse}" />
+                                            <TextBlock Grid.Column="1" Text="{Binding AmountPaid, Mode=TwoWay, Converter={StaticResource MoneyConverter}}" Style="{StaticResource ListViewSubtitle}"
+                                                        Visibility="{Binding ElementName=InvoiceDetails, Path=DataContext.IsEditMode, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Reverse}" />
+                                            <TextBlock Grid.Column="2" VerticalAlignment="Center" FontSize="16" Foreground="DarkGray" Text="{Binding PaymentDate, Converter={StaticResource DateConverter}}"
+                                                        Visibility="{Binding ElementName=InvoiceDetails, Path=DataContext.IsEditMode, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Reverse}" />
 
 
+                                            <TextBox Margin="30, 0, 60, 0" Grid.Column="0" Text="{Binding Note, Mode=TwoWay}"  Style="{StaticResource ListViewItemEditField}"
+                                                        Visibility="{Binding ElementName=InvoiceDetails, Path=DataContext.IsEditMode, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                            <TextBox KeyDown="ItemPrice_KeyDown" Margin="15, 0" Grid.Column="1" Text="{Binding AmountPaid, Mode=TwoWay, Converter={StaticResource MoneyConverter}, ConverterParameter=HideIf0}" Style="{StaticResource ListViewItemEditField}"
+                                                        Visibility="{Binding ElementName=InvoiceDetails, Path=DataContext.IsEditMode, Converter={StaticResource BooleanToVisibilityConverter}}" Paste="TextBox_Paste" />
+                                            <DatePicker x:Name="PaymentDatePicker" MinWidth="175" Grid.Column="2" MaxWidth="200" MonthFormat="{}{month.abbreviated}" Date="{Binding PaymentDate, Mode=TwoWay, Converter={StaticResource DateTimeToDateTimeOffsetConverter}}"
+                                                        Visibility="{Binding ElementName=InvoiceDetails, Path=DataContext.IsEditMode, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                        </Grid>
+                                    </controls:DropShadowPanel>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </Grid>
+                </PivotItem>
+            </Pivot>
+            
 
             <CommandBar Visibility="{Binding IsEditMode, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Reverse}"
                         Grid.Row="4" DefaultLabelPosition="Right" VerticalContentAlignment="Center" Background="{StaticResource SystemControlAcrylicElementMediumHighBrush}">

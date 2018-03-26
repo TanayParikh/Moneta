@@ -72,6 +72,7 @@ namespace MonetaFMS.ViewModels
         }
 
         public ObservableCollection<InvoiceItem> Items { get; set; } = new ObservableCollection<InvoiceItem>();
+        public ObservableCollection<InvoicePayment> Payments { get; set; } = new ObservableCollection<InvoicePayment>();
         public ObservableCollection<Client> Clients { get; set; } = new ObservableCollection<Client>(Services.Services.ClientService.AllItems);
         
         private Invoice InvoiceBackup { get; set; }
@@ -97,16 +98,22 @@ namespace MonetaFMS.ViewModels
             IsPaid = Invoice.Status.InvoiceStatusType == InvoiceStatusType.Paid;
 
             Items.Clear();
+            Payments.Clear();
 
             if (Invoice.Id == -1)
             {
                 NewItem();
+                NewPayment();
             }
             else
             {
                 foreach (InvoiceItem i in Invoice.Items)
                 {
                     Items.Add(i);
+                }
+                foreach (InvoicePayment i in Invoice.Payments)
+                {
+                    Payments.Add(i);
                 }
             }
         }
@@ -129,6 +136,7 @@ namespace MonetaFMS.ViewModels
         internal bool SaveInvoice()
         {
             Invoice.Items = Items.ToList();
+            Invoice.Payments = Payments.ToList();
             Invoice.Status = new InvoiceStatus(Invoice.DueDate, IsPaid);
 
             bool result = Invoice.Id == -1 ?
@@ -149,6 +157,11 @@ namespace MonetaFMS.ViewModels
         {
             Invoice.Status = new InvoiceStatus(Invoice.DueDate, IsPaid);
             InvoiceService.UpdateEntry(Invoice);
+        }
+
+        internal void NewPayment()
+        {
+            Payments.Insert(0, InvoiceService.NewInvoicePayment(Invoice.Id));
         }
     }
 }

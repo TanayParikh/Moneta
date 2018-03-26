@@ -128,5 +128,10 @@ namespace MonetaFMS.Pages
             // Disables TB Paste for price / tax %
             e.Handled = true;
         }
+
+        private void NewPayment_Click(object sender, RoutedEventArgs e)
+        {
+            ViewModel.NewPayment();
+        }
     }
 }
