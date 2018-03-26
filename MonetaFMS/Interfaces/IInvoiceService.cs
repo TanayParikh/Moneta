@@ -11,6 +11,7 @@ namespace MonetaFMS.Interfaces
     {
         Invoice NewInvoice();
         InvoiceItem NewInvoiceItem(int invoiceId = -1);
+        InvoicePayment NewInvoicePayment(int invoiceId = -1);
 
         decimal GetInvoiceTotal(int id);
         decimal GetInvoiceTotal(Invoice invoice);

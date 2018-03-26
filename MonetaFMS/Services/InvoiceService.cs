@@ -14,6 +14,7 @@ namespace MonetaFMS.Services
     {
         IClientService ClientService { get; set; }
         IItemsService ItemsService { get; set; }
+        IPaymentsService PaymentsService { get; set; }
         IPDFService PDFService { get; set; }
         ISettingsService SettingsService { get; set; }
 
@@ -32,18 +33,23 @@ namespace MonetaFMS.Services
         }
 
         public Invoice NewInvoice() => new Invoice(id: -1, creation: DateTime.Now, note: string.Empty, client: null, items: new List<InvoiceItem>(),
-                invoiceDate: DateTime.Now, dueDate: DateTime.Now.AddDays(SettingsService.MonetaSettings.InvoiceCreditPeriod),
+                payments: new List<InvoicePayment>(), invoiceDate: DateTime.Now, dueDate: DateTime.Now.AddDays(SettingsService.MonetaSettings.InvoiceCreditPeriod),
                 invoiceType: InvoiceType.Invoice, status: new InvoiceStatus(InvoiceStatusType.Due, ""));
 
         public InvoiceItem NewInvoiceItem(int invoiceId = -1) =>
             new InvoiceItem(id: -1, creation: DateTime.Now, note: "", description: "", price: 0, taxPercentage: Convert.ToDecimal(SettingsService.MonetaSettings.TaxPercentage / 100d), invoiceId: invoiceId);
 
-        public InvoiceService(DBService dBService, IClientService clientService, IItemsService itemsService, IPDFService pdfService, ISettingsService settingsService) : base(dBService)
+        public InvoicePayment NewInvoicePayment(int invoiceId = -1) =>
+            new InvoicePayment(id: -1, creation: DateTime.Now, note: "", paymentDate: DateTime.Now, amountPaid: 0M, invoiceId: invoiceId);
+
+        public InvoiceService(DBService dBService, IClientService clientService, IItemsService itemsService, IPDFService pdfService, ISettingsService settingsService, IPaymentsService paymentsService) : base(dBService)
         {
             ClientService = clientService;
             ItemsService = itemsService;
             PDFService = pdfService;
             SettingsService = settingsService;
+            PaymentsService = paymentsService;
+
             AllItems = GetAllFromDB();
         }
 
@@ -75,6 +81,12 @@ namespace MonetaFMS.Services
                 ItemsService.CreateEntry(item);
             }
 
+            foreach (var payment in newValue.Payments)
+            {
+                payment.InvoiceId = newValue.Id;
+                PaymentsService.CreateEntry(payment);
+            }
+
             return newValue;
         }
 
@@ -90,7 +102,7 @@ namespace MonetaFMS.Services
 
         public override bool UpdateEntry(Invoice updatedValue)
         {
-            bool invoiceUpdated, itemsUpdated = true;
+            bool invoiceUpdated, itemsUpdated = true, paymentsUpdated = true;
 
             using (var command = new SqliteCommand())
             {
@@ -106,11 +118,17 @@ namespace MonetaFMS.Services
 
             foreach (var item in updatedValue.Items)
             {
-                itemsUpdated = itemsUpdated && 
+                itemsUpdated = itemsUpdated &&
                     (item.Id >= 0) ? ItemsService.UpdateEntry(item) : ItemsService.CreateEntry(item).Id >= 0;
             }
 
-            return invoiceUpdated && itemsUpdated;
+            foreach (var payment in updatedValue.Payments)
+            {
+                paymentsUpdated = paymentsUpdated &&
+                    (payment.Id >= 0) ? PaymentsService.UpdateEntry(payment) : PaymentsService.CreateEntry(payment).Id >= 0;
+            }
+
+            return invoiceUpdated && itemsUpdated && paymentsUpdated;
         }
 
         protected override Invoice ParseFromReader(SqliteDataReader reader)
@@ -140,7 +158,7 @@ namespace MonetaFMS.Services
 
             InvoiceStatus status = new InvoiceStatus(dueDate, paid);
 
-            return new Invoice(id, creationDate, notes, ClientService.ReadEntry(clientId), ItemsService.GetInvoiceItems(id), invoiceDate, dueDate, invoiceType, status);
+            return new Invoice(id, creationDate, notes, ClientService.ReadEntry(clientId), ItemsService.GetInvoiceItems(id), PaymentsService.GetInvoicePayments(id), invoiceDate, dueDate, invoiceType, status);
         }
 
         protected override void SetParameters(SqliteCommand command, Invoice val)

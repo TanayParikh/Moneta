@@ -103,7 +103,9 @@
     <Compile Include="Converters\InvoiceStatusToColorConverter.cs" />
     <Compile Include="Converters\DateConverter.cs" />
     <Compile Include="Converters\PercentageConverter.cs" />
+    <Compile Include="Interfaces\IPaymentsService.cs" />
     <Compile Include="Models\DayRange.cs" />
+    <Compile Include="Models\InvoicePayment.cs" />
     <Compile Include="Models\LottieAnimation.cs" />
     <Compile Include="Models\RoamingDataKey.cs" />
     <Compile Include="Pages\InvoiceDetailPage.xaml.cs">
@@ -152,6 +154,7 @@
     <Compile Include="Services\AbstractTableService.cs" />
     <Compile Include="Services\BusinessStatsService.cs" />
     <Compile Include="Services\ClientService.cs" />
+    <Compile Include="Services\PaymentsService.cs" />
     <Compile Include="Services\SettingsService.cs" />
     <Compile Include="Services\DBService.cs" />
     <Compile Include="Services\DemoDataService.cs" />

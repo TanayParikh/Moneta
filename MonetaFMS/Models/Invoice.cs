@@ -59,25 +59,36 @@ namespace MonetaFMS.Models
             }
         }
 
+        List<InvoicePayment> _payments;
+        public List<InvoicePayment> Payments
+        {
+            get { return _payments; }
+            set
+            {
+                SetProperty(ref _payments, value);
+            }
+        }
+
         public decimal Subtotal => Items.Sum(i => i.Price);
         public decimal TaxAmount => Items.Sum(i => i.TaxPercentage * i.Price);
         public decimal Total => TaxAmount + Subtotal;
 
         [JsonConstructor]
-        public Invoice(int id, DateTime creation, string note, Client client, List<InvoiceItem> items,
+        public Invoice(int id, DateTime creation, string note, Client client, List<InvoiceItem> items, List<InvoicePayment> payments,
             DateTime? invoiceDate, DateTime? dueDate, InvoiceType invoiceType, InvoiceStatus status)
-            : this(note, client, items, invoiceDate, dueDate, invoiceType, status)
+            : this(note, client, items, payments, invoiceDate, dueDate, invoiceType, status)
         {
             Id = id;
             CreationDate = creation;
         }
 
-        public Invoice(string note, Client client, List<InvoiceItem> items,
+        public Invoice(string note, Client client, List<InvoiceItem> items, List<InvoicePayment> payments,
             DateTime? invoiceDate, DateTime? dueDate, InvoiceType invoiceType, InvoiceStatus status) : base()
         {
             Note = note;
             Client = client;
             Items = items;
+            Payments = payments;
             InvoiceDate = invoiceDate;
             DueDate = dueDate;
             InvoiceType = invoiceType;

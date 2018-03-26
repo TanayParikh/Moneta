@@ -18,6 +18,7 @@ namespace MonetaFMS.Services
         public static IExpenseService ExpenseService { get; set; }
         public static IInvoiceService InvoiceService { get; set; }
         public static IItemsService ItemsService { get; set; }
+        public static IPaymentsService PaymentsService { get; set; }
 
         public static IBusinessStatsService BusinessStatsService { get; set; }
 
@@ -32,10 +33,11 @@ namespace MonetaFMS.Services
 
             ClientService = new ClientService(DBService);
             ItemsService = new ItemsService(DBService);
-            InvoiceService = new InvoiceService(DBService, ClientService, ItemsService, PDFService, SettingsService);
+            PaymentsService = new PaymentsService(DBService);
+            InvoiceService = new InvoiceService(DBService, ClientService, ItemsService, PDFService, SettingsService, PaymentsService);
             ExpenseService = new ExpenseService(DBService, InvoiceService);
             BusinessStatsService = new BusinessStatsService(ClientService, InvoiceService, ExpenseService);
-            // DemoDataService = new DemoDataService(DBService, ClientService, ExpenseService, InvoiceService, ItemsService);
+            DemoDataService = new DemoDataService(DBService, ClientService, ExpenseService, InvoiceService, ItemsService, PaymentsService);
         }
     }
 }
