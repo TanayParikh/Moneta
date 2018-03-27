@@ -75,9 +75,12 @@
                                 <TextBlock Grid.Column="1" Text="{Binding Category}" Style="{StaticResource ListViewSubtitle}" />
                                 <TextBlock Grid.Column="2" Text="{Binding TotalCost, Converter={StaticResource MoneyConverter}}" Style="{StaticResource ListViewSubtitle}" />
 
-                                <StackPanel VerticalAlignment="Center" Margin="0,0,15,0" Grid.Column="5">
-                                    <TextBlock Text="{Binding Date, Converter={StaticResource DateConverter}, ConverterParameter=MonthShort}" Style="{StaticResource Month}" />
-                                    <TextBlock Text="{Binding Date, Converter={StaticResource DateConverter}, ConverterParameter=DayOfMonth}" Style="{StaticResource DayOfMonth}" />
+                                <StackPanel Orientation="Horizontal" Grid.Column="5" Margin="0,0,15,0">
+                                    <StackPanel VerticalAlignment="Center" Margin="0,0,10,0">
+                                        <TextBlock Text="{Binding Date, Converter={StaticResource DateConverter}, ConverterParameter=MonthShort}" Style="{StaticResource Month}" />
+                                        <TextBlock Text="{Binding Date, Converter={StaticResource DateConverter}, ConverterParameter=DayOfMonth}" Style="{StaticResource DayOfMonth}" />
+                                    </StackPanel>
+                                    <TextBlock Text="{Binding Date, Converter={StaticResource DateConverter}, ConverterParameter=Year}" HorizontalAlignment="Left" MaxLines="4" Width="8" VerticalAlignment="Center" TextWrapping="Wrap" Style="{StaticResource Month}" />
                                 </StackPanel>
                             </Grid>
                             <Grid x:Name="ExpenseDetail" Height="350" Style="{StaticResource ListViewRow}" Visibility="Collapsed">
