@@ -46,20 +46,12 @@ namespace MonetaFMS.Models
             set { SetProperty(ref _date, value); }
         }
 
-        string _imageReference;
-        public string ImageReference
+        string _documentName;
+        public string DocumentName
         {
-            get { return _imageReference; }
-            set
-            {
-                if (SetProperty(ref _imageReference, value))
-                {
-                    OnPropertyChanged(nameof(DocumentName));
-                }
-            }
+            get { return _documentName; }
+            set { SetProperty(ref _documentName, value); }
         }
-        
-        public string DocumentName => string.IsNullOrEmpty(ImageReference) ? null : Path.GetFileName(ImageReference);
 
         Invoice _invoice;
         public Invoice Invoice
@@ -70,15 +62,15 @@ namespace MonetaFMS.Models
 
         [JsonConstructor]
         public Expense(int id, DateTime creation, string note, string description, ExpenseCategory category,
-            DateTime date, decimal taxComponent, decimal totalCost, string imageReference, Invoice invoice)
-            : this(note, description, category, date, taxComponent, totalCost, imageReference, invoice)
+            DateTime date, decimal taxComponent, decimal totalCost, string documentName, Invoice invoice)
+            : this(note, description, category, date, taxComponent, totalCost, documentName, invoice)
         {
             Id = id;
             CreationDate = creation;
         }
 
         public Expense(string note, string description, ExpenseCategory category, DateTime date,
-            decimal taxComponent, decimal totalCost, string imageReference, Invoice invoice) : base()
+            decimal taxComponent, decimal totalCost, string documentName, Invoice invoice) : base()
         {
             Note = note;
             Description = description;
@@ -86,7 +78,7 @@ namespace MonetaFMS.Models
             Date = date;
             TaxComponent = taxComponent;
             TotalCost = totalCost;
-            ImageReference = imageReference;
+            DocumentName = documentName;
             Invoice = invoice;
 
             if (Date == null || Date.Year == 1)

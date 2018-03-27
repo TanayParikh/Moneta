@@ -60,7 +60,7 @@ namespace MonetaFMS.Services
         }
 
         public Expense NewExpense() => 
-            new Expense(id: -1, creation: DateTime.Now, note: string.Empty, description: string.Empty, category: ExpenseCategory.Accounting, date: DateTime.Now, taxComponent: 0, totalCost: 0, imageReference: string.Empty, invoice: null);
+            new Expense(id: -1, creation: DateTime.Now, note: string.Empty, description: string.Empty, category: ExpenseCategory.Accounting, date: DateTime.Now, taxComponent: 0, totalCost: 0, documentName: null, invoice: null);
 
         public override bool DeleteEntry(Expense deletedValue)
         {
@@ -101,6 +101,10 @@ namespace MonetaFMS.Services
             decimal taxComponent = ConvertToDollars(Convert.ToInt32(reader[Columns.TaxAmount.ToString()]));
             decimal totalCost = ConvertToDollars(Convert.ToInt32(reader[Columns.TotalAmount.ToString()]));
             string imageReference = Convert.ToString(reader[Columns.ImageReference.ToString()]);
+
+            if (string.IsNullOrWhiteSpace(imageReference))
+                imageReference = null;
+
             Invoice invoice = null;
 
             if ((reader[Columns.InvoiceID.ToString()] is string invoiceIdRaw) && int.TryParse(invoiceIdRaw, out int invoiceId))
@@ -115,7 +119,7 @@ namespace MonetaFMS.Services
         {
             command.Parameters.Add(new SqliteParameter("@Date", DbType.DateTime) { Value = val.Date });
             command.Parameters.Add(new SqliteParameter("@Description", DbType.String) { Value = val.Description });
-            command.Parameters.Add(new SqliteParameter("@ImageReference", DbType.String) { Value = val.ImageReference });
+            command.Parameters.Add(new SqliteParameter("@ImageReference", DbType.String) { Value = val.DocumentName });
             command.Parameters.Add(new SqliteParameter("@InvoiceID", DbType.Int32) { Value = val.Invoice?.Id ?? 0 });
             command.Parameters.Add(new SqliteParameter("@ExpenseCategory", DbType.String) { Value = val.Category.ToString() });
             command.Parameters.Add(new SqliteParameter("@TaxAmount", DbType.Int32) { Value = ConvertToCents(val.TaxComponent) });

@@ -67,7 +67,7 @@ namespace MonetaFMS.ViewModels
                 Expense.TotalCost = ExpenseBackup.TotalCost;
                 Expense.TaxComponent = ExpenseBackup.TaxComponent;
                 Expense.Date = ExpenseBackup.Date;
-                Expense.ImageReference = ExpenseBackup.ImageReference;
+                Expense.DocumentName = ExpenseBackup.DocumentName;
                 Expense.Invoice = ExpenseBackup.Invoice;
             }
         }
@@ -91,7 +91,7 @@ namespace MonetaFMS.ViewModels
             var receiptsFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync("Receipts", CreationCollisionOption.OpenIfExists);
             var storedReceipt = await storageFile.CopyAsync(receiptsFolder, storageFile.Name, NameCollisionOption.GenerateUniqueName);
 
-            Expense.ImageReference = storedReceipt.Path;
+            Expense.DocumentName = System.IO.Path.GetFileName(storedReceipt.Path);
         }
 
         internal async Task OpenDoc()
