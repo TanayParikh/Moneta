@@ -44,14 +44,25 @@ namespace MonetaFMS.ViewModels
             AllExpenses = new AdvancedCollectionView(_allExpenses);
 
             // Default sorts to descending id
-            AllExpenses.SortDescriptions.Add(new SortDescription("Id", SortDirection.Descending));
+            AllExpenses.SortDescriptions.Add(new SortDescription("Date", SortDirection.Descending));
 
             ExpenseService = Services.Services.ExpenseService;
         }
 
         internal void Search(string text)
         {
-
+            if (string.IsNullOrEmpty(text))
+            {
+                AllExpenses.Filter = e => true;
+            }
+            else if (decimal.TryParse(text, out decimal searchAmount))
+            {
+                AllExpenses.Filter = e => (e as Expense).TotalCost == searchAmount;
+            }
+            else
+            {
+                AllExpenses.Filter = e => (e as Expense).Description.ToLowerInvariant().StartsWith(text.ToLowerInvariant());
+            }
         }
 
         internal void CancelEdit()
