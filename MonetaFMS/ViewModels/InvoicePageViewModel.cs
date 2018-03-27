@@ -36,7 +36,7 @@ namespace MonetaFMS.ViewModels
             AllInvoices = new AdvancedCollectionView(_allInvoices);
 
             // Default sorts to descending id
-            AllInvoices.SortDescriptions.Add(new SortDescription("Id", SortDirection.Descending));
+            AllInvoices.SortDescriptions.Add(new SortDescription("InvoiceDate", SortDirection.Descending));
 
             InvoiceService = Services.Services.InvoiceService;
 
@@ -111,27 +111,28 @@ namespace MonetaFMS.ViewModels
 
         internal void Search(string text)
         {
-            string[] searchComponents = text.Split(' ');
-            Dictionary<string, string> searchMapping = new Dictionary<string, string>();
-
-            for (int i = 0; i < searchComponents.Length; ++i)
+            if (string.IsNullOrEmpty(text))
             {
-                string[] component = searchComponents[i].Split(':', StringSplitOptions.RemoveEmptyEntries);
-
-                if (component.Length > 2)
+                AllInvoices.Filter = i => true;
+            }
+            else if (decimal.TryParse(text, out decimal searchAmount))
+            {
+                if (searchAmount % 1 == 0 && int.TryParse(text, out int invoiceId))
                 {
-                    component = new string[]{ component[0], string.Join(':', component.Skip(1)) };
+                    AllInvoices.Filter = i =>
+                    {
+                        Invoice invoice = i as Invoice;
+                        return invoice.Total == searchAmount || invoice.Id == invoiceId;
+                    };
                 }
-
-                if (component.Length == 2)
+                else
                 {
-                    //AllInvoices.Filter
+                    AllInvoices.Filter = i => (i as Invoice).Total == searchAmount;
                 }
             }
-
-            if (int.TryParse(text, out int searchInt))
+            else
             {
-                AllInvoices.Filter = i => (i as Invoice).Id == searchInt;
+                AllInvoices.Filter = i => (i as Invoice).Client.Company.ToLowerInvariant().StartsWith(text.ToLowerInvariant());
             }
         }
         
