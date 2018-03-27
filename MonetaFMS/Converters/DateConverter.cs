@@ -24,6 +24,10 @@ namespace MonetaFMS.Converters
                     {
                         return date.Day;
                     }
+                    else if (param == "Year")
+                    {
+                        return date.Year.ToString().Substring(2);
+                    }
                 }
 
                 return date.ToString("MMM dd, yyyy");
