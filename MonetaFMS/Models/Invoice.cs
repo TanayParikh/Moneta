@@ -54,7 +54,7 @@ namespace MonetaFMS.Models
                 {
                     OnPropertyChanged(nameof(Subtotal));
                     OnPropertyChanged(nameof(TaxAmount));
-                    OnPropertyChanged(nameof(Total));
+                    OnPropertyChanged(nameof(InvoiceTotal));
                 }
             }
         }
@@ -65,13 +65,14 @@ namespace MonetaFMS.Models
             get { return _payments; }
             set
             {
-                SetProperty(ref _payments, value);
+                if (SetProperty(ref _payments, value))
+                    OnPropertyChanged(nameof(AmountPaid));
             }
         }
 
         public decimal Subtotal => Items.Sum(i => i.Price);
         public decimal TaxAmount => Items.Sum(i => i.TaxPercentage * i.Price);
-        public decimal Total => TaxAmount + Subtotal;
+        public decimal InvoiceTotal => TaxAmount + Subtotal;
 
         [JsonConstructor]
         public Invoice(int id, DateTime creation, string note, Client client, List<InvoiceItem> items, List<InvoicePayment> payments,

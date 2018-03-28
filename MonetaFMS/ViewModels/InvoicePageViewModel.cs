@@ -122,12 +122,12 @@ namespace MonetaFMS.ViewModels
                     AllInvoices.Filter = i =>
                     {
                         Invoice invoice = i as Invoice;
-                        return invoice.Total == searchAmount || invoice.Id == invoiceId;
+                        return invoice.InvoiceTotal == searchAmount || invoice.Id == invoiceId;
                     };
                 }
                 else
                 {
-                    AllInvoices.Filter = i => (i as Invoice).Total == searchAmount;
+                    AllInvoices.Filter = i => (i as Invoice).InvoiceTotal == searchAmount;
                 }
             }
             else
@@ -143,7 +143,7 @@ namespace MonetaFMS.ViewModels
 
             foreach (Invoice i in InvoiceService.AllItems)
             {
-                var invoiceTotal = i.Total;
+                var invoiceTotal = i.InvoiceTotal;
 
                 if (i.InvoiceDate >= firstOfYear)
                 {
