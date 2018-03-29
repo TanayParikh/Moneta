@@ -92,9 +92,9 @@ namespace MonetaFMS.Pages
             ViewModel.NewItem();
         }
 
-        private void Print_Click(object sender, RoutedEventArgs e)
+        private async void Print_Click(object sender, RoutedEventArgs e)
         {
-            ViewModel.PrintInvoice();
+            await ViewModel.PrintInvoice();
         }
 
         private void ItemPrice_KeyDown(object sender, KeyRoutedEventArgs e)

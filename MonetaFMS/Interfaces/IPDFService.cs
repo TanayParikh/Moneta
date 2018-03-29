@@ -9,7 +9,7 @@ namespace MonetaFMS.Interfaces
 {
     public interface IPDFService
     {
-        bool GenerateInvoicePDF(Invoice invoice);
+        Task<bool> GenerateInvoicePDF(Invoice invoice);
         bool GenerateProfitLossPDF(Invoice invoice);
     }
 }

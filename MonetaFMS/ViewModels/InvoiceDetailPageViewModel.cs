@@ -128,9 +128,9 @@ namespace MonetaFMS.ViewModels
             Items.Insert(0, InvoiceService.NewInvoiceItem(Invoice.Id));
         }
 
-        internal void PrintInvoice()
+        internal async Task PrintInvoice()
         {
-            InvoiceService.PrintInvoice(Invoice);
+            await InvoiceService.PrintInvoice(Invoice);
         }
 
         internal bool SaveInvoice()

@@ -113,7 +113,7 @@
                                        MaxLines="1"/>
                             <TextBlock Grid.Column="2" Text="{Binding Id}" Style="{StaticResource ListViewSubtitle}" />
                             <TextBlock Grid.Column="3" Text="{Binding Client.Company}" Style="{StaticResource ListViewHeading}" />
-                            <TextBlock Grid.Column="4" Text="{Binding Total, Converter={StaticResource MoneyConverter}}" Style="{StaticResource ListViewSubtitle}" />
+                            <TextBlock Grid.Column="4" Text="{Binding InvoiceTotal, Converter={StaticResource MoneyConverter}}" Style="{StaticResource ListViewSubtitle}" />
 
                             <StackPanel VerticalAlignment="Center" Margin="0,0,15,0" Grid.Column="5">
                                 <TextBlock Text="{Binding InvoiceDate, Converter={StaticResource DateConverter}, ConverterParameter=MonthShort}" Style="{StaticResource Month}" />

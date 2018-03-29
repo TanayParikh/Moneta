@@ -39,14 +39,14 @@ namespace MonetaFMS.Services
             SetupFont();
         }
         
-        public bool GenerateInvoicePDF(Invoice invoice)
+        public async Task<bool> GenerateInvoicePDF(Invoice invoice)
         {
             Document doc = new Document(PageSize.LETTER, 117 * PAGE_SCALE_FACTOR, 117 * PAGE_SCALE_FACTOR, 0, 0);
 
             string themeFolder = Path.Combine(Windows.ApplicationModel.Package.Current.InstalledLocation.Path,
                 "Assets/InvoiceThemes/Theme1");
             
-            string invoicePath = GetInvoicePath(invoice);
+            string invoicePath = await GetInvoicePath(invoice);
             PdfWriter writer = PdfWriter.GetInstance(doc, new FileStream(invoicePath, FileMode.Create));
             writer.CompressionLevel = PdfStream.BEST_COMPRESSION;
 
@@ -80,7 +80,7 @@ namespace MonetaFMS.Services
 
         private async void LaunchFile(string invoicePath)
         {
-            var file = await (await ApplicationData.Current.LocalFolder.GetFolderAsync("Invoices"))?.GetFileAsync(Path.GetFileName(invoicePath));
+            var file = await (await ApplicationData.Current.LocalFolder.CreateFolderAsync("Invoices", CreationCollisionOption.OpenIfExists))?.GetFileAsync(Path.GetFileName(invoicePath));
 
             if (file != null)
             {
@@ -97,7 +97,7 @@ namespace MonetaFMS.Services
             doc.Add(totals);
 
             Chunk invoiceSubtotals = new Chunk(String.Format("{0:C}", invoice.Subtotal) + "\n" + String.Format("{0:C}", invoice.TaxAmount) + "\n", Lato[8]);
-            Chunk invoiceGrandTotal = new Chunk(String.Format("{0:C}", invoice.Total), Lato[12]);
+            Chunk invoiceGrandTotal = new Chunk(String.Format("{0:C}", invoice.InvoiceTotal), Lato[12]);
             Phrase invoiceTotals = new Phrase();
             invoiceTotals.Add(invoiceSubtotals);
             invoiceTotals.Add(invoiceGrandTotal);
@@ -215,7 +215,7 @@ namespace MonetaFMS.Services
             ColumnText fromContactInfo = new ColumnText(pdfContentByte);
             fromContactInfo.SetSimpleColumn(
                 new Phrase(
-                    new Chunk($"{SettingsService.BusinessProfile.Company}\n{FormatPhoneNumber(SettingsService.BusinessProfile.PhoneNumber)}\n{FormatAddress(SettingsService.BusinessProfile.Address)}", Lato[7])),
+                    new Chunk($"{SettingsService.BusinessProfile.Company}\n{FormatPhoneNumber(SettingsService.BusinessProfile.PhoneNumber)}\n{FormatAddress(SettingsService.BusinessProfile?.Address)}", Lato[7])),
                     180 * PAGE_SCALE_FACTOR,
                     PageSize.LETTER.Height - 570 * PAGE_SCALE_FACTOR,
                     620 * PAGE_SCALE_FACTOR,
@@ -227,6 +227,9 @@ namespace MonetaFMS.Services
 
         private string FormatAddress(string address)
         {
+            if (string.IsNullOrEmpty(address))
+                return string.Empty;
+
             string[] addressLines = address.Split(',');
 
             if (addressLines.Length >= 2 && address.Length > 75)
@@ -298,11 +301,11 @@ namespace MonetaFMS.Services
             }
         }
 
-        private string GetInvoicePath(Invoice invoice)
+        private async Task<string> GetInvoicePath(Invoice invoice)
         {
             //var monetaFolder = Services.SettingsService.GetFutureAccessFolder(FutureAccessToken.MonetaFolderToken).Result;
             var company = Common.Utilities.MakeValidFileName(invoice.Client.Company);
-            var invoiceFolderPath = Path.Combine(ApplicationData.Current.LocalFolder.Path, "Invoices");
+            var invoiceFolderPath = (await ApplicationData.Current.LocalFolder.CreateFolderAsync("Invoices", CreationCollisionOption.OpenIfExists)).Path;
             var invoicePath = Path.Combine(invoiceFolderPath, $"{company} - {invoice.Id}.pdf");
 
             if (File.Exists(invoicePath))

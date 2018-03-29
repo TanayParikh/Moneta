@@ -176,9 +176,9 @@ namespace MonetaFMS.Services
             return invoice.Items.Sum(i => i.Price + i.Price * i.TaxPercentage);
         }
 
-        public void PrintInvoice(Invoice invoice)
+        public async Task PrintInvoice(Invoice invoice)
         {
-            PDFService.GenerateInvoicePDF(invoice);
+            await PDFService.GenerateInvoicePDF(invoice);
         }
     }
 }

@@ -15,6 +15,6 @@ namespace MonetaFMS.Interfaces
 
         decimal GetInvoiceTotal(int id);
         decimal GetInvoiceTotal(Invoice invoice);
-        void PrintInvoice(Invoice invoice);
+        Task PrintInvoice(Invoice invoice);
     }
 }
