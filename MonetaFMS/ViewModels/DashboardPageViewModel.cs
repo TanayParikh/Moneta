@@ -138,7 +138,10 @@ namespace MonetaFMS.ViewModels
 
         private string GetPastPerformance()
         {
-            List<(string month, decimal revenue, decimal expenses)> pastPerformance = BusinessStatsService.GetPerformance(StartDate, EndDate);
+            List<(string month, decimal payments, decimal expenses)> pastPerformance = BusinessStatsService.GetPerformance(new DateTime(2017,1,1), new DateTime(2017,12,31,23,59,59,999));
+
+            decimal totalPayments = pastPerformance.Sum(p => p.payments);
+            decimal totalExpenses = pastPerformance.Sum(p => p.expenses);
            
             string[] backgroundColorGreen = { "rgba(151, 205, 118, .7)" };
             string[] backgroundColorBlue = { "rgba(31, 200, 219, .7)" };
@@ -151,7 +154,7 @@ namespace MonetaFMS.ViewModels
                     new GraphData.Datasets
                     {
                         label = "Revenue",
-                        data = pastPerformance.Select(c => (int)c.revenue).ToArray(),
+                        data = pastPerformance.Select(c => (int)c.payments).ToArray(),
                         backgroundColor = backgroundColorGreen
                     },
 

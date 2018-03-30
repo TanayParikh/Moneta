@@ -36,8 +36,8 @@ namespace MonetaFMS.Services
             PaymentsService = new PaymentsService(DBService);
             InvoiceService = new InvoiceService(DBService, ClientService, ItemsService, PDFService, SettingsService, PaymentsService);
             ExpenseService = new ExpenseService(DBService, InvoiceService);
-            BusinessStatsService = new BusinessStatsService(ClientService, InvoiceService, ExpenseService);
-            DemoDataService = new DemoDataService(DBService, ClientService, ExpenseService, InvoiceService, ItemsService, PaymentsService);
+            BusinessStatsService = new BusinessStatsService(ClientService, InvoiceService, ExpenseService, PaymentsService);
+            //DemoDataService = new DemoDataService(DBService, ClientService, ExpenseService, InvoiceService, ItemsService, PaymentsService);
         }
     }
 }

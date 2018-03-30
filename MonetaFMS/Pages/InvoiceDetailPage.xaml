@@ -226,7 +226,7 @@
                         </TextBlock>
                         <TextBlock HorizontalAlignment="Left" Grid.Column="2" Style="{StaticResource ListViewSubtitle}">
                             <Run FontWeight="SemiBold">Total: </Run>
-                            <Run Text="{Binding Invoice.Total, Converter={StaticResource MoneyConverter}}"></Run>
+                            <Run Text="{Binding Invoice.InvoiceTotal, Converter={StaticResource MoneyConverter}}"></Run>
                         </TextBlock>
                     </Grid>
                 </CommandBar.Content>

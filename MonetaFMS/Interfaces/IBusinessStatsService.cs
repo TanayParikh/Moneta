@@ -9,7 +9,7 @@ namespace MonetaFMS.Interfaces
 {
     public interface IBusinessStatsService
     {
-        List<(string month, decimal revenue, decimal expenses)> GetPerformance(DateTime start, DateTime end);
+        List<(string month, decimal payments, decimal expenses)> GetPerformance(DateTime start, DateTime end);
         Dictionary<Client, decimal> GetTopClients(DateTime start, DateTime end, int numClients);
         Dictionary<ExpenseCategory, decimal> GetTopExpenseCategories(DateTime start, DateTime end, int numCategories);
     }

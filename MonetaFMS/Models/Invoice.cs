@@ -73,6 +73,7 @@ namespace MonetaFMS.Models
         public decimal Subtotal => Items.Sum(i => i.Price);
         public decimal TaxAmount => Items.Sum(i => i.TaxPercentage * i.Price);
         public decimal InvoiceTotal => TaxAmount + Subtotal;
+        public decimal AmountPaid => Payments.Sum(p => p.AmountPaid);
 
         [JsonConstructor]
         public Invoice(int id, DateTime creation, string note, Client client, List<InvoiceItem> items, List<InvoicePayment> payments,

@@ -12,12 +12,14 @@ namespace MonetaFMS.Services
     {
         IClientService ClientService { get; set; }
         IInvoiceService InvoiceService { get; set; }
+        IPaymentsService PaymentsService { get; set; }
         IExpenseService ExpenseService { get; set; }
 
-        public BusinessStatsService(IClientService clientService, IInvoiceService invoiceService, IExpenseService expenseService)
+        public BusinessStatsService(IClientService clientService, IInvoiceService invoiceService, IExpenseService expenseService, IPaymentsService paymentsService)
         {
             ClientService = clientService;
             InvoiceService = invoiceService;
+            PaymentsService = paymentsService;
             ExpenseService = expenseService;
         }
         
@@ -25,14 +27,14 @@ namespace MonetaFMS.Services
 
         private bool InRange(DateTime start, DateTime end, DateTime date) => date >= start && date <= end;
         
-        public List<(string month, decimal revenue, decimal expenses)> GetPerformance(DateTime start, DateTime end)
+        public List<(string month, decimal payments, decimal expenses)> GetPerformance(DateTime start, DateTime end)
         {
-            List<(string, decimal, decimal)> performance = new List<(string, decimal, decimal)>();
+            List<(string month, decimal payments, decimal expenses)> performance = new List<(string, decimal, decimal)>();
 
-            var monthlyInvoiceData = InvoiceService.AllItems
-                .Where(i => InRange(start, end, i.InvoiceDate.Value))
-                .GroupBy(i => new DateTime(i.InvoiceDate.Value.Year, i.InvoiceDate.Value.Month, 1))
-                .Select(monthlyInvoices => (calendarMonth: monthlyInvoices.Key, total: monthlyInvoices.Sum(i => i.Total)))
+            var monthlyPaymentsData = PaymentsService.AllItems
+                .Where(p => InRange(start, end, p.PaymentDate))
+                .GroupBy(p => new DateTime(p.PaymentDate.Year, p.PaymentDate.Month, 1))
+                .Select(monthlyInvoices => (calendarMonth: monthlyInvoices.Key, total: monthlyInvoices.Sum(i => i.AmountPaid)))
                 .ToList();
 
             var monthlyExpenseData = ExpenseService.AllItems
@@ -46,7 +48,7 @@ namespace MonetaFMS.Services
             while (curMonth <= end)
             {
                 performance.Add((curMonth.ToString("MMMM"),
-                    monthlyInvoiceData.FirstOrDefault(month => EqualCalendarMonths(month.calendarMonth, curMonth)).total,
+                    monthlyPaymentsData.FirstOrDefault(month => EqualCalendarMonths(month.calendarMonth, curMonth)).total,
                     monthlyExpenseData.FirstOrDefault(month => EqualCalendarMonths(month.calendarMonth, curMonth)).total));
 
                 curMonth = curMonth.AddMonths(1);
@@ -62,7 +64,7 @@ namespace MonetaFMS.Services
             foreach (Invoice i in InvoiceService.AllItems)
             {
                 if (InRange(start, end, i.InvoiceDate.Value))
-                    topClients[i.Client] += i.Total;
+                    topClients[i.Client] += i.InvoiceTotal;
             }
 
             return topClients.OrderByDescending(tc => tc.Value).Take(numClients).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
@@ -100,7 +102,7 @@ namespace MonetaFMS.Services
             return InvoiceService.AllItems
                 .Where(i => i.DueDate.HasValue && i.DueDate >= start && i.Status.InvoiceStatusType != InvoiceStatusType.Paid)
                 .GroupBy(i => GetPayableInterval(start, i))
-                .ToDictionary(invoicesByInterval => invoicesByInterval.Key, invoicesByInterval => invoicesByInterval.Sum(i => i.Total));
+                .ToDictionary(invoicesByInterval => invoicesByInterval.Key, invoicesByInterval => invoicesByInterval.Sum(i => i.InvoiceTotal));
         }
         
         private DayRange GetPayableInterval(DateTime start, Invoice invoice)

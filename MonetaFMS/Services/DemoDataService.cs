@@ -109,7 +109,7 @@ namespace MonetaFMS.Services
             var commerce = new Bogus.DataSets.Commerce();
             var numPayments = random.Next(1, 5);
 
-            var paymentAmount = (invoice.Status.InvoiceStatusType == InvoiceStatusType.Paid ? invoice.Total : (invoice.Total / 2)) / numPayments;
+            var paymentAmount = (invoice.Status.InvoiceStatusType == InvoiceStatusType.Paid ? invoice.InvoiceTotal : (invoice.InvoiceTotal / 2)) / numPayments;
             
             var payments = new List<InvoicePayment>(numPayments);
 
@@ -118,7 +118,7 @@ namespace MonetaFMS.Services
                 payments.Add(new InvoicePayment(-1, DateTime.Now, commerce.ProductName(), invoice.InvoiceDate.Value.AddDays(random.Next(0, 90)), paymentAmount, invoice.Id));
             }
 
-            var balance = invoice.Total - payments.Sum(p => p.AmountPaid);
+            var balance = invoice.InvoiceTotal - payments.Sum(p => p.AmountPaid);
             payments.Add(new InvoicePayment(-1, DateTime.Now, commerce.ProductName(), invoice.InvoiceDate.Value.AddDays(random.Next(0, 90)), paymentAmount, invoice.Id));
 
             invoice.Payments.AddRange(payments);
