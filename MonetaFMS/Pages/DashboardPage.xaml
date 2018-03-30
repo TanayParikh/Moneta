@@ -16,6 +16,6 @@
             <DatePicker x:Name="EndDatePicker" Header="End Date" MinWidth="175" MaxWidth="200" MonthFormat="{}{month.abbreviated}" Margin="20"
                                  Date="{Binding EndDate, Mode=TwoWay, Converter={StaticResource DateTimeToDateTimeOffsetConverter}}" />
         </StackPanel>-->
-        <WebView x:Name="DashboardWebview" HorizontalAlignment="Center" VerticalAlignment="Stretch" />
+        <WebView x:Name="DashboardWebview" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
     </Grid>
 </Page>
