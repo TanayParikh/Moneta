@@ -10,16 +10,17 @@ using Windows.Storage;
 using System.IO;
 using MonetaFMS.Models;
 using System.Data;
+using MonetaFMS.Interfaces;
 
 namespace MonetaFMS.Services
 {
-    public class DBService
+    public class DBService : IDBService
     {
         string DBFileName = "MonetaDB.db";
         string DBPath => Path.Combine(ApplicationData.Current.LocalFolder.Path, DBFileName);
         
         string _dbConnectionString;
-        internal string DBConnectionString {
+        public string DBConnectionString {
             get {
                 if (string.IsNullOrEmpty(_dbConnectionString))
                 {
@@ -34,12 +35,12 @@ namespace MonetaFMS.Services
                 return _dbConnectionString;
             }
         }
-
+        
         /// <summary>
         ///  Performs a backup of the DBFile
         /// </summary>
         /// <param name="deleteAfterBackup">DBFile to be deleted after backup (false)</param>
-        internal void BackupDB(bool deleteAfterBackup = false)
+        public void BackupDB(bool deleteAfterBackup = false)
         {
             if (File.Exists(DBPath))
             {
@@ -125,7 +126,7 @@ namespace MonetaFMS.Services
         /// </summary>
         /// <param name="command">Update SQL command</param>
         /// <returns></returns>
-        internal bool UpdateValue(SqliteCommand command)
+        public bool UpdateValue(SqliteCommand command)
         {
             try
             {
@@ -148,7 +149,7 @@ namespace MonetaFMS.Services
         /// </summary>
         /// <param name="command">Insert SQL command</param>
         /// <returns></returns>
-        internal int InsertValue(SqliteCommand command)
+        public int InsertValue(SqliteCommand command)
         {
             using (SqliteConnection db = new SqliteConnection(DBConnectionString))
             {
