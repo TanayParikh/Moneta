@@ -138,7 +138,7 @@ namespace MonetaFMS.ViewModels
 
         private string GetPastPerformance()
         {
-            List<(string month, decimal payments, decimal expenses)> pastPerformance = BusinessStatsService.GetPerformance(new DateTime(2017,1,1), new DateTime(2017,12,31,23,59,59,999));
+            List<(string month, decimal payments, decimal expenses)> pastPerformance = BusinessStatsService.GetPerformance(StartDate, GetEndOfDay(EndDate));
 
             decimal totalPayments = pastPerformance.Sum(p => p.payments);
             decimal totalExpenses = pastPerformance.Sum(p => p.expenses);
@@ -170,5 +170,7 @@ namespace MonetaFMS.ViewModels
             return JsonConvert.SerializeObject(graphData);
         }
 
+        private DateTime GetEndOfDay(DateTime endDate)
+            => new DateTime(EndDate.Year, EndDate.Month, EndDate.Day, 23, 59, 59);
     }
 }
