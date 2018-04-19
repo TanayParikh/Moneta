@@ -103,6 +103,7 @@
     <Compile Include="Converters\InvoiceStatusToColorConverter.cs" />
     <Compile Include="Converters\DateConverter.cs" />
     <Compile Include="Converters\PercentageConverter.cs" />
+    <Compile Include="Interfaces\IDBService.cs" />
     <Compile Include="Interfaces\IPaymentsService.cs" />
     <Compile Include="Models\DayRange.cs" />
     <Compile Include="Models\InvoicePayment.cs" />
