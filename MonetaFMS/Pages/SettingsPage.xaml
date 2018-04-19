@@ -97,13 +97,18 @@
                             </TextBlock>
                         </Grid>
 
-                        <Button Name="SaveMonetaSettings" Margin="25" Width="100" Height="30" Content="Save" Click="SaveMonetaSettings_Click" />
+                        <Border CornerRadius="6" Margin="25" BorderBrush="Green" BorderThickness="3" HorizontalAlignment="Left">
+                            <Button Name="SaveMonetaSettings" Width="100" Height="30" Content="Save" Click="SaveMonetaSettings_Click"
+                                 Background="Green" BorderThickness="0" Foreground="White" FontWeight="Bold" FontSize="16" />
+                        </Border>
 
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Top">
+                        
+
+                        <!--<StackPanel Orientation="Horizontal" VerticalAlignment="Top">
                             <Button Name="MonetaDirectory" Margin="25" Width="200" Height="50" Content="Select Moneta Directory" Click="MonetaDirectory_Click" />
 
                             <Button Name="BackupDirectory" Margin="25" Width="200" Height="50" Content="Select Backup Directory" Click="BackupDirectory_Click" />
-                        </StackPanel>
+                        </StackPanel>-->
                     </StackPanel>
                 </PivotItem>
                 <PivotItem Header="About Moneta">

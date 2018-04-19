@@ -99,6 +99,7 @@
                     <!-- Theme Brushes -->
                     <SolidColorBrush x:Key="NavigationViewSelectionIndicatorForeground" Color="Green" />
                     <SolidColorBrush x:Key="SystemControlHighlightAccentBrush" Color="Green" />
+                    <SolidColorBrush x:Key="SystemControlForegroundAccentBrush" Color="Green" />
                     <SolidColorBrush x:Key="UserAccentColor" Color="Green" />
                     <SolidColorBrush x:Key="BorderBrush" Color="Green" />
                 </ResourceDictionary>
