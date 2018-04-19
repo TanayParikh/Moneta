@@ -37,14 +37,14 @@
                                     Name="ContentFrame"
                                     SelectedItem="{Binding SelectedClient, Mode=TwoWay}">
             <controls:MasterDetailsView.MasterHeader>
-                <Grid>
+                <Grid HorizontalAlignment="Stretch">
                     <AutoSuggestBox x:Name="SearchBox" Width="225" HorizontalAlignment="Left"
                         TextChanged="SearchBox_TextChanged"
                         VerticalAlignment="Center" QueryIcon="Find"/>
                     <CommandBar HorizontalAlignment="Right"
                         VerticalAlignment="Center"
                         DefaultLabelPosition="Right"
-                        Background="{ThemeResource SystemControlBackgroundAltHighBrush}">
+                        Background="{ThemeResource SystemControlBackgroundTransparentRevealBorderBrush}">
                         <AppBarButton Click="CreateClient_Click">
                             <AppBarButton.Icon>
                                 <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE8FA;"/>
@@ -53,29 +53,34 @@
                     </CommandBar>
                 </Grid>
             </controls:MasterDetailsView.MasterHeader>
+            <controls:MasterDetailsView.MasterPaneBackground>
+                <SolidColorBrush Color="#f8f8f8" />
+            </controls:MasterDetailsView.MasterPaneBackground>
             <controls:MasterDetailsView.ItemTemplate>
                 <DataTemplate>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
+                    <controls:DropShadowPanel Style="{StaticResource ListViewRowDropshadow}">
+                        <Grid Style="{StaticResource ListViewRow}" Height="Auto" Padding="10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
 
-                        <PersonPicture VerticalAlignment="Center" Grid.Column="0" MaxWidth="45" DisplayName="{Binding Company}" />
-                        <StackPanel Margin="15,8,10,8" Grid.Column="1">
-                            <TextBlock Text="{Binding Company}" 
+                            <PersonPicture VerticalAlignment="Center" Grid.Column="0" MaxWidth="45" Margin="10" DisplayName="{Binding Company}" />
+                            <StackPanel Margin="15,8,10,8" Grid.Column="1">
+                                <TextBlock Text="{Binding Company}" 
                                    Style="{ThemeResource SubtitleTextBlockStyle}"/>
-                            <TextBlock Text="{Binding FullName}" 
+                                <TextBlock Text="{Binding FullName}" 
                                    Style="{ThemeResource BodyTextBlockStyle}"
                                    Opacity=".6" 
                                    MaxLines="1"/>
-                        </StackPanel>
-                    </Grid>
+                            </StackPanel>
+                        </Grid>
+                    </controls:DropShadowPanel>
                 </DataTemplate>
             </controls:MasterDetailsView.ItemTemplate>
             <controls:MasterDetailsView.DetailsTemplate>
                 <DataTemplate>
-                    <RelativePanel Margin="24">
+                    <RelativePanel Margin="24" BorderThickness="0">
                         <StackPanel>
                             <TextBox FontSize="36" Text="{Binding Company, Mode=TwoWay}" PlaceholderText="Company Name" IsTextPredictionEnabled="False" IsSpellCheckEnabled="False" x:Name="CompanyName" Margin="0,24,0,0" MaxLength="75" Width="400" FontWeight="SemiBold" HorizontalAlignment="Left" InputScope="AlphanumericFullWidth"/>
 
