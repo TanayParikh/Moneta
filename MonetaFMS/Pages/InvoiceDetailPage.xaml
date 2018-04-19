@@ -144,7 +144,7 @@
                         </ListView>
                     </Grid>
                 </PivotItem>
-                <PivotItem Header="Invoice Details">
+                <PivotItem Header="Payments">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
