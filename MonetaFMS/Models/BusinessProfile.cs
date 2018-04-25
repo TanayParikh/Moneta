@@ -10,7 +10,7 @@ namespace MonetaFMS.Models
 {
     public class BusinessProfile : BindableBase
     {
-        string _company;
+        string _company = "Company Name";
 
         [JsonProperty]
         public string Company
@@ -19,7 +19,7 @@ namespace MonetaFMS.Models
             set { SetProperty(ref _company, value); }
         }
 
-        string _address;
+        string _address = "123 Address St.";
 
         [JsonProperty]
         public string Address
@@ -28,7 +28,7 @@ namespace MonetaFMS.Models
             set { SetProperty(ref _address, value); }
         }
 
-        string _phoneNumber;
+        string _phoneNumber = "(555) 555-5555";
 
         [JsonProperty]
         public string PhoneNumber
@@ -37,7 +37,7 @@ namespace MonetaFMS.Models
             set { SetProperty(ref _phoneNumber, value); }
         }
 
-        string _email;
+        string _email = "email@example.com";
 
         [JsonProperty]
         public string Email
@@ -46,7 +46,7 @@ namespace MonetaFMS.Models
             set { SetProperty(ref _email, value); }
         }
 
-        public BusinessProfile(string company = "", string address = "", string phoneNumber = "", string email = "")
+        public BusinessProfile(string company = "123 Address St.", string address = "123 Address St.", string phoneNumber = "(555) 555-5555", string email = "email@example.com")
         {
             Company = company;
             Address = address;
