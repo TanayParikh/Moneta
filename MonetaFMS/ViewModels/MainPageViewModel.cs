@@ -20,7 +20,7 @@ namespace MonetaFMS.ViewModels
 
         public string PageTitle
         {
-            get { return pageTitle; }
+            get { return pageTitle + " Demo"; }
             set { SetProperty(ref pageTitle, value); }
         }
 

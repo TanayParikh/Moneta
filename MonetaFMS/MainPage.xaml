@@ -10,7 +10,7 @@
     <Grid>
         <TextBlock x:Name="AppTitle" 
             xmlns:appmodel="using:Windows.ApplicationModel"
-            Text="Moneta FMS" 
+            Text="Moneta - DEMO" 
             Style="{StaticResource CaptionTextBlockStyle}" 
             IsHitTestVisible="False"
             Visibility="{Binding ElementName=NavView, Path=IsPaneOpen}"
