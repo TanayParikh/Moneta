@@ -56,16 +56,7 @@ namespace MonetaFMS.Services
         }
 
         const string SELECT_ROW_ID = ";SELECT last_insert_rowid();";
-
-        internal enum Tables
-        {
-            Invoices,
-            Clients,
-            Expenses,
-            Items,
-            Payments
-        }
-
+        
         public DBService()
         {
             SqliteEngine.UseWinSqlite3(); //Configuring library to use SDK version of SQLite
@@ -109,7 +100,7 @@ namespace MonetaFMS.Services
                     tablesRead.Add(reader.GetString(1));
                 }
 
-                string[] expectedTables = Enum.GetNames(typeof(Tables));
+                string[] expectedTables = Enum.GetNames(typeof(DBTables));
                 string[] missingTables = expectedTables.Except(tablesRead).ToArray();
 
                 if (missingTables.Length == 0)
@@ -169,7 +160,7 @@ namespace MonetaFMS.Services
             // Backup existing file if applicable
             BackupDB(true);
 
-            string freshDBPath = Path.Combine(Windows.ApplicationModel.Package.Current.InstalledLocation.Path, "Resources/MonetaDB.db");
+            string freshDBPath = Path.Combine(Windows.ApplicationModel.Package.Current.InstalledLocation.Path, "Resources/MonetaDB_DEMO_DATA.db"); //"Resources/MonetaDB.db");
 
             if (File.Exists(freshDBPath))
                 File.Copy(freshDBPath, DBPath);

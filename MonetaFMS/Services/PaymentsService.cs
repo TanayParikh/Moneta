@@ -10,7 +10,7 @@ namespace MonetaFMS.Services
 {
     class PaymentsService : AbstractTableService<InvoicePayment>, IPaymentsService
     {
-        public PaymentsService(DBService dBService) : base(dBService)
+        public PaymentsService(IDBService dBService) : base(dBService)
         {
             AllItems = GetAllFromDB();
         }
@@ -25,7 +25,7 @@ namespace MonetaFMS.Services
             CreationDate
         }
 
-        protected override string TableName => DBService.Tables.Payments.ToString();
+        protected override string TableName => DBTables.Payments.ToString();
 
         public override InvoicePayment CreateEntry(InvoicePayment newValue)
         {

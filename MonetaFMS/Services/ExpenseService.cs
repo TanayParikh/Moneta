@@ -14,13 +14,13 @@ namespace MonetaFMS.Services
     {
         IInvoiceService InvoiceService { get; set; }
 
-        public ExpenseService(DBService dBService, IInvoiceService invoiceService) : base(dBService)
+        public ExpenseService(IDBService dBService, IInvoiceService invoiceService) : base(dBService)
         {
             InvoiceService = invoiceService;
             AllItems = GetAllFromDB();
         }
 
-        protected override string TableName => DBService.Tables.Expenses.ToString();
+        protected override string TableName => DBTables.Expenses.ToString();
 
         enum Columns
         {

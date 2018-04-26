@@ -10,7 +10,7 @@ namespace MonetaFMS.Services
 {
     class DemoDataService
     {
-        private DBService DBService { get; set; }
+        private IDBService DBService { get; set; }
         private IClientService ClientService { get; set; }
         private IExpenseService ExpenseService { get; set; }
         private IInvoiceService InvoiceService { get; set; }
@@ -24,7 +24,7 @@ namespace MonetaFMS.Services
 
         private Random random = new Random();
 
-        public DemoDataService(DBService dBService, IClientService clientService, IExpenseService expenseService, 
+        public DemoDataService(IDBService dBService, IClientService clientService, IExpenseService expenseService, 
             IInvoiceService invoiceService, IItemsService itemsService, IPaymentsService paymentsService)
         {
             DBService = dBService;
@@ -41,11 +41,20 @@ namespace MonetaFMS.Services
         {
             DBService.BackupDB();
 
-            PopulateClients();
-            PopulateInvoices();
-            PopulateItems();
-            PopulateExpenses();
-            PopulatePayments();
+            if (ClientService.AllItems.Count == 0)
+                PopulateClients();
+
+            if (InvoiceService.AllItems.Count == 0)
+                PopulateInvoices();
+
+            if (ItemsService.AllItems.Count == 0)
+                PopulateItems();
+
+            if (ExpenseService.AllItems.Count == 0)
+                PopulateExpenses();
+
+            if (PaymentsService.AllItems.Count == 0)
+                PopulatePayments();
         }
 
         private void PopulateExpenses()
@@ -80,7 +89,7 @@ namespace MonetaFMS.Services
                 var hacker = new Bogus.DataSets.Hacker();
                 var invoice = GetRandomElement(InvoiceService.AllItems);
 
-                InvoiceItem item = new InvoiceItem(-1, DateTime.Now, string.Empty, commerce.ProductName(), Convert.ToDecimal(commerce.Price()), Math.Round((decimal)(random.NextDouble() / 5d), 2), invoice.Id);
+                InvoiceItem item = new InvoiceItem(-1, DateTime.Now, string.Empty, commerce.ProductName(), Convert.ToDecimal(commerce.Price(15, 500)), Math.Round((decimal)(random.NextDouble() / 5d), 2), invoice.Id);
                 ItemsService.CreateEntry(item);
                 invoice.Items.Add(item);
             }
@@ -97,7 +106,7 @@ namespace MonetaFMS.Services
                 var items = new List<InvoiceItem>();
                 var payments = new List<InvoicePayment>();
                 var dueDate = DateTime.Now.AddDays(random.Next(-60, 90));
-                var invoiceDate = DateTime.Now.AddDays(random.Next(-360, 50));
+                var invoiceDate = DateTime.Now.AddDays(random.Next(-270, 180));
 
                 Invoice invoice = new Invoice(-1, DateTime.Now, company.CatchPhrase(), client, items, payments, invoiceDate, dueDate, (InvoiceType)random.Next(numInvoiceTypes), new InvoiceStatus(dueDate, random.Next(2) == 1));
                 InvoiceService.CreateEntry(invoice);
@@ -106,7 +115,6 @@ namespace MonetaFMS.Services
 
         private void PopulatePayments(Invoice invoice)
         {
-            var commerce = new Bogus.DataSets.Commerce();
             var numPayments = random.Next(1, 5);
 
             var paymentAmount = (invoice.Status.InvoiceStatusType == InvoiceStatusType.Paid ? invoice.InvoiceTotal : (invoice.InvoiceTotal / 2)) / numPayments;
@@ -115,11 +123,11 @@ namespace MonetaFMS.Services
 
             for (int i = 0; i < numPayments - 1; ++i)
             {
-                payments.Add(new InvoicePayment(-1, DateTime.Now, commerce.ProductName(), invoice.InvoiceDate.Value.AddDays(random.Next(0, 90)), paymentAmount, invoice.Id));
+                payments.Add(new InvoicePayment(-1, DateTime.Now, (i == 0 ? "Initial Deposit" : $"Payment {i+1}"), invoice.InvoiceDate.Value.AddDays(random.Next(0, 60)), paymentAmount, invoice.Id));
             }
 
             var balance = invoice.InvoiceTotal - payments.Sum(p => p.AmountPaid);
-            payments.Add(new InvoicePayment(-1, DateTime.Now, commerce.ProductName(), invoice.InvoiceDate.Value.AddDays(random.Next(0, 90)), paymentAmount, invoice.Id));
+            payments.Add(new InvoicePayment(-1, DateTime.Now, "Full Payment", invoice.InvoiceDate.Value.AddDays(random.Next(0, 60)), paymentAmount, invoice.Id));
 
             invoice.Payments.AddRange(payments);
 

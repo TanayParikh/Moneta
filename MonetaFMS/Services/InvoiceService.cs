@@ -18,7 +18,7 @@ namespace MonetaFMS.Services
         IPDFService PDFService { get; set; }
         ISettingsService SettingsService { get; set; }
 
-        protected override string TableName => DBService.Tables.Invoices.ToString();
+        protected override string TableName => DBTables.Invoices.ToString();
 
         enum Columns
         {
@@ -42,7 +42,7 @@ namespace MonetaFMS.Services
         public InvoicePayment NewInvoicePayment(int invoiceId = -1) =>
             new InvoicePayment(id: -1, creation: DateTime.Now, note: "", paymentDate: DateTime.Now, amountPaid: 0M, invoiceId: invoiceId);
 
-        public InvoiceService(DBService dBService, IClientService clientService, IItemsService itemsService, IPDFService pdfService, ISettingsService settingsService, IPaymentsService paymentsService) : base(dBService)
+        public InvoiceService(IDBService dBService, IClientService clientService, IItemsService itemsService, IPDFService pdfService, ISettingsService settingsService, IPaymentsService paymentsService) : base(dBService)
         {
             ClientService = clientService;
             ItemsService = itemsService;

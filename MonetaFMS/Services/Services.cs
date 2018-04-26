@@ -10,8 +10,8 @@ namespace MonetaFMS.Services
 {
     public static class Services
     {
-        public static SettingsService SettingsService { get; set; }
-        public static DBService DBService { get; set; }
+        public static ISettingsService SettingsService { get; set; }
+        public static IDBService DBService { get; set; }
         static DemoDataService DemoDataService { get; set; }
 
         public static IClientService ClientService { get; set; }

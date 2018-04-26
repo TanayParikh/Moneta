@@ -12,7 +12,7 @@ namespace MonetaFMS.Services
 {
     class ItemsService : AbstractTableService<InvoiceItem>, IItemsService
     {
-        public ItemsService(DBService dBService) : base(dBService)
+        public ItemsService(IDBService dBService) : base(dBService)
         {
             AllItems = GetAllFromDB();
         }
@@ -28,7 +28,7 @@ namespace MonetaFMS.Services
             CreationDate
         }
 
-        protected override string TableName => DBService.Tables.Items.ToString();
+        protected override string TableName => DBTables.Items.ToString();
 
         public override InvoiceItem CreateEntry(InvoiceItem newValue)
         {
