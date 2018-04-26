@@ -98,7 +98,10 @@ namespace MonetaFMS.ViewModels
 
         private string GetTopClients()
         {
-            Dictionary<Client, Decimal> topClients = BusinessStatsService.GetTopClients(StartDate, EndDate, 5);
+            if (Services.Services.ClientService.AllItems.Count == 0)
+                return string.Empty;
+
+            Dictionary<Client, Decimal> topClients = BusinessStatsService.GetTopClients(StartDate, GetEndOfDay(EndDate), 5);
 
             var graphData = new GraphData
             {
@@ -118,7 +121,10 @@ namespace MonetaFMS.ViewModels
 
         private string GetTopExpenseCategories()
         {
-            Dictionary<ExpenseCategory, Decimal> topExpenses = BusinessStatsService.GetTopExpenseCategories(StartDate, EndDate, 5);
+            if (Services.Services.ExpenseService.AllItems.Count == 0)
+                return string.Empty;
+
+            Dictionary<ExpenseCategory, Decimal> topExpenses = BusinessStatsService.GetTopExpenseCategories(StartDate, GetEndOfDay(EndDate), 5);
 
             var graphData = new GraphData
             {
@@ -138,6 +144,10 @@ namespace MonetaFMS.ViewModels
 
         private string GetPastPerformance()
         {
+            if (Services.Services.PaymentsService.AllItems.Count == 0 && 
+                Services.Services.ExpenseService.AllItems.Count == 0)
+                return string.Empty;
+
             List<(string month, decimal payments, decimal expenses)> pastPerformance = BusinessStatsService.GetPerformance(StartDate, GetEndOfDay(EndDate));
 
             decimal totalPayments = pastPerformance.Sum(p => p.payments);

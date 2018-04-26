@@ -8,6 +8,8 @@ namespace MonetaFMS.Pages
     {
         public DashboardPageViewModel ViewModel { get; set; } = new DashboardPageViewModel();
 
+        private readonly Uri DASHBOARD_URI = new Uri("ms-appx-web:///Resources/Dashboard/Dashboard.html");
+
         public DashboardPage()
         {
             InitializeComponent();
@@ -16,13 +18,13 @@ namespace MonetaFMS.Pages
             Loaded += (s, e) =>
             {
                 DashboardWebview.NavigationCompleted += (se, ev) => InitializeGraphs();
-                DashboardWebview.Navigate(new Uri("ms-appx-web:///Resources/Dashboard.html"));
+                DashboardWebview.Navigate(DASHBOARD_URI);
             };
 
             ViewModel.PropertyChanged += (s, e) =>
                 {
                     if (e.PropertyName == nameof(ViewModel.PerformanceData))
-                        DashboardWebview.Navigate(new Uri("ms-appx-web:///Resources/Dashboard.html"));
+                        DashboardWebview.Navigate(DASHBOARD_URI);
                 };
 
             // Necessary due to improper memory management by UWP Webview
@@ -31,9 +33,22 @@ namespace MonetaFMS.Pages
 
         private async void InitializeGraphs()
         {
-            var topClientsResult = await DashboardWebview.InvokeScriptAsync("setupTopClients", new string[] { ViewModel.TopClientsData });
-            var pastPerformanceResult = await DashboardWebview.InvokeScriptAsync("setupRevenueExpense", new string[] { ViewModel.PerformanceData });
-            var expenseCategoriesResult = await DashboardWebview.InvokeScriptAsync("setupTopExpenseCategories", new string[] { ViewModel.TopExpensesData });
+            if (!string.IsNullOrEmpty(ViewModel.TopClientsData))
+            {
+                var topClientsResult = await DashboardWebview.InvokeScriptAsync("setupTopClients", new string[] { ViewModel.TopClientsData });
+            }
+
+
+            if (!string.IsNullOrEmpty(ViewModel.PerformanceData))
+            {
+                var pastPerformanceResult = await DashboardWebview.InvokeScriptAsync("setupRevenueExpense", new string[] { ViewModel.PerformanceData });
+            }
+
+
+            if (!string.IsNullOrEmpty(ViewModel.TopExpensesData))
+            {
+                var expenseCategoriesResult = await DashboardWebview.InvokeScriptAsync("setupTopExpenseCategories", new string[] { ViewModel.TopExpensesData });
+            }
         }
     }
 }
