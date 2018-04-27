@@ -11,11 +11,11 @@ namespace MonetaFMS.Services
 {
     public abstract class AbstractTableService<T> : ITableService<T> where T : Record
     {
-        protected DBService DBService { get; set; }
+        protected IDBService DBService { get; set; }
         
         protected abstract string TableName { get; }
 
-        protected AbstractTableService(DBService dBService)
+        protected AbstractTableService(IDBService dBService)
         {
             DBService = dBService;
         }

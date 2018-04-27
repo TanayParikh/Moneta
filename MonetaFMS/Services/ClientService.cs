@@ -12,7 +12,7 @@ namespace MonetaFMS.Services
 {
     class ClientService : AbstractTableService<Client>, IClientService
     {
-        protected override string TableName => DBService.Tables.Clients.ToString();
+        protected override string TableName => DBTables.Clients.ToString();
 
         enum Columns
         {
@@ -27,7 +27,7 @@ namespace MonetaFMS.Services
             CreationDate
         }
 
-        public ClientService(DBService dBService) : base(dBService)
+        public ClientService(IDBService dBService) : base(dBService)
         {
             AllItems = GetAllFromDB();
         }
