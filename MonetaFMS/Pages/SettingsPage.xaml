@@ -111,9 +111,11 @@
                         </StackPanel>-->
                     </StackPanel>
                 </PivotItem>
-                <PivotItem Header="About Moneta">
-                    <TextBlock Text="Content of pivot item 3."/>
-                </PivotItem>
+                <!--<PivotItem Header="About Moneta">
+                    <StackPanel>
+                        <TextBlock Margin="20" Text="Moneta aims to be your one-stop-shop for all your freelance accounting needs."/>
+                    </StackPanel>
+                </PivotItem>-->
             </Pivot>
         </Grid>
     </Grid>
