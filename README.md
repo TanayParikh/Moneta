@@ -40,6 +40,7 @@ Moneta can be installed directly from the Microsoft Store on Windows 10 devices 
 * [Newtonsoft.Json](https://www.newtonsoft.com/json) - JSON Parsing
 * [Bogus](https://github.com/bchavez/Bogus) - Demo Data
 * [Lottie Files](https://www.lottiefiles.com) - Lottie Animations
+* [Chart.js](https://www.chartjs.org) - Dashboard Charts
 
 
 ## Contributing
