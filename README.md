@@ -34,7 +34,7 @@ Moneta can be installed directly from the Microsoft Store on Windows 10 devices 
 
 ## Built With
 * [Lottie UWP](https://github.com/azchohfi/LottieUWP) - Lottie Animations for UWP
-* [iTextSharp-LGPL](https://github.com/schourode/iTextSharp-LGPL) - Invoice PDF Creation
+* [iTextSharp-LGPL](https://github.com/schourode/iTextSharp-LGPL) - Invoice PDF Creation (Temporarily Disabled)
 * [Microsoft.Data.Sqlite](https://www.asp.net) - Local DB
 * [Windows Community Toolkit](https://github.com/Microsoft/WindowsCommunityToolkit) - UI Elements
 * [Newtonsoft.Json](https://www.newtonsoft.com/json) - JSON Parsing
@@ -78,6 +78,15 @@ This project is licensed under the GNU GENERAL PUBLIC LICENSE Version 3 - see th
 		- [ ] Encrypted DB
 	- [ ] Add non-intrusive, privacy friendly telemetrics to further improve UX	
 	- [ ] High test coverage
+	- [ ] Print to PDF (`iTextSharp-LGPL` not well supported with UWP, causing following conflict)
+	
+```
+Binary analyzer
+Error Found: The binary analyzer test detected the following errors:
+File iTextSharp.dll has failed the NXCheck check.
+Impact if not fixed: If the app doesn’t use the available Windows protections, it can increase the vulnerability of the customer's computer to malware.
+How to fix: Apply the required linker options - SAFESEH, DYNAMICBASE, NXCOMPAT, and APPCONTAINER - when you link the app. See links below for more information:
+```
 
 ### Future Plans
 1. Private, self-hosted server capabilities

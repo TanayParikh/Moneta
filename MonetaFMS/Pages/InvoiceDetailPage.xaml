@@ -232,9 +232,9 @@
                 </CommandBar.Content>
                 <AppBarSeparator />
                 <AppBarButton Click="EditInvoice_Click" Label="Edit" Icon="Edit"/>
-                <AppBarButton Click="Print_Click" Label="Print" Icon="Print" />
+                <!--<AppBarButton Click="Print_Click" Label="Print" Icon="Print" />
                 <AppBarButton Label="Email" Icon="Send"/>
-                <AppBarButton Label="Delete" Icon="Delete"/>
+                <AppBarButton Label="Delete" Icon="Delete"/>-->
             </CommandBar>
 
             <CommandBar Visibility="{Binding IsEditMode, Converter={StaticResource BooleanToVisibilityConverter}}"

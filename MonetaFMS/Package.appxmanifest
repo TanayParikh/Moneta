@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" IgnorableNamespaces="uap mp">
-  <Identity Name="57333TanayParikh.Moneta-InvoiceAccounting" Publisher="CN=38656192-C9BD-432E-AFA2-6FACE0FA80B1" Version="0.5.3.0" />
+  <Identity Name="57333TanayParikh.Moneta-InvoiceAccounting" Publisher="CN=38656192-C9BD-432E-AFA2-6FACE0FA80B1" Version="0.5.4.0" />
   <mp:PhoneIdentity PhoneProductId="ab70c718-667b-40fa-a423-a82ff2c172bb" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>Moneta - Invoice &amp; Accounting</DisplayName>

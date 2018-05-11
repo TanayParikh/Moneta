@@ -79,6 +79,7 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>true</Prefer32Bit>
+    <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <OutputPath>bin\x64\Release\</OutputPath>
@@ -329,9 +330,6 @@
   <ItemGroup>
     <PackageReference Include="Bogus">
       <Version>22.0.2</Version>
-    </PackageReference>
-    <PackageReference Include="iTextSharp-LGPL">
-      <Version>4.1.6</Version>
     </PackageReference>
     <PackageReference Include="LottieUWP">
       <Version>2.5.1</Version>
