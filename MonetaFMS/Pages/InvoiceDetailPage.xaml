@@ -133,9 +133,9 @@
 
                                             <TextBox Margin="30, 0, 60, 0" Grid.Column="0" Text="{Binding Description, Mode=TwoWay}"  Style="{StaticResource ListViewItemEditField}"
                                          Visibility="{Binding ElementName=InvoiceDetails, Path=DataContext.IsEditMode, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                                            <TextBox KeyDown="ItemPrice_KeyDown" Margin="15, 0" Grid.Column="1" Text="{Binding Price, Mode=TwoWay, Converter={StaticResource MoneyConverter}, ConverterParameter=HideIf0}" Style="{StaticResource ListViewItemEditField}"
+                                            <TextBox Margin="15, 0" Grid.Column="1" Text="{Binding Price, Mode=TwoWay, Converter={StaticResource MoneyConverter}, ConverterParameter=HideIf0}" Style="{StaticResource ListViewItemEditField}"
                                          Visibility="{Binding ElementName=InvoiceDetails, Path=DataContext.IsEditMode, Converter={StaticResource BooleanToVisibilityConverter}}" Paste="TextBox_Paste" />
-                                            <TextBox KeyDown="ItemTaxPercentage_KeyDown" Margin="25, 0, 25, 0" Grid.Column="2" Text="{Binding TaxPercentage, Mode=TwoWay, Converter={StaticResource PercentageConverter}}" Style="{StaticResource ListViewItemEditField}"
+                                            <TextBox Margin="25, 0, 25, 0" Grid.Column="2" Text="{Binding TaxPercentage, Mode=TwoWay, Converter={StaticResource PercentageConverter}}" Style="{StaticResource ListViewItemEditField}"
                                          Visibility="{Binding ElementName=InvoiceDetails, Mode=TwoWay, Path=DataContext.IsEditMode, Converter={StaticResource BooleanToVisibilityConverter}}" Paste="TextBox_Paste" />
                                         </Grid>
                                     </controls:DropShadowPanel>
@@ -192,7 +192,7 @@
 
                                             <TextBox Margin="30, 0, 60, 0" Grid.Column="0" Text="{Binding Note, Mode=TwoWay}"  Style="{StaticResource ListViewItemEditField}"
                                                         Visibility="{Binding ElementName=InvoiceDetails, Path=DataContext.IsEditMode, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                                            <TextBox KeyDown="ItemPrice_KeyDown" Margin="15, 0" Grid.Column="1" Text="{Binding AmountPaid, Mode=TwoWay, Converter={StaticResource MoneyConverter}, ConverterParameter=HideIf0}" Style="{StaticResource ListViewItemEditField}"
+                                            <TextBox Margin="15, 0" Grid.Column="1" Text="{Binding AmountPaid, Mode=TwoWay, Converter={StaticResource MoneyConverter}, ConverterParameter=HideIf0}" Style="{StaticResource ListViewItemEditField}"
                                                         Visibility="{Binding ElementName=InvoiceDetails, Path=DataContext.IsEditMode, Converter={StaticResource BooleanToVisibilityConverter}}" Paste="TextBox_Paste" />
                                             <DatePicker x:Name="PaymentDatePicker" MinWidth="175" Grid.Column="2" MaxWidth="200" MonthFormat="{}{month.abbreviated}" Date="{Binding PaymentDate, Mode=TwoWay, Converter={StaticResource DateTimeToDateTimeOffsetConverter}}"
                                                         Visibility="{Binding ElementName=InvoiceDetails, Path=DataContext.IsEditMode, Converter={StaticResource BooleanToVisibilityConverter}}" />

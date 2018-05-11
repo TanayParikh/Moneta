@@ -100,19 +100,6 @@ namespace MonetaFMS.Pages
             EditExpense(newExpense);
         }
 
-        private void Cost_KeyDown(object sender, KeyRoutedEventArgs e)
-        {
-            try
-            {
-                // Doesn't register key if key leads to invalid input
-                e.Handled = MoneyConverter.ConvertBack(((TextBox)sender).Text + Utilities.GetCharFromKey(e.Key)) == null;
-            }
-            catch (Exception)
-            {
-                e.Handled = true;
-            }
-        }
-
         private void Cancel_Click(object sender, RoutedEventArgs e)
         {
             ViewModel.CancelEdit();

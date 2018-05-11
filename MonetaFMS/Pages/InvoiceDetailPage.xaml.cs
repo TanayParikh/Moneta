@@ -26,10 +26,7 @@ namespace MonetaFMS.Pages
     {
         public InvoiceDetailPageViewModel ViewModel { get; set; } = new InvoiceDetailPageViewModel();
         public bool IsEditMode { get; set; } = false;
-
-        private MoneyConverter MoneyConverter { get; } = new MoneyConverter();
-        private PercentageConverter PercentageConverter { get; } = new PercentageConverter();
-
+        
         public InvoiceDetailPage()
         {
             InitializeComponent();
@@ -95,32 +92,6 @@ namespace MonetaFMS.Pages
         private async void Print_Click(object sender, RoutedEventArgs e)
         {
             await ViewModel.PrintInvoice();
-        }
-
-        private void ItemPrice_KeyDown(object sender, KeyRoutedEventArgs e)
-        {
-            try
-            {
-                // Doesn't register key if key leads to invalid input
-                e.Handled = MoneyConverter.ConvertBack(((TextBox)sender).Text + Utilities.GetCharFromKey(e.Key)) == null;
-            }
-            catch (Exception)
-            {
-                e.Handled = true;
-            }
-        }
-
-        private void ItemTaxPercentage_KeyDown(object sender, KeyRoutedEventArgs e)
-        {
-            try
-            {
-                // Doesn't register key if key leads to invalid input
-                e.Handled = PercentageConverter.ConvertBack(((TextBox)sender).Text + Utilities.GetCharFromKey(e.Key)) == null;
-            }
-            catch (Exception)
-            {
-                e.Handled = true;
-            }
         }
 
         private void TextBox_Paste(object sender, TextControlPasteEventArgs e)

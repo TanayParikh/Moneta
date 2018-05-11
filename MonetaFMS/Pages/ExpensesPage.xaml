@@ -100,8 +100,8 @@
                                         <DatePicker Grid.Column="1" x:Name="ExpenseDatePicker" HorizontalAlignment="Center" Header="Receipt Date" MinWidth="175" MaxWidth="200" MonthFormat="{}{month.abbreviated}"
                                             Date="{Binding Date, Mode=TwoWay, Converter={StaticResource DateTimeToDateTimeOffsetConverter}}" />
 
-                                        <TextBox KeyDown="Cost_KeyDown" MinWidth="100" Header="Total" HorizontalAlignment="Center" Grid.Column="2" Text="{Binding TotalCost, Mode=TwoWay, Converter={StaticResource MoneyConverter}, ConverterParameter=HideIf0}" Style="{StaticResource ExpensePriceField}" />
-                                        <TextBox KeyDown="Cost_KeyDown" MinWidth="100" Header="Tax Component" HorizontalAlignment="Center" Grid.Column="3" Text="{Binding TaxComponent, Mode=TwoWay, Converter={StaticResource MoneyConverter}, ConverterParameter=HideIf0}" Style="{StaticResource ExpensePriceField}" />
+                                        <TextBox MinWidth="100" Header="Total" HorizontalAlignment="Center" Grid.Column="2" Text="{Binding TotalCost, Mode=TwoWay, Converter={StaticResource MoneyConverter}, ConverterParameter=HideIf0}" Style="{StaticResource ExpensePriceField}" />
+                                        <TextBox MinWidth="100" Header="Tax Component" HorizontalAlignment="Center" Grid.Column="3" Text="{Binding TaxComponent, Mode=TwoWay, Converter={StaticResource MoneyConverter}, ConverterParameter=HideIf0}" Style="{StaticResource ExpensePriceField}" />
                                     </Grid>
 
                                     <Grid Name="AttachBox" CanDrag="True" AllowDrop="True" DragEnter="AttachBox_DragEnter" DragOver="AttachBox_DragOver" DragLeave="AttachBox_DragLeave" Drop="AttachBox_Drop">
