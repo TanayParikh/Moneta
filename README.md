@@ -1,6 +1,7 @@
 # Moneta
 [![GitHub (pre-)release](https://img.shields.io/github/release/TanayParikh/Moneta/all.svg)](https://github.com/TanayParikh/Moneta/releases)
 ![License](https://img.shields.io/github/license/TanayParikh/Moneta.svg)
+![Status](https://img.shields.io/badge/status-beta-orange.svg)
 ![Author](https://img.shields.io/badge/author-Tanay%20Parikh-brightgreen.svg)
 ![MonetaFMS.com](https://img.shields.io/website-up-down-green-red/http/shields.io.svg?label=MonetaFMS.com)
 
