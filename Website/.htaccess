@@ -1,0 +1,12 @@
+
+RewriteEngine on
+RewriteCond %{HTTP_HOST} ^monetafms\.com$ [OR]
+RewriteCond %{HTTP_HOST} ^www\.monetafms\.com$
+RewriteRule ^Github$ "https\:\/\/github\.com\/TanayParikh\/MonetaFMS" [R=301,L]
+
+RewriteOptions inherit
+Options -Indexes
+RewriteCond %{HTTP_HOST} ^monetafms\.com$ [OR]
+RewriteCond %{HTTP_HOST} ^www\.monetafms\.com$
+RewriteRule ^github$ "https\:\/\/github\.com\/TanayParikh\/MonetaFMS" [R=301,L]
+
