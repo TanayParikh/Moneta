@@ -67,11 +67,15 @@ This project is licensed under the GNU GENERAL PUBLIC LICENSE Version 3 - see th
 - [x] Rewrite core application using UWP to improve overall user experience
 	- [x] Updates to core UI/UX
 	- [x] Replace the portable LAMP server needed for MYSQL with SQLite
+	- [x] Autoupdater - Microsoft Store
+	- [x] Add support for invoice payment tracking
+	- [x] Add in-app animations
+	- [x] Easy invoice searching
+	- [x] Add business dashboard
 	- [ ] Increase overall security. 
 		- [ ] Authentication on start
 		- [ ] Encrypted DB
 	- [ ] Add non-intrusive, privacy friendly telemetrics to further improve UX	
-	- [x] Autoupdater - Microsoft Store
 	- [ ] High test coverage
 
 ### Future Plans
