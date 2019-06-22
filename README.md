@@ -26,12 +26,6 @@ Moneta is a Windows 10 desktop app :computer: which supports invoicing :page_fac
 <img src="./Screenshots/Save Animation.PNG" width="48%"/> <img src="./Screenshots/Settings.PNG" width="48%"/> 
 
 
-## Installing
-Moneta can be installed directly from the Microsoft Store on Windows 10 devices (Fall Creators Update or newer). 
-
-<a href="https://www.microsoft.com/store/apps/9MWF8N6RL6TQ"><img src="https://assets.windowsphone.com/85864462-9c82-451e-9355-a3d5f874397a/English_get-it-from-MS_InvariantCulture_Default.png" width="200px" /></a>
-
-
 ## Built With
 * [Lottie UWP](https://github.com/azchohfi/LottieUWP) - Lottie Animations for UWP
 * [iTextSharp-LGPL](https://github.com/schourode/iTextSharp-LGPL) - Invoice PDF Creation (Temporarily Disabled)
